@@ -36,4 +36,10 @@ git branch -M main
 git remote add origin https://github.com/karwan5880/portfolio.git             
 git push -u origin main
 
+npm run build
+
+npm install @opennextjs/cloudflare@latest
+
+npm install --save-dev wrangler@latest
+
 
