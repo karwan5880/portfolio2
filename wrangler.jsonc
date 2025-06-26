@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "main": "src/app/page.js",
+  "main": ".open-next/worker.js",
   "name": "leongkarwan",
   "compatibility_date": "2024-12-30",
   "compatibility_flags": [
@@ -12,7 +12,7 @@
     "global_fetch_strictly_public",
   ],
   "assets": {
-    "directory": "./public",
+    "directory": ".open-next/assets",
     "binding": "ASSETS",
   },
   "services": [
