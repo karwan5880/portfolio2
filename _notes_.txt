@@ -1,0 +1,39 @@
+npx create-next-app@latest portfolio
+
+√ Would you like to use TypeScript? ... No. / Yes
+√ Would you like to use ESLint? ... No. / Yes
+√ Would you like to use Tailwind CSS? ... No / Yes.
+√ Would you like your code inside a `src/` directory? ... No / Yes.
+√ Would you like to use App Router? (recommended) ... No / Yes.
+√ Would you like to use Turbopack for `next dev`? ... No / Yes.
+√ Would you like to customize the import alias (`@/*` by default)? ... No / Yes.
+√ What import alias would you like configured? ... @/*
+Creating a new Next.js app in C:\Users\lkarw\OneDrive\Desktop\py\react\portfolio.
+
+npm install three @react-three/fiber @react-three/drei
+
+npx gltfjsx public/raspberry_pi_3.glb
+
+npx gltfjsx public/raspberry-pi-model/scene.gltf --transform -o src/components/RaspberryPi.js
+
+npx gltfjsx public/low_poly_car/scene.gltf --transform -o src/components/CarModel.js
+
+alt+shift+f to set default formatter
+
+npm install @react-three/drei
+
+npm install leva
+
+npm install @react-three/rapier
+
+npm install gsap
+
+first create a private repo on github, but dont create readme, gitignore, license, then:
+git init                                                                            
+git add .                                                                           
+git commit -m "Initial commit: Setup for portfolio"
+git branch -M main                                                                  
+git remote add origin https://github.com/karwan5880/portfolio.git             
+git push -u origin main
+
+

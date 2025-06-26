@@ -1,0 +1,81 @@
+.neuralNetworkBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  background-color: #121212;
+}
+
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+/* 
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #333;
+  perspective: 1000px;
+} */
+
+.documentContainer {
+  max-width: 850px;
+  width: 100%;
+  background-color: #121212;
+  color: #d0d0d0;
+  padding: 2.5rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.jobTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.companyName::after {
+  content: ' -';
+  white-space: pre;
+}
+
+@media (max-width: 768px) {
+  .jobTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+  }
+
+  .companyName::after {
+    content: '';
+  }
+
+  .roleName {
+    font-size: 0.9em;
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 1rem;
+  }
+
+  .documentContainer {
+    padding: 2rem 1.5rem;
+    font-size: 15px;
+  }
+}

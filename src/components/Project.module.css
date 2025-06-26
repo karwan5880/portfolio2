@@ -1,0 +1,87 @@
+.projectContainer {
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  color: white;
+  font-size: 1em;
+  font-weight: 700;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.title:hover {
+  color: #8a2be2;
+}
+
+.indicator {
+  margin-right: 0.75rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid #8a2be2;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.indicatorExpanded {
+  background-color: #8a2be2;
+  box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
+}
+
+.contentWrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+  position: relative;
+  border-left: 2px solid rgba(138, 43, 226, 0);
+}
+
+.contentWrapper.expanded {
+  max-height: 500px;
+  transition: max-height 0.5s ease-in-out;
+  border-left: 2px solid rgba(138, 43, 226, 0.5);
+}
+
+.contentWrapper.expanded::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 100%;
+  height: 2px;
+  background: red;
+  box-shadow:
+    0 0 5px red,
+    0 0 10px blue;
+  animation: scanline-tear 0.3s linear;
+}
+
+.content {
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.4s ease-out 0.2s,
+    transform 0.4s ease-out 0.2s;
+}
+
+.contentWrapper.expanded .content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes scanline-tear {
+  from {
+    top: 0;
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0;
+  }
+}

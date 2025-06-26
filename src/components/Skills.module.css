@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.category {
+  display: flex;
+}
+.skillText::after {
+  content: '•';
+  color: #666;
+  margin-left: 0.5rem;
+}
+.skillText:last-child::after {
+  content: '';
+}
+
+.skillRow {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+}
+
+.categoryTitle {
+  font-weight: 700;
+  color: #ffffff;
+  flex: 0 0 160px;
+  padding-right: 1rem;
+}
+
+.skillsList {
+  flex: 1;
+  color: #d0d0d0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .skillRow {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.4rem 0;
+  }
+
+  .categoryTitle {
+    flex-basis: auto;
+    margin-bottom: 0.25rem;
+  }
+}

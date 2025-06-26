@@ -1,0 +1,43 @@
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.contactBar {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  color: #c0c0c0;
+  font-size: 0.85rem;
+}
+
+.contactBar a {
+  color: #c0c0c0;
+  text-decoration: none;
+}
+.contactBar a:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .contactBar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contactBar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .separator {
+    display: none;
+  }
+}
