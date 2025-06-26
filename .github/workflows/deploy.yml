@@ -1,0 +1,31 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main # The branch to deploy from, change if you use 'master' or another name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24' # Use a Node.js version compatible with your project
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Publish to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # The 'wrangler deploy' command is run by default
