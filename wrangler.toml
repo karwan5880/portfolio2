@@ -13,7 +13,8 @@ compatibility_date = "2024-05-01"
 
 [site]
 # bucket = "./.next/static" # Tells Wrangler where your static Next.js assets are
-bucket = ".vercel/output/static"
+# bucket = ".vercel/output/static"
+bucket = ".vercel/output
 
 [build]
 command = "npm run build:cf" # The command to build your Next.js app
