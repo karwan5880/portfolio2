@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: 'Leong Kar Wan',
-  description: '',
+  description: 'Leong Kar Wan Portfolio',
 }
 
 export default function RootLayout({ children }) {
