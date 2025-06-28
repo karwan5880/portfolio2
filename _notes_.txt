@@ -46,3 +46,6 @@ npm i @opennextjs/cloudflare@latest
 npm i -D wrangler@latest
 
 https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/
+
+pip install audioop-lts
+

@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import React, { useLayoutEffect, useRef, useState } from 'react'
 
 import { Header } from '@/components/Header'
@@ -27,6 +28,14 @@ export default function Home() {
   const resumeContainer = useRef(null)
   const { width } = useWindowSize()
   const isMobile = width < 768
+
+  const playSound = () => {
+    // const audio = new Audio('/secret.mp3')
+    const randomNumber = Math.floor(Math.random() * 7) // 7 for 0-6 range
+    // Construct the file path using the random number
+    const audio = new Audio(`/sound/secret${randomNumber}.mp3`)
+    audio.play()
+  }
 
   return (
     <div ref={main}>
@@ -98,6 +107,7 @@ export default function Home() {
             <Section title="Languages" isInteractive>
               <p style={commonStyles.p}>English, Mandarin, Malay</p>
             </Section>
+            <Link href="/dossier" onClick={playSound} className={styles.dogEar} aria-label="Go to next page"></Link>
           </div>
         </div>
       </div>
