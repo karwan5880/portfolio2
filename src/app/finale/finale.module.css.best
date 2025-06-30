@@ -1,0 +1,320 @@
+/* app/dossier/applications/finale/finale.module.css */
+
+.content {
+  /* container for text and links */
+}
+
+.finalText {
+  color: #00ff00; /* Terminal green */
+  font-size: 2rem;
+  margin: 0;
+}
+
+.staticContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+.staticContainer.hidden {
+  opacity: 0;
+}
+
+.finalMessage {
+  font-size: 2rem;
+  color: #00ff00;
+  text-shadow:
+    0 0 15px #000,
+    0 0 20px #000;
+
+  /* --- THE FIX --- */
+  display: flex;
+  justify-content: center; /* Keeps it horizontally centered */
+  align-items: center; /* Vertically aligns the text and cursor perfectly */
+}
+
+.blinkingCursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.8rem;
+  background-color: #00ff00;
+  animation: blink 1s step-end infinite;
+  vertical-align: bottom;
+  margin-left: 8px;
+}
+@keyframes blink {
+  50% {
+    background-color: transparent;
+  }
+}
+/* @keyframes blink {
+  from,
+  to {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #00ff00;
+  }
+} */
+
+.link a {
+  font-size: 1.2rem;
+  color: #999;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.link a:hover {
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.finaleWrapper.exiting {
+  opacity: 0;
+}
+.streamItem {
+  width: 100%;
+  padding: 0rem 2rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.thought {
+  font-size: 1.5rem;
+  /* color: #d0d0d0; */
+  color: #999;
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+}
+.comment-js,
+.comment-py,
+.comment-c,
+.comment-asm,
+.comment-sh {
+  font-size: 1.2rem;
+  color: #5a9e5a;
+  font-style: italic;
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+}
+.code-line {
+  font-size: 1.2rem;
+}
+
+.multiColumnContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 2rem;
+  text-align: left;
+  align-items: flex-start;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.codeColumn {
+  flex: 1;
+  max-width: 400px;
+  background: rgba(10, 10, 10, 0.5);
+  border-left: 1px solid #333;
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 0.8rem;
+  overflow: hidden;
+}
+.codeTitle {
+  color: #999;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #333;
+  font-style: italic;
+}
+.codeColumn pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Simulated Syntax Highlighting */
+:global(.keyword) {
+  color: #c586c0;
+}
+:global(.string) {
+  color: #ce9178;
+}
+
+@keyframes scrollUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2000vh);
+  }
+}
+
+.finaleWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  color: #d0d0d0;
+  font-family: monospace;
+  overflow: hidden;
+  transition: opacity 1s ease-out;
+}
+.finaleWrapper.exiting {
+  opacity: 0;
+}
+
+@keyframes scrollUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-3000vh);
+  } /* Even larger value for a longer show */
+}
+
+.streamContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* Hide the scrolling content by default */
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+
+.streamContainer.scrolling {
+  /* When scrolling starts, make it visible */
+  opacity: 1;
+}
+
+/* .streamContent:nth-child(2) {
+  animation-delay: -75s;
+} */
+/* @keyframes marquee {
+  0% {
+    transform: translateY(100vh);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+} */
+/* 
+.streamContent[aria-hidden='true'] {
+  position: absolute;
+  top: 100%;
+} */
+
+.staticHeader {
+  text-align: center;
+  margin-bottom: 2rem; /* Add space between header and the stream */
+}
+
+.linksContainer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  opacity: 0;
+  transition: opacity 1s ease-in;
+  pointer-events: auto;
+}
+.linksContainer.visible {
+  opacity: 1;
+}
+
+.link {
+  font-size: 1.2rem;
+  color: #999;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.link:hover {
+  color: #fff;
+}
+
+.escapeHatch {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  color: #555;
+  z-index: 20;
+}
+
+/* In finale.module.css */
+
+.scrollContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+.scrollContainer.scrolling {
+  opacity: 1;
+}
+
+/* --- Define the two independent marquees --- */
+.singleLineMarquee,
+.multiColumnMarquee {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.streamContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  padding-bottom: 5rem;
+  /* Apply the base animation */
+  animation-name: marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Give each marquee a different speed and starting position */
+.singleLineMarquee .streamContent {
+  animation-duration: 180s;
+  color: #999; /* Make single lines slightly dimmer for depth */
+}
+.multiColumnMarquee .streamContent {
+  animation-duration: 250s; /* Slower, more majestic */
+}
+
+/* The seamless loop logic */
+.singleLineMarquee .streamContent:nth-child(2) {
+  animation-delay: -90s;
+}
+.multiColumnMarquee .streamContent:nth-child(2) {
+  animation-delay: -125s;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateY(100vh);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}

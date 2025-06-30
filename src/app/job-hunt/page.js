@@ -1,0 +1,248 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
+import { DogEar } from '@/components/DogEar'
+
+import styles from './job-spec.module.css'
+import { skillsData } from '@/data/skills-data'
+
+// --- Data for the boot sequence (from Vision 3) ---
+const createProgressBar = (level) => {
+  const cappedLevel = Math.min(level, 10)
+  const filled = '█'.repeat(cappedLevel)
+  const empty = ' '.repeat(10 - cappedLevel)
+  return `[${filled}${empty}]`
+}
+const bootSequenceLines = [
+  '[0.000001] Kernel boot sequence initiated...',
+  '[0.000045] Loading core directives...',
+  '[0.000098] > Directive [AI_ENGINEER]:       [ LOADED ] [ ONLINE ]',
+  '[0.000153] > Directive [EMBEDDED_SYSTEMS]:  [ LOADED ] [ ONLINE ]',
+  '[0.000210] > Subroutine [WEB_DEV_STACK]:   [ LOADED ] [ STANDBY ]',
+  ' ',
+  '[0.000350] Running system proficiency diagnostics...',
+  '[0.000400] Scanning language modules:',
+  ...skillsData.map(
+    (skill) =>
+      `[0.000${451 + skillsData.indexOf(skill) * 50}]   - ${skill.name.padEnd(14, ' ')} ${createProgressBar(skill.level)} ${skill.level}/10 (STATUS: ${skill.status})`
+  ),
+  ' ',
+  '[0.001000] System check complete. All systems nominal.',
+  '[0.001025] Waiting for next command...',
+]
+// --- End of boot sequence data ---
+
+export default function JobSpecPage() {
+  // Our new, more descriptive state machine
+  const [pageState, setPageState] = useState('BOOTING') // 'BOOTING' or 'BROADCAST'
+  const [animationStage, setAnimationStage] = useState('BOOTING')
+  const [visibleLines, setVisibleLines] = useState([])
+  const [showCursor, setShowCursor] = useState(false)
+
+  useEffect(() => {
+    let isMounted = true
+    // Stage 1: Booting Animation
+    bootSequenceLines.forEach((line, index) => {
+      setTimeout(() => {
+        if (!isMounted) return
+        setVisibleLines((prev) => [...prev, line])
+        if (index === bootSequenceLines.length - 1) {
+          setShowCursor(true)
+          // --- TRANSITION LOGIC ---
+          // After booting, wait 1s, then start centering
+          setTimeout(() => {
+            if (!isMounted) return
+            setAnimationStage('CENTERING')
+            // After centering animation (1.5s), transition to broadcast
+            setTimeout(() => {
+              if (!isMounted) return
+              setAnimationStage('BROADCAST')
+            }, 300) // This must match the CSS transition duration
+          }, 100) // 1-second pause
+        }
+      }, index * 80)
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const renderLine = (line) => {
+    if (line.includes('[ ONLINE ]')) return <span className={styles.online}>{line}</span>
+    if (line.includes('[ STANDBY ]')) return <span className={styles.standby}>{line}</span>
+    if (line.includes('OVERCLOCKED')) return <span className={styles.overclockedText}>{line}</span>
+    return line
+  }
+
+  const getBarClass = (level) => {
+    if (level > 10) return `${styles.barFill} ${styles.overclocked}`
+    if (level > 7) return `${styles.barFill} ${styles.optimized}`
+    return styles.barFill
+  }
+
+  return (
+    <div className={styles.wrapper}>
+      {/* Apply classes based on the animation stage */}
+      <div
+        className={`
+        ${styles.bootContainer}
+        ${animationStage === 'CENTERING' || animationStage === 'BROADCAST' ? styles.isCentering : ''}
+        ${animationStage === 'BROADCAST' ? styles.isHidden : ''}
+      `}
+      >
+        <pre className={styles.output}>
+          {visibleLines.map((line, index) => (
+            <div key={index}>{renderLine(line)}</div>
+          ))}
+          {showCursor && <span className={styles.blinkingCursor}></span>}
+        </pre>
+      </div>
+
+      <div
+        className={`${styles.broadcastContainer} 
+        ${animationStage === 'BROADCAST' ? styles.isVisible : ''}
+        `}
+        // ${pageState === 'BROADCAST' ? styles.isVisible : ''}`}
+      >
+        <div className={styles.primaryDirectives}>
+          <h1>AI ENGINEER</h1>
+          <h1>EMBEDDED SYSTEMS ENGINEER</h1>
+        </div>
+        <div className={styles.secondaryProtocols}>
+          <h2>// SECONDARY PROTOCOLS</h2>
+          <p>Frontend Engineer • Backend Engineer • Full-Stack Developer</p>
+        </div>
+        <div className={styles.proficiencies}>
+          <h3>SYSTEM PROFICIENCIES</h3>
+          <div className={styles.skillGrid}>
+            {skillsData.map((skill, index) => (
+              <div key={index} className={styles.skillEntry}>
+                <span className={styles.skillName}>{skill.name}</span>
+                <div className={styles.barContainer}>
+                  <div className={getBarClass(skill.level)} style={{ width: `calc(10% * ${skill.level})` }}></div>
+                </div>
+                <span className={styles.skillLevel}>{skill.level}/10</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* <DogEar href="/dev-history" position="bottom-left" aria-label="Return to dev-history" /> */}
+      <DogEar href="/dossier" position="bottom-left" aria-label="Return to dossier" />
+      <DogEar href="/applications" position="bottom-right" aria-label="View applications" />
+    </div>
+  )
+}
+
+// 'use client'
+// import { useEffect, useState } from 'react'
+// import { DogEar } from '@/components/DogEar'
+// import styles from './job-spec.module.css'
+// import { skillsData } from '@/data/skills-data'
+// // --- Data for the boot sequence (from Vision 3) ---
+// const createProgressBar = (level) => {
+//   const cappedLevel = Math.min(level, 10)
+//   const filled = '█'.repeat(cappedLevel)
+//   const empty = ' '.repeat(10 - cappedLevel)
+//   return `[${filled}${empty}]`
+// }
+// const bootSequenceLines = [
+//   '[0.000001] Kernel boot sequence initiated...',
+//   '[0.000045] Loading core directives...',
+//   '[0.000098] > Directive [AI_ENGINEER]:       [ LOADED ] [ ONLINE ]',
+//   '[0.000153] > Directive [EMBEDDED_SYSTEMS]:  [ LOADED ] [ ONLINE ]',
+//   '[0.000210] > Subroutine [WEB_DEV_STACK]:   [ LOADED ] [ STANDBY ]',
+//   ' ',
+//   '[0.000350] Running system proficiency diagnostics...',
+//   '[0.000400] Scanning language modules:',
+//   ...skillsData.map(
+//     (skill) =>
+//       `[0.000${451 + skillsData.indexOf(skill) * 50}]   - ${skill.name.padEnd(14, ' ')} ${createProgressBar(skill.level)} ${skill.level}/10 (STATUS: ${skill.status})`
+//   ),
+//   ' ',
+//   '[0.001000] System check complete. All systems nominal.',
+//   '[0.001025] Waiting for next command...',
+// ]
+// // --- End of boot sequence data ---
+// export default function JobSpecPage() {
+//   const [pageState, setPageState] = useState('BOOTING') // 'BOOTING' or 'BROADCAST'
+//   const [visibleLines, setVisibleLines] = useState([])
+//   const [showCursor, setShowCursor] = useState(false)
+//   useEffect(() => {
+//     let isMounted = true
+//     // --- Stage 1: Booting Animation ---
+//     bootSequenceLines.forEach((line, index) => {
+//       setTimeout(() => {
+//         if (isMounted) {
+//           setVisibleLines((prev) => [...prev, line])
+//           if (index === bootSequenceLines.length - 1) {
+//             setShowCursor(true)
+//             // After the last line, wait then transition to Stage 2
+//             setTimeout(() => {
+//               if (isMounted) {
+//                 setPageState('BROADCAST')
+//               }
+//             }, 1000) // 2-second delay after boot finishes
+//           }
+//         }
+//       }, index * 80) // Typing speed
+//     })
+//     return () => {
+//       isMounted = false
+//     }
+//   }, [])
+//   const renderLine = (line) => {
+//     if (line.includes('[ ONLINE ]')) return <span className={styles.online}>{line}</span>
+//     if (line.includes('[ STANDBY ]')) return <span className={styles.standby}>{line}</span>
+//     if (line.includes('OVERCLOCKED')) return <span className={styles.overclockedText}>{line}</span>
+//     return line
+//   }
+//   const getBarClass = (level) => {
+//     if (level > 10) return `${styles.barFill} ${styles.overclocked}`
+//     if (level > 7) return `${styles.barFill} ${styles.optimized}`
+//     return styles.barFill
+//   }
+//   return (
+//     <div className={styles.wrapper}>
+//       {/* --- STAGE 1 RENDER --- */}
+//       <div className={`${styles.bootContainer} ${pageState === 'BROADCAST' ? styles.hidden : ''}`}>
+//         <pre className={styles.output}>
+//           {visibleLines.map((line, index) => (
+//             <div key={index}>{renderLine(line)}</div>
+//           ))}
+//           {showCursor && <span className={styles.blinkingCursor}></span>}
+//         </pre>
+//       </div>
+//       {/* --- STAGE 2 RENDER --- */}
+//       <div className={`${styles.broadcastContainer} ${pageState === 'BROADCAST' ? styles.visible : ''}`}>
+//         <div className={styles.primaryDirectives}>
+//           <h1>AI ENGINEER</h1>
+//           <h1>EMBEDDED SYSTEMS ENGINEER</h1>
+//         </div>
+//         <div className={styles.secondaryProtocols}>
+//           <h2>// SECONDARY PROTOCOLS</h2>
+//           <p>Frontend Engineer • Backend Engineer • Full-Stack Developer</p>
+//         </div>
+//         <div className={styles.proficiencies}>
+//           <h3>SYSTEM PROFICIENCIES</h3>
+//           <div className={styles.skillGrid}>
+//             {skillsData.map((skill, index) => (
+//               <div key={index} className={styles.skillEntry}>
+//                 <span className={styles.skillName}>{skill.name}</span>
+//                 <div className={styles.barContainer}>
+//                   <div className={getBarClass(skill.level)} style={{ width: `calc(10% * ${skill.level})` }}></div>
+//                 </div>
+//                 <span className={styles.skillLevel}>{skill.level}/10</span>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//       <DogEar href="/dev-history" position="bottom-left" aria-label="Return to dev-history" />
+//       <DogEar href="/applications" position="bottom-right" aria-label="View applications" />
+//     </div>
+//   )
+// }

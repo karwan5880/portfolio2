@@ -1,0 +1,108 @@
+/* app/dossier/job-spec/job-spec.module.css */
+.wrapper {
+  position: relative;
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: monospace;
+  padding: 2rem;
+}
+
+/* Staggered animations */
+.primaryDirectives,
+.secondaryProtocols,
+.proficiencies {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.wrapper.visible .primaryDirectives {
+  transition-delay: 0.2s;
+}
+.wrapper.visible .secondaryProtocols {
+  transition-delay: 0.6s;
+}
+.wrapper.visible .proficiencies {
+  transition-delay: 1s;
+}
+
+.wrapper.visible > div {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Sections --- */
+.primaryDirectives h1 {
+  font-size: 3rem;
+  color: #00ff00;
+  text-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+  margin: 0.5rem 0;
+  letter-spacing: 2px;
+}
+
+.secondaryProtocols {
+  margin: 3rem 0;
+}
+.secondaryProtocols h2 {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+.secondaryProtocols p {
+  font-size: 1rem;
+  color: #d0d0d0;
+  margin: 0;
+}
+
+.proficiencies {
+  width: 100%;
+  max-width: 600px;
+}
+.proficiencies h3 {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+.skillGrid {
+  display: grid;
+  gap: 0.75rem;
+}
+.skillEntry {
+  display: grid;
+  grid-template-columns: 100px 1fr 50px;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+}
+.skillName {
+  text-align: right;
+  color: #d0d0d0;
+}
+.barContainer {
+  height: 16px;
+  background: #222;
+  border: 1px solid #444;
+  width: 100%;
+}
+.barFill {
+  height: 100%;
+  background: #00ff00;
+}
+.optimized {
+  background: #e6db74;
+} /* Yellow for optimized */
+.overclocked {
+  background: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+  /* The bar is allowed to overflow its container */
+}
+.skillLevel {
+  color: #999;
+}

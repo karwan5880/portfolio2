@@ -1,0 +1,39 @@
+/* components/Preloader.module.css */
+.preloaderWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of everything */
+  font-family: monospace;
+  color: #00ff00;
+}
+
+.bootText {
+  text-align: left;
+  font-size: 1.2rem;
+}
+
+.bootText p {
+  margin: 0.5rem 0;
+}
+
+.blinkingCursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2rem;
+  background-color: #00ff00;
+  animation: blink 1s step-end infinite;
+  margin-left: 8px;
+}
+
+@keyframes blink {
+  50% {
+    background-color: transparent;
+  }
+}

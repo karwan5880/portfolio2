@@ -1,0 +1,52 @@
+/* app/dossier/job-spec/job-spec.module.css */
+.terminalWrapper {
+  position: relative;
+  min-height: 100vh;
+  background: #000; /* Pure black for the terminal */
+  padding: 2rem;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+}
+
+.output {
+  width: 100%;
+  color: #d0d0d0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.online {
+  color: #00ff00; /* Bright green for primary directives */
+  font-weight: 700;
+}
+
+.standby {
+  color: #e6db74; /* A common yellow for warnings/standby */
+}
+
+.overclocked {
+  color: #ff0000; /* Red for the overclocked status */
+  font-weight: 700;
+  text-shadow: 0 0 5px #ff0000;
+}
+
+.blinkingCursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2rem;
+  background-color: #d0d0d0;
+  animation: blink 1s step-end infinite;
+  margin-left: 8px; /* Position after prompt text */
+}
+
+@keyframes blink {
+  from,
+  to {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #d0d0d0;
+  }
+}

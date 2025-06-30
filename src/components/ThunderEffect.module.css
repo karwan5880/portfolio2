@@ -1,0 +1,49 @@
+/* components/ThunderEffect.module.css */
+.thunderContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0; /* Start invisible */
+
+  /* The key is the animation timing. It's mostly invisible, with sudden flashes. */
+  animation: lightning-flash 7s linear infinite;
+}
+
+@keyframes lightning-flash {
+  /* The flash happens in a very short burst within the long animation cycle */
+  0% {
+    opacity: 0;
+  }
+  48% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  } /* First bright flash */
+  50.5% {
+    opacity: 0.2;
+  }
+  51% {
+    opacity: 1;
+  } /* Second, brighter flash */
+  52% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}

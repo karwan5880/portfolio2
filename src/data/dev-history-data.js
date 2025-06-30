@@ -1,0 +1,79 @@
+// data/dev-history-data.js
+export const devHistoryData = [
+  {
+    id: 'internship',
+    year: '2018',
+    title: 'Software Engineer Intern',
+    description: 'First professional experience. Built front-end and back-end solutions with Angular and .NET Core.',
+    position: [0, 0, 0],
+    connectsTo: [],
+    type: 'cube',
+  },
+  {
+    id: 'fyp',
+    year: '2019',
+    title: 'Final Year Project',
+    description: 'Completed a significant academic project, solidifying core development principles.',
+    position: [5, 2, -10],
+    connectsTo: ['internship'],
+    type: 'crystal',
+  },
+  {
+    id: 'python',
+    year: '2020-2021',
+    title: 'Python Deep Dive',
+    description: 'Focused on Python, building various automation tools and projects during the global pause.',
+    position: [-5, 4, -20],
+    connectsTo: ['fyp'],
+    type: 'ring',
+  },
+  {
+    id: 'lpd',
+    year: '2022-2023',
+    title: "Master's Dissertation: License Plate Detection",
+    description:
+      'A deep focus into computer vision and deep learning, applying Python skills to a major research project.',
+    position: [0, 6, -30],
+    connectsTo: ['python'],
+    type: 'gyroscope',
+  },
+  {
+    id: 'pyqt',
+    year: '2024.01 - 2024.08',
+    title: 'PyQt6/PySide6 Apps',
+    description:
+      'Designed and built GUI for Windows desktop applications, translating concepts into user-facing programs.',
+    position: [6, 8, -40],
+    connectsTo: ['lpd'],
+    type: 'circuit',
+  },
+  {
+    id: 'leet',
+    year: '2024.08 - 2025.02',
+    title: 'Job Hunt / LeetCode',
+    description: 'Started my journey to look for a job, practicing leetcode questions everyday.',
+    position: [-6, 10, -50],
+    connectsTo: ['pyqt'],
+    type: 'circuit',
+  },
+  {
+    id: 'exploration',
+    year: '2025.02 - 2025.05',
+    title: 'C++ / Flutter / Godot / Next.js Exploration',
+    description:
+      'Ventured into low-level systems with WinRT and KMDF drivers, mobile with Flutter, game dev with Godot, and advanced AI with Reinforcement Learning.',
+    position: [0, 12, -60],
+    connectsTo: ['leet'],
+    type: 'cluster',
+  },
+  {
+    id: 'current',
+    year: '2025.06 - Present',
+    title: 'Xiaohongshu Clone',
+    description:
+      'Currently architecting and building a full-stack social media application clone, leveraging React for the front-end and Django for the back-end.',
+    position: [7, 14, -70],
+    connectsTo: ['exploration'],
+    type: 'assembler',
+  },
+]

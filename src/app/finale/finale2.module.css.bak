@@ -1,0 +1,56 @@
+/* app/dossier/applications/finale/finale.module.css */
+.finaleWrapper {
+  height: 100vh;
+  background: #121212; /* A dark terminal background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: monospace;
+}
+
+.terminalOutput {
+  width: 100%;
+  max-width: 850px;
+  padding: 2rem;
+  color: #d0d0d0; /* Default text color */
+}
+
+.terminalOutput pre {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.commitFiles {
+  color: #2e7d32; /* A dark, git-style green */
+  display: block; /* Each file on a new line */
+}
+
+.untrackedFiles {
+  color: #c62828; /* A dark, git-style red */
+  display: block; /* Each file on a new line */
+}
+
+.prompt {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.blinkingCursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2rem;
+  background-color: #d0d0d0;
+  animation: blink 1s step-end infinite;
+  margin-left: 8px;
+}
+
+@keyframes blink {
+  from,
+  to {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #d0d0d0;
+  }
+}

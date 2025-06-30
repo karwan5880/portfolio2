@@ -7,11 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    
-		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
-
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "build:cf": "npm run build && npx @cloudflare/next-on-pages"
   },
@@ -23,7 +21,8 @@
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.177.0"
+    "three": "^0.177.0",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.12",

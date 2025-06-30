@@ -2,9 +2,11 @@
 
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
+import { DogEar } from '@/components/DogEar'
 import { Header } from '@/components/Header'
+import { Preloader } from '@/components/Preloader'
 import { Project } from '@/components/Project'
 import { Section } from '@/components/Section'
 import { Skills } from '@/components/Skills'
@@ -28,13 +30,19 @@ export default function Home() {
   const resumeContainer = useRef(null)
   const { width } = useWindowSize()
   const isMobile = width < 768
+  const [isBooting, setIsBooting] = useState(true) // Start in "booting" state
 
-  const playSound = () => {
-    // const audio = new Audio('/secret.mp3')
-    const randomNumber = Math.floor(Math.random() * 7) // 7 for 0-6 range
-    // Construct the file path using the random number
-    const audio = new Audio(`/sound/secret${randomNumber}.mp3`)
-    audio.play()
+  // This logic is for the main page content after the loader is gone
+  useEffect(() => {
+    // Prevent this from running while the preloader is active
+    if (isBooting) return
+
+    // ... any GSAP or other animations for your main page can go here ...
+  }, [isBooting]) // Re-run when booting is finished
+
+  // If we are booting, only render the preloader
+  if (isBooting) {
+    return <Preloader onBootComplete={() => setIsBooting(false)} />
   }
 
   return (
@@ -107,7 +115,9 @@ export default function Home() {
             <Section title="Languages" isInteractive>
               <p style={commonStyles.p}>English, Mandarin, Malay</p>
             </Section>
-            <Link href="/dossier" onClick={playSound} className={styles.dogEar} aria-label="Go to next page"></Link>
+            {/* <Link href="/dossier" onClick={playSound} className={styles.dogEar} aria-label="Go to next page"></Link> */}
+            {/* <DogEar href="/dossier" aria-label="Go to next page" /> */}
+            <DogEar href="/dossier" position="bottom-right" aria-label="View the dossier" />
           </div>
         </div>
       </div>

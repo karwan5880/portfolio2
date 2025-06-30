@@ -1,0 +1,142 @@
+/* app/dossier/job-spec/job-spec.module.css */
+.boardWrapper {
+  position: relative;
+  min-height: 100vh;
+  background: #0a0a0a;
+  padding: 4rem;
+  font-family: monospace;
+  background-image:
+    linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    'cpu cpu'
+    'primary secondary'
+    'ram ram';
+  gap: 4rem;
+}
+
+.module {
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  background: #0a0a0a;
+}
+
+.module::after {
+  /* The Power Trace */
+  content: '';
+  position: absolute;
+  background: #8a2be2;
+}
+
+.cpu {
+  grid-area: cpu;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 5px;
+}
+
+/* Primary Modules */
+.aiModule {
+  grid-area: primary;
+}
+.roboticsModule {
+  grid-area: primary;
+  margin-top: 8rem;
+}
+
+/* Secondary Modules */
+.webModule {
+  grid-area: secondary;
+  border-color: #555;
+  color: #555;
+}
+.uiModule {
+  grid-area: secondary;
+  margin-top: 8rem;
+  border-color: #555;
+  color: #555;
+}
+
+/* Primary Power Traces */
+.aiModule::after,
+.roboticsModule::after {
+  height: 6px;
+  box-shadow: 0 0 10px #8a2be2;
+  top: 50%;
+  right: 100%;
+  width: 4rem;
+}
+/* Secondary Power Traces */
+.webModule::after,
+.uiModule::after {
+  height: 2px;
+  opacity: 0.5;
+  top: 50%;
+  right: 100%;
+  width: 4rem;
+}
+
+/* RAM Bank */
+.ramBank {
+  grid-area: ram;
+  border: 1px dashed #555;
+  padding: 1.5rem;
+}
+.bankTitle {
+  color: #fff;
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+}
+.skillStick {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.skillName {
+  color: #d0d0d0;
+  flex-basis: 120px;
+  text-align: right;
+}
+.levelBar {
+  flex-grow: 1;
+  height: 20px;
+  background: #222;
+  border: 1px solid #444;
+}
+.levelIndicator {
+  height: 100%;
+  background: #00ff00;
+  box-shadow: 0 0 10px #00ff00;
+}
+.skillStatus {
+  color: #999;
+  flex-basis: 200px;
+}
+
+/* Overclocked styles */
+.overclocked {
+  background: #ff0000;
+  box-shadow: 0 0 15px #ff0000;
+  animation: pulse 1s infinite;
+}
+.overclockedText {
+  color: #ff0000;
+  font-weight: 700;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.7;
+  }
+}

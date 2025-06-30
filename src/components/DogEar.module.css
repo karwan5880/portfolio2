@@ -1,0 +1,115 @@
+/* .dogEar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  z-index: 20;
+} */
+
+/* .dogEar::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
+  border: 25px solid transparent;
+  border-bottom-color: #333;
+  border-right-color: #333;
+  transition: all 0.3s ease;
+} */
+
+/* We can define the hover effect once */
+/* .dogEar:hover::before {
+  border-width: 35px;
+  border-bottom-color: #8a2be2;
+  border-right-color: #8a2be2;
+  box-shadow: -10px -10px 15px rgba(138, 43, 226, 0.3);
+} */
+
+/* Optional but recommended: you can use CSS variables to customize hover colors if needed,
+   or just accept the default purple glow for all of them for consistency. */
+
+.dogEar {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.dogEar::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 25px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* --- Right Corner (Next Page) --- */
+.bottomRight {
+  bottom: 0;
+  right: 0;
+}
+
+.bottomRight::before {
+  bottom: 0;
+  right: 0;
+  border-bottom-color: #333; /* Default fold color */
+  border-right-color: #333;
+  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.bottomRight:hover::before {
+  border-width: 35px;
+  border-bottom-color: #8a2be2; /* Purple hover for "Next" */
+  border-right-color: #8a2be2;
+  box-shadow: -10px -10px 15px rgba(138, 43, 226, 0.3);
+}
+
+/* --- Left Corner (Previous Page) --- */
+.bottomLeft {
+  bottom: 0;
+  left: 0;
+}
+
+.bottomLeft::before {
+  bottom: 0;
+  left: 0;
+  border-bottom-color: #333; /* Default fold color */
+  border-left-color: #333; /* Mirrored border */
+  box-shadow: 5px -5px 10px rgba(0, 0, 0, 0.5); /* Mirrored shadow */
+}
+
+.bottomLeft:hover::before {
+  border-width: 35px;
+  border-bottom-color: #00ff00; /* Green hover for "Previous" to match terminal */
+  border-left-color: #00ff00; /* Mirrored border */
+  box-shadow: 10px -10px 15px rgba(0, 255, 0, 0.3); /* Mirrored shadow */
+}
+
+.previous {
+  right: auto; /* Unset the right positioning */
+  left: 0; /* Position on the left */
+}
+
+.previous::before {
+  right: auto;
+  left: 0;
+  /* Mirror the box-shadow */
+  box-shadow: 5px -5px 10px rgba(0, 0, 0, 0.5);
+  /* Mirror the border colors */
+  border-right-color: transparent !important; /* Override the default */
+  border-left-color: #333;
+}
+
+/* Mirror the hover effect */
+.previous:hover::before {
+  border-right-color: transparent !important;
+  border-left-color: #8a2be2; /* Use the same theme color */
+  box-shadow: 10px -10px 15px rgba(138, 43, 226, 0.3);
+}

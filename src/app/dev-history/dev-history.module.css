@@ -1,0 +1,183 @@
+/* app/dossier/dev-history/dev-history.module.css */
+.wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #000; /* The blackness of space */
+  /* transition: background-color 1s ease; */
+}
+
+.wrapper.shutdown {
+  /* When shutdown is active, the canvas inside it will animate */
+  animation: derez 2s forwards;
+}
+
+.wrapper.shutdown > canvas {
+  /* Make the canvas itself the target of the animation */
+  animation: grid-collapse 2s forwards;
+}
+
+@keyframes derez {
+  0% {
+    background: #000;
+  }
+  50% {
+    background: #1a0000;
+  } /* Briefly flash red */
+  100% {
+    background: #000;
+  }
+}
+
+@keyframes grid-collapse {
+  0% {
+    transform: scale(1);
+    filter: blur(0px) saturate(1);
+  }
+  50% {
+    /* Devolve into a pixelated, blurry mess */
+    transform: scale(1.1);
+    filter: blur(5px) saturate(0) contrast(2);
+  }
+  99% {
+    /* Collapse into a single horizontal line */
+    transform: scale(1, 0.005);
+    filter: blur(2px) saturate(0) contrast(2);
+  }
+  100% {
+    /* Disappear completely */
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* The DogEar component from before will work perfectly on top of this */
+
+.infoPanel {
+  width: 250px;
+  padding: 0.8rem 1rem;
+  background: rgba(20, 20, 20, 0.8); /* Semi-transparent background */
+  border: 1px solid #333;
+  border-radius: 8px;
+  backdrop-filter: blur(5px); /* Frosted glass effect */
+  color: #d0d0d0;
+  font-family: monospace;
+  line-height: 1.5;
+  /* This prevents the text from interfering with 3D controls */
+  pointer-events: none;
+}
+
+.infoPanel h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.infoPanel h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: #00ff00; /* Green to match the theme */
+  font-weight: 700;
+}
+
+.infoPanel p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.overlayContainer {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #8a2be2;
+  border-radius: 8px;
+  color: #d0d0d0;
+  font-family: monospace;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none; /* Can't be clicked when invisible */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.overlayContainer.isVisible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.overlayContainer h2 {
+  color: #8a2be2;
+  margin-top: 0;
+}
+.overlayContainer p {
+  line-height: 1.6;
+}
+.closeButton {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: #777;
+  font-family: monospace;
+}
+
+.htmlContainer {
+  font-family: monospace;
+  color: #d0d0d0;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 300px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.4s ease-in-out;
+}
+
+.htmlContainer.htmlVisible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.htmlContainer h2 {
+  margin: 0 0 0.5rem 0;
+  color: #00ff00;
+  font-size: 1.2rem;
+}
+.htmlContainer p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.finaleContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  font-family: monospace;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease-in 1s; /* Fade in after 1s delay */
+}
+.finaleContainer.isVisible {
+  opacity: 1;
+}
+.finaleContainer h1 {
+  font-size: 3rem;
+  text-shadow: 0 0 15px white;
+}
+.finaleContainer a {
+  color: #999;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+.finaleContainer a:hover {
+  color: #fff;
+}

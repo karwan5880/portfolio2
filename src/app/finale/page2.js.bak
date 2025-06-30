@@ -1,0 +1,44 @@
+// app/dossier/applications/finale/page.js
+import { DogEar } from '@/components/DogEar'
+
+import styles from './finale.module.css'
+
+export default function FinalePage() {
+  return (
+    <div className={styles.finaleWrapper}>
+      <div className={styles.terminalOutput}>
+        <pre>
+          {`
+user@mainframe:~/career$ git status
+
+On branch feature/next-chapter
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+
+      `}
+          <span className={styles.commitFiles}>{`new file:   role_ai-engineer.md`}</span>
+          <span className={styles.commitFiles}>{`new file:   role_embedded-systems-engineer.md`}</span>
+          {`
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+      `}
+          <span className={styles.untrackedFiles}>{`role_frontend-engineer.md`}</span>
+          <span className={styles.untrackedFiles}>{`role_backend-engineer.md`}</span>
+          <span className={styles.untrackedFiles}>{`role_full-stack-developer.md`}</span>
+          {`
+
+`}
+        </pre>
+        <div className={styles.prompt}>
+          <span>user@mainframe:~/career$</span>
+          <span className={styles.blinkingCursor}></span>
+        </div>
+      </div>
+      <DogEar href="/dossier/applications" position="bottom-left" aria-label="Return to application logs" />
+    </div>
+  )
+}

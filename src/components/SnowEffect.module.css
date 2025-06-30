@@ -1,0 +1,37 @@
+/* components/SnowEffect.module.css */
+.snowContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Allows clicks to pass through */
+  z-index: 5; /* Sit on top of the stream, but below the main text */
+}
+
+.flake {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  /* The core animation */
+  animation-name: snowfall;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  /* Use our randomized CSS variables */
+  animation-delay: var(--animation-delay);
+  animation-duration: var(--animation-duration);
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) translateX(0);
+    left: var(--left-start);
+  }
+  100% {
+    transform: translateY(110vh) translateX(10px); /* Add slight sideways drift */
+    left: var(--left-end);
+  }
+}

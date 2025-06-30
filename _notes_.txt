@@ -49,3 +49,4 @@ https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/
 
 pip install audioop-lts
 
+npm install zustand
