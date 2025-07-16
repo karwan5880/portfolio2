@@ -1,0 +1,93 @@
+'use client'
+
+import { Html, Stars } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { useMemo, useState } from 'react'
+import { Vector3 } from 'three'
+
+import { CornerLink } from '@/components/CornerLink'
+import { Globe } from '@/components/Globe'
+
+import styles from './location.module.css'
+// <-- Import our new Globe component
+import { locationData } from '@/data/location-data'
+import { useGatekeeper } from '@/hooks/useGatekeeper'
+
+// Helper function to convert lat/lon to 3D coordinates on a sphere
+function latLonToVector3(lat, lon, radius) {
+  const phi = (90 - lat) * (Math.PI / 180)
+  const theta = (lon + 180) * (Math.PI / 180)
+  const x = -(radius * Math.sin(phi) * Math.cos(theta))
+  const z = radius * Math.sin(phi) * Math.sin(theta)
+  const y = radius * Math.cos(phi)
+  return new Vector3(x, y, z)
+}
+
+function Marker({ position, isHome, onClick, onPointerEnter, onPointerLeave }) {
+  const color = isHome ? '#00ff9d' : '#ffc300' // Green for home, gold for others
+  const [size, setSize] = useState(0.05)
+
+  return (
+    <mesh position={position} onClick={onClick} onPointerEnter={() => setSize(0.08)} onPointerLeave={() => setSize(0.05)}>
+      <sphereGeometry args={[size, 16, 16]} />
+      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={3} toneMapped={false} />
+    </mesh>
+  )
+}
+
+export default function LocationPage() {
+  useGatekeeper('/location')
+  const [hovered, setHovered] = useState(null)
+
+  // Convert location data to 3D vectors
+  const markers = useMemo(
+    () =>
+      locationData.map((loc) => ({
+        ...loc,
+        vectorPosition: latLonToVector3(loc.coordinates[1], loc.coordinates[0], 5),
+      })),
+    []
+  )
+
+  return (
+    <div className={styles.wrapper}>
+      <Canvas camera={{ position: [0, 3, 12], fov: 75 }}>
+        <ambientLight intensity={0.3} />
+        <pointLight position={[20, 20, 20]} intensity={1} />
+        <Stars count={5000} factor={4} saturation={0} fade speed={1} />
+
+        {/* Use the new Globe component */}
+        <Globe>
+          {markers.map((loc) => (
+            <Marker
+              key={loc.id}
+              position={loc.vectorPosition}
+              isHome={loc.isHome}
+              onPointerEnter={() => setHovered(loc)}
+              onPointerLeave={() => setHovered(null)}
+              // onClick={() => { /* Logic will be added in the next step */ }}
+            />
+          ))}
+
+          {/* Tooltip on hover */}
+          {hovered && (
+            <Html position={hovered.vectorPosition.clone().multiplyScalar(1.05)}>
+              <div className={styles.tooltip}>{hovered.name}</div>
+            </Html>
+          )}
+        </Globe>
+      </Canvas>
+
+      <div className={styles.overlay}>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>Relocation Availability</h1>
+          <p className={styles.subtitle}>Currently based in Malaysia. Open to opportunities worldwide.</p>
+        </div>
+        {/* Info panel is temporarily disabled while we focus on the globe */}
+      </div>
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/finale" position="bottom-right" label="Finale" />
+    </div>
+  )
+}

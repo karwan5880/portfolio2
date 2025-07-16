@@ -1,0 +1,155 @@
+'use client'
+
+import { useState } from 'react'
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+
+// Import useState
+import { CornerLink } from '@/components/CornerLink'
+
+import styles from './location.module.css'
+
+const geoUrl = '/world.json' // We'll use the 50m world.json
+const seaGeoUrl = '/sea_10m.json'
+
+// --- Define our two "camera" settings ---
+const worldProjectionConfig = {
+  scale: 160,
+  center: [0, 0],
+}
+
+const seaProjectionConfig = {
+  scale: 800, // Zoomed in
+  center: [118, 15], // Centered on SE Asia
+}
+
+// --- Define our target countries ---
+// const targetCountries = ['HKG', 'TWN', 'SGP', 'AUS', 'JPN', 'GBR', 'USA', 'CAN', 'DNK', 'SWE', 'FIN', 'FRA', 'NOR']
+const targetCountries = [
+  // Asia-Pacific
+  'HKG',
+  'TWN',
+  'SGP',
+  'AUS',
+  'JPN',
+  'KOR',
+  'NZL',
+  // Europe
+  'GBR',
+  'DNK',
+  'SWE',
+  'FIN',
+  'FRA',
+  'DEU',
+  'IRL',
+  'NLD',
+  'NOR',
+  'CHE',
+  'ESP',
+  'ITA',
+  // North America
+  'USA',
+  'CAN',
+  // Middle East
+  'ARE',
+]
+const homeCountry = 'MYS'
+
+const countryStyles = {
+  default: { fill: '#2C2C2C', stroke: '#555555', strokeWidth: 0.5, outline: 'none' },
+  hover: { fill: '#00FF9D', stroke: '#00FF9D', strokeWidth: 0.75, outline: 'none' },
+  pressed: { fill: '#00FF9D', stroke: '#00FF9D', outline: 'none' },
+}
+
+export default function LocationPage() {
+  const [tooltipContent, setTooltipContent] = useState('')
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
+
+  // --- NEW: State to control the current map view ---
+  const [view, setView] = useState('WORLD') // 'WORLD' or 'SEA'
+  const [geoData, setGeoData] = useState(null)
+
+  useEffect(() => {
+    const url = view === 'WORLD' ? worldGeoUrl : seaGeoUrl
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setGeoData(data)
+      })
+  }, [view]) // This effect re-runs whenever the 'view' state changes
+
+  const handleMouseMove = (e) => {
+    setTooltipPosition({ x: e.clientX, y: e.clientY })
+  }
+
+  // --- NEW: Function to toggle the view state ---
+  const toggleView = () => {
+    setView((currentView) => (currentView === 'WORLD' ? 'SEA' : 'WORLD'))
+  }
+
+  // Don't render anything until the initial map data has loaded
+  if (!geoData) {
+    return <div className={styles.loading}>Loading Map...</div>
+  }
+
+  return (
+    <div className={styles.wrapper} onMouseMove={handleMouseMove}>
+      <div className={styles.header}>
+        {/* The header can also be dynamic based on the view */}
+        <h1>{view === 'WORLD' ? 'Global Relocation Availability' : 'Target Region: Asia-Pacific'}</h1>
+        <p>Ready to engage worldwide. Visa sponsorship required for all locations outside of Malaysia.</p>
+      </div>
+
+      {/* Adding a key prop that changes with the view forces React to
+          re-mount the component, which prevents weird zooming/panning bugs. */}
+      <ComposableMap key={view} projectionConfig={view === 'WORLD' ? worldProjectionConfig : seaProjectionConfig} className={styles.map}>
+        <Geographies geography={geoUrl}>
+          {({ geographies }) =>
+            geographies.map((geo) => {
+              const isTarget = targetCountries.includes(geo.properties.iso_a3)
+              const isHome = geo.properties.iso_a3 === homeCountry
+
+              let style = { ...countryStyles.default }
+              // In SEA view, we can make non-target countries even more subtle
+              if (view === 'SEA') {
+                style.fill = '#1a1a1a'
+                style.stroke = '#444'
+              }
+              if (isHome) style.fill = '#FFC300'
+              if (isTarget) style.fill = 'rgba(0, 255, 157, 0.2)'
+
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  style={{ default: style, hover: countryStyles.hover, pressed: countryStyles.pressed }}
+                  onMouseEnter={() => {
+                    if (isTarget) setTooltipContent(`${geo.properties.name} - Visa Sponsorship Required`)
+                    if (isHome) setTooltipContent(`${geo.properties.name} - Home Base (No Sponsorship)`)
+                  }}
+                  onMouseLeave={() => setTooltipContent('')}
+                />
+              )
+            })
+          }
+        </Geographies>
+        <Marker coordinates={[101.97, 4.21]}>
+          <circle r={view === 'WORLD' ? 3 : 1} fill="#FFC300" stroke="#fff" strokeWidth={view === 'WORLD' ? 1 : 0.5} />
+        </Marker>
+      </ComposableMap>
+
+      {tooltipContent && (
+        <div style={{ left: tooltipPosition.x + 15, top: tooltipPosition.y + 15 }} className={styles.tooltip}>
+          {tooltipContent}
+        </div>
+      )}
+
+      {/* --- NEW: The Toggle Button --- */}
+      <button className={styles.toggleButton} onClick={toggleView}>
+        {view === 'WORLD' ? 'SEA' : 'World'}
+      </button>
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/finale" position="bottom-right" label="Finale" />
+    </div>
+  )
+}

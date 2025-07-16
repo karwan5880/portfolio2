@@ -1,50 +1,29 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
+// Import our global store
 import styles from './DogEar.module.css'
+import { useAudioStore } from '@/stores/audioStore'
 
-export function DogEar({ href, 'aria-label': ariaLabel, position = 'bottom-right', direction = 'next', ...props }) {
-  const router = useRouter()
+export function DogEar({ href, 'aria-label': ariaLabel, position = 'bottom-right', onNavigateStart, ...rest }) {
+  // Get the sound-playing action from our store
+  const playUISound = useAudioStore((state) => state.playUISound)
 
-  const playSound = () => {
-    // const randomNumber = Math.floor(Math.random() * 7) // 7 for 0-6 range
-    const randomNumber = Math.floor(Math.random() * 9)
-    try {
-      console.log(`playing secret${randomNumber}.mp3`)
-      const audio = new Audio(`/sound/secret${randomNumber}.mp3`)
-      audio.play()
-    } catch (error) {
-      console.error('Failed to play sound:', error)
+  const handleClick = () => {
+    // 1. Trigger the global sound effect
+    playUISound('dogEar')
+
+    // 2. Call the optional callback if it exists
+    if (onNavigateStart) {
+      onNavigateStart()
     }
+
+    // 3. That's it! We DO NOT call e.preventDefault().
+    // The Next.js <Link> will now handle the navigation instantly.
   }
 
   const positionClass = position === 'bottom-left' ? styles.bottomLeft : styles.bottomRight
 
-  //   const handlePreviousClick = () => {
-  //     playSound()
-  //     router.back()
-  //   }
-  //   // Conditionally render a 'back' button or a 'next' link
-  //   if (direction === 'previous') {
-  //     return (
-  //       <div
-  //         aria-label={ariaLabel || 'Go to previous page'}
-  //         onClick={handlePreviousClick}
-  //         className={`${styles.dogEar} ${styles.previous}`} // Add the 'previous' class
-  //         {...props}
-  //       />
-  //     )
-  //   }
-
-  return (
-    <Link
-      href={href}
-      aria-label={ariaLabel || 'Go to next page'}
-      onClick={playSound}
-      className={`${styles.dogEar} ${positionClass}`}
-      {...props}
-    />
-  )
+  return <Link href={href} aria-label={ariaLabel || `Navigate to ${href}`} onClick={handleClick} className={`${styles.dogEar} ${positionClass}`} {...rest} />
 }

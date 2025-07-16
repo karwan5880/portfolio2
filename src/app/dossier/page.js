@@ -1,10 +1,14 @@
+'use client'
+
 import Link from 'next/link'
 
 import { DogEar } from '@/components/DogEar'
 
 import styles from './dossier.module.css'
+import { useGatekeeper } from '@/hooks/useGatekeeper'
 
 export default function Dossier() {
+  useGatekeeper('/dossier')
   return (
     <div className={styles.dossierWrapper}>
       <div className={styles.dossierPaper}>
@@ -34,35 +38,9 @@ export default function Dossier() {
    `}
         </pre>
         <div className={styles.blinkingCursor}></div>
-        {/* <Link href="/dossier/applications" className={styles.dogEar} aria-label="Go to application list"></Link> */}
-        {/* <Link href="/dossier/dev-history" className={styles.dogEar} aria-label="Go to dev history"></Link> */}
-        {/* <DogEar href="/dossier/dev-history" aria-label="Go to dev history" /> */}
-        {/* <DogEar href="/dev-history" position="bottom-right" aria-label="View dev history" /> */}
+        <DogEar href="/" position="bottom-left" aria-label="Return to main page" />
         <DogEar href="/job-hunt" position="bottom-right" aria-label="View job-hunt" />
       </div>
-      {/* <DogEar direction="previous" aria-label="Go to previous page" /> */}
-      <DogEar href="/" position="bottom-left" aria-label="Return to main page" />
     </div>
   )
 }
-
-//    -> Applications: 50+
-//    -> Interviews: <5
-//    -> Offers: 0
-//    -> Script failed.
-// 2025.04: Executing script "job_hunt_local_MY_0.sh"... (Running)
-//    -> Applications: 100+
-//    -> Interviews: <10
-//    -> Offers: 0
-//    -> Script failed.
-// 2025.05: Executing script "job_hunt_local_MY_1.sh"... (Running)
-//    -> Applications: 100+
-//    -> Interviews: <10
-//    -> Offers: 0
-//    -> Script failed.
-// 2025.06: Executing script "job_hunt_local_MY_2.sh"... (Running)
-//    -> Applications: 100+
-//    -> Interviews: <10
-//    -> Offers: 0
-//    -> Script failed.
-// 2025.07: Executing script "job_hunt_local_MY_3.sh"... (Running)

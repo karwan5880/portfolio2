@@ -1,0 +1,91 @@
+// app/dossier/applications/finale/page.js
+import { DogEar } from '@/components/DogEar'
+
+import styles from './finale.module.css'
+
+export default function FinalePage() {
+  return (
+    <div className={styles.finaleWrapper}>
+      <div className={styles.terminalOutput}>
+        <pre>
+          {`
+user@mainframe:~/career$ git status
+
+On branch feature/next-chapter
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+
+      `}
+          <span className={styles.commitFiles}>{`new file:   role_ai-engineer.md`}</span>
+          <span className={styles.commitFiles}>{`new file:   role_embedded-systems-engineer.md`}</span>
+          {`
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+      `}
+          <span className={styles.untrackedFiles}>{`role_frontend-engineer.md`}</span>
+          <span className={styles.untrackedFiles}>{`role_backend-engineer.md`}</span>
+          <span className={styles.untrackedFiles}>{`role_full-stack-developer.md`}</span>
+          {`
+
+`}
+        </pre>
+        <div className={styles.prompt}>
+          <span>user@mainframe:~/career$</span>
+          <span className={styles.blinkingCursor}></span>
+        </div>
+      </div>
+      <DogEar href="/dossier/applications" position="bottom-left" aria-label="Return to application logs" />
+    </div>
+  )
+}
+
+
+
+i have this following audio code:
+  const { startPlayback, playNextTrack, currentSongIndex, isPlaying, activeTheme } = useAudioStore()
+i have this following useeffect to change theme when song playing changed:
+  // This effect starts the music when the component mounts
+  useEffect(() => {
+    // After a 4-second delay, try to start the music.
+    const timer = setTimeout(() => {
+      startPlayback()
+    }, 4000)
+    return () => clearTimeout(timer)
+  }, [startPlayback])
+  useEffect(() => {
+    const timer = setTimeout(() => startPlayback(), 4000)
+    return () => clearTimeout(timer)
+  }, [startPlayback])
+  useEffect(() => {
+    if (currentSongIndex > 0) playNextTrack()
+  }, [currentSongIndex, playNextTrack])
+i have the following <div> set up:
+    <div className={`${styles.finaleWrapper} ${isExiting ? styles.exiting : ''}`}>
+      {activeTheme === 'snow' && <SnowEffect />}
+      {activeTheme === 'thunder' && <ThunderEffect />}
+      {activeTheme === 'lightning' && <LightningEffect />}
+      <div className={`${styles.staticContainer} ${pageState === 'SCROLLING' ? styles.hidden : ''}`}>
+        <p className={`${styles.streamItem} ${styles.finalMessage}`}>
+          {typedText}
+          {!isExiting && <span className={styles.blinkingCursor}></span>}
+        </p>
+        <div className={`${styles.linksContainer} ${pageState !== 'TYPING' ? styles.visible : ''}`}>
+          {initialLinks.map((item, index) => (
+            <a key={index} href={item.href} target="_blank" rel="noopener noreferrer" className={styles.link}>
+              {item.content}
+            </a>
+          ))}
+        </div>
+      </div>
+// TODO: write the div of singleline, left, middle, right, glitch
+      <div className={`${styles.scrollContainer} ${pageState === 'SCROLLING' ? styles.scrolling : ''}`}>
+        <div className={styles.dataBurstContainer}>{githubBurst && <StreamItem key={githubBurst.id} item={githubBurst} />}</div>
+        <div className={styles.dataBurstContainer}>{musicBurst && <StreamItem key={musicBurst.id} item={musicBurst} />}</div>
+      </div>
+      <DogEar href="/dev-history" position="bottom-left" aria-label="Return to dev-history" />
+      <DogEar href="/" position="bottom-right" aria-label="View main page" />
+    </div>

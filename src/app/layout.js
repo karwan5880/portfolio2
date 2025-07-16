@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from 'next/font/google'
 import Script from 'next/script'
 
+import { AudioControl } from '@/components/AudioControl'
+
 import './globals.css'
 
 const geistSans = Geist({
@@ -21,7 +23,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {children}
+        {/* <AudioControl /> */}
+      </body>
       {/* just for testing, script is running twice if set automatically inject on cloudflare.  */}
       {/* <Script
         defer

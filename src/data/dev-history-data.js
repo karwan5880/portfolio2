@@ -31,8 +31,7 @@ export const devHistoryData = [
     id: 'lpd',
     year: '2022-2023',
     title: "Master's Dissertation: License Plate Detection",
-    description:
-      'A deep focus into computer vision and deep learning, applying Python skills to a major research project.',
+    description: 'A deep focus into computer vision and deep learning, applying Python skills to a major research project.',
     position: [0, 6, -30],
     connectsTo: ['python'],
     type: 'gyroscope',
@@ -41,8 +40,7 @@ export const devHistoryData = [
     id: 'pyqt',
     year: '2024.01 - 2024.08',
     title: 'PyQt6/PySide6 Apps',
-    description:
-      'Designed and built GUI for Windows desktop applications, translating concepts into user-facing programs.',
+    description: 'Designed and built GUI for Windows desktop applications, translating concepts into user-facing programs.',
     position: [6, 8, -40],
     connectsTo: ['lpd'],
     type: 'circuit',
@@ -59,9 +57,8 @@ export const devHistoryData = [
   {
     id: 'exploration',
     year: '2025.02 - 2025.05',
-    title: 'C++ / Flutter / Godot / Next.js Exploration',
-    description:
-      'Ventured into low-level systems with WinRT and KMDF drivers, mobile with Flutter, game dev with Godot, and advanced AI with Reinforcement Learning.',
+    title: 'C++ / Flutter / Next.js / Godot Exploration',
+    description: 'Ventured into low-level systems with WinRT and KMDF drivers, mobile with Flutter, game dev with Godot, and advanced AI with Reinforcement Learning.',
     position: [0, 12, -60],
     connectsTo: ['leet'],
     type: 'cluster',
@@ -70,8 +67,7 @@ export const devHistoryData = [
     id: 'current',
     year: '2025.06 - Present',
     title: 'Xiaohongshu Clone',
-    description:
-      'Currently architecting and building a full-stack social media application clone, leveraging React for the front-end and Django for the back-end.',
+    description: 'Currently architecting and building a full-stack social media application clone, leveraging React for the front-end and Django for the back-end.',
     position: [7, 14, -70],
     connectsTo: ['exploration'],
     type: 'assembler',

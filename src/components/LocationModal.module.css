@@ -1,0 +1,189 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.modalOverlay.isOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* .modalContent {
+  position: relative;
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+} */
+.modalContent {
+  position: relative;
+  background-color: #fcfcfc;
+  color: #333;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modalOverlay.isOpen .modalContent {
+  transform: scale(1);
+}
+
+.imageContainer {
+  width: 100%;
+  height: 0;
+  padding-bottom: 60%; /* Aspect ratio for the image container */
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.imageContainer img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.infoContainer {
+  padding: 1.5rem 2rem;
+}
+
+.infoContainer h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #00ff9d;
+}
+
+.infoContainer p {
+  margin: 0;
+  color: #a0a0a0;
+}
+
+.navButton {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 60px;
+  font-size: 2rem;
+  border-radius: 4px;
+}
+.prevButton {
+  left: -60px;
+}
+.nextButton {
+  right: -60px;
+}
+
+.header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+.header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0077b6;
+}
+.backButton {
+  background: none;
+  border: none;
+  color: #0077b6;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.5rem 0 0 0;
+}
+.cityList {
+  padding: 1rem;
+}
+.cityEntry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.cityEntry:hover {
+  background-color: #f0f0f0;
+}
+.imageViewer {
+  width: 100%;
+  position: relative;
+}
+.imageViewer img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.imageCaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+}
+.imageCaption h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.8rem;
+}
+.imageCaption p {
+  margin: 0;
+}
+.closeButton {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border: 1px solid #e0e0e0;
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+
+.navButton {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+.closeButton:hover,
+.navButton:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.closeButton {
+  top: 1rem;
+  right: 1rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+}

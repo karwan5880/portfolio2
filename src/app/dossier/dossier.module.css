@@ -13,7 +13,7 @@
   max-width: 850px;
   background-color: #121212;
   color: #d0d0d0;
-  padding: 2.5rem 3rem;
+  padding: 2.5rem 3rem 5rem 3rem;
   border: 1px solid #333;
   position: relative;
 }
@@ -21,7 +21,7 @@
 .header {
   color: #00ff00; /* Green terminal text */
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .timeline {
@@ -79,4 +79,48 @@
   border-bottom-color: #8a2be2;
   border-right-color: #8a2be2;
   box-shadow: -10px -10px 15px rgba(138, 43, 226, 0.3);
+}
+
+.documentContainer {
+  /* ... your existing styles like width, background, box-shadow, etc. ... */
+
+  /* ADD THIS LINE to increase the page height */
+  padding-bottom: 6rem; /* Adjust this value as needed */
+}
+
+/* It's also good practice to adjust for mobile */
+@media (max-width: 768px) {
+  .documentContainer {
+    /* You might want a smaller padding on mobile screens */
+    padding-bottom: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Reduce the padding around the paper to bring it closer to the screen edges */
+  .dossierWrapper {
+    padding: 1rem;
+    /* This ensures the paper doesn't get stuck at the top */
+    align-items: flex-start;
+    padding-top: 3rem; /* Add some space from the top */
+  }
+
+  /* Reduce the internal padding of the paper itself */
+  .dossierPaper {
+    padding: 1.5rem;
+    /* If you have a max-width, you might want to adjust it */
+    max-width: 100%;
+  }
+
+  /* Make the main header slightly smaller */
+  .header {
+    font-size: 1.2rem;
+  }
+
+  /* The most important fix: Make the preformatted text wrap */
+  .timeline {
+    font-size: 0.85rem; /* Make the timeline text a bit smaller */
+    white-space: pre-wrap; /* This preserves your line breaks but wraps long lines */
+    word-break: break-word; /* A fallback to ensure words themselves can break if needed */
+  }
 }

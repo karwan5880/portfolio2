@@ -1,0 +1,64 @@
+.thunderWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.dischargeContainer {
+  position: absolute;
+  animation: fadeInAndOut 2s forwards;
+}
+
+.icon {
+  font-size: 1.2rem;
+  color: white;
+  text-shadow:
+    0 0 10px white,
+    0 0 20px white;
+}
+
+.sparkle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
+  /* The "leaking electricity" animation */
+  animation: dissipate 2s forwards;
+}
+
+@keyframes fadeInAndOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(var(--start-rot));
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--end-rot));
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(var(--end-rot));
+  }
+}
+
+@keyframes dissipate {
+  from {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  to {
+    transform: scale(8);
+    opacity: 0;
+  }
+}

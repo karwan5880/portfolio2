@@ -1,0 +1,86 @@
+export const latLonToVector3 = (lat, lon, radius) => {
+  // Convert latitude and longitude from degrees to radians
+  const latitudeRad = (lat * Math.PI) / 180
+  const longitudeRad = (lon * Math.PI) / 180
+
+  // The standard formula for converting spherical coordinates to Cartesian (x, y, z)
+  // in a Y-up system like Three.js.
+  const x = radius * Math.cos(latitudeRad) * Math.sin(longitudeRad)
+  const y = radius * Math.sin(latitudeRad)
+  const z = radius * Math.cos(latitudeRad) * Math.cos(longitudeRad)
+
+  return [x, y, z]
+}
+
+export const locations = [
+  {
+    id: 'my',
+    name: 'Malaysia',
+    type: 'home',
+    coordinates: [3.139, 101.6869], // Kuala Lumpur
+    status: 'No Visa Sponsorship Required',
+  },
+  {
+    id: 'sg',
+    name: 'Singapore',
+    type: 'target',
+    coordinates: [1.3521, 103.8198],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'hk',
+    name: 'Hong Kong',
+    type: 'target',
+    coordinates: [22.3193, 114.1694],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'tw',
+    name: 'Taiwan',
+    type: 'target',
+    coordinates: [23.6978, 120.9605],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'jp',
+    name: 'Japan',
+    type: 'target',
+    coordinates: [36.2048, 138.2529],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'au',
+    name: 'Australia',
+    type: 'target',
+    coordinates: [-25.2744, 133.7751],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'eu',
+    name: 'Europe (Nordics+)',
+    type: 'target',
+    coordinates: [60.1699, 24.9384], // Helsinki as a representative point
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'uk',
+    name: 'United Kingdom',
+    type: 'target',
+    coordinates: [55.3781, -3.436],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'us',
+    name: 'United States',
+    type: 'target',
+    coordinates: [39.8283, -98.5795],
+    status: 'Visa Sponsorship Required',
+  },
+  {
+    id: 'ca',
+    name: 'Canada',
+    type: 'target',
+    coordinates: [56.1304, -106.3468],
+    status: 'Visa Sponsorship Required',
+  },
+]

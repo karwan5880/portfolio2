@@ -1,0 +1,70 @@
+'use client'
+
+import { Stars, Text } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { useEffect, useRef } from 'react'
+import { MathUtils, Vector3 } from 'three'
+
+import { useGatekeeper } from '@/hooks/useGatekeeper'
+import { useAudioStore } from '@/stores/audioStore'
+
+// NOTE: We don't import useStore, as this page won't be selecting individual nodes.
+
+// We'll reuse the EtherealNode component for visual consistency.
+// In a real project, this would be moved to a shared components directory.
+function EtherealNode({ position, title, year }) {
+  const heartRef = useRef()
+
+  return (
+    <group position={position}>
+      <Text position={[0, 0.8, 0]} fontSize={0.5} color="white" anchorX="center">
+        {title}
+      </Text>
+      <Text position={[0, -0.8, 0]} fontSize={0.25} color="#999" anchorX="center">
+        {year}
+      </Text>
+      <mesh ref={heartRef}>
+        <sphereGeometry args={[0.3, 16, 16]} />
+        <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={1.5} toneMapped={false} />
+      </mesh>
+    </group>
+  )
+}
+
+function FinaleScene() {
+  // The main 3D content will be built out here in the next steps.
+  return (
+    <>
+      <Stars count={5000} />
+      {/* We will add the "Constellation" here later. */}
+    </>
+  )
+}
+
+export default function FinalePage() {
+  useGatekeeper('/finale')
+  const hasPermission = useAudioStore((state) => state.hasPermission)
+
+  useEffect(() => {
+    // This is the core logic for this step.
+    // When the component mounts, it checks if permission has been granted
+    // from the previous page.
+    if (hasPermission) {
+      console.log('Permission to display finale received. The journey concludes.')
+      // In the next steps, we will trigger our animation sequence from here.
+    } else {
+      console.log('Awaiting permission to display finale.')
+      // We could redirect the user or show a placeholder if they arrive here directly.
+    }
+  }, [hasPermission])
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', background: 'black', color: 'white' }}>
+      <Canvas camera={{ fov: 75, position: [0, 0, 50] }}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <FinaleScene />
+      </Canvas>
+    </div>
+  )
+}

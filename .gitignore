@@ -44,3 +44,24 @@ next-env.d.ts
 /test
 
 .github*
+*.glb
+*.jpg
+public/data/countries.geojson
+/public/drone
+/public/fonts
+public/drone2.gltf
+public/gentilis_bold.typeface.json
+public/glow.png
+public/helvetiker_bold.typeface.json
+public/helvetiker_regular.typeface.json
+public/images/locations/night/tokyo_night.png
+public/ma_shan_zheng_regular.json
+/public/not_used
+*.ttf
+*.png
+*.json
+*.svg
+public/scene.bin
+/public/sound
+/public/sound
+/public/textures

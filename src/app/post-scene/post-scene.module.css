@@ -1,0 +1,52 @@
+.postSceneWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  color: #00ff00;
+  font-family: monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+}
+
+.contentContainer {
+  font-size: 1.5rem;
+}
+
+.typedText {
+  display: block; /* Each message on a new line */
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  border-right: 3px solid #00ff00;
+  width: fit-content;
+  animation: blink-caret 1s step-end infinite;
+}
+
+.link {
+  color: #00ff00;
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+  animation-delay: 1s; /* Fade in after it's typed */
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #00ff00;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

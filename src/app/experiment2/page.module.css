@@ -1,0 +1,106 @@
+.main {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  color: white;
+  overflow: hidden; /* Important to keep canvas contained */
+  position: relative; /* For positioning the InfoBox */
+}
+
+.header {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  pointer-events: none; /* Allows clicks to go through to the canvas */
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+  background: linear-gradient(90deg, #a770ef, #cf8bf3, #fdb99b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header p {
+  font-size: 1rem;
+  color: #c0c0c0;
+  margin-top: 8px;
+}
+
+/* InfoBox Styles */
+.infoBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background: rgba(20, 20, 30, 0.85);
+  border: 1px solid rgba(171, 71, 239, 0.5);
+  border-radius: 16px;
+  padding: 2rem;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.infoBox.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.infoBox h2 {
+  margin-top: 0;
+  color: #cf8bf3;
+  border-bottom: 1px solid #a770ef;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.infoBox p {
+  line-height: 1.6;
+}
+
+.projectList {
+  list-style: none;
+  padding: 0;
+}
+
+.projectList li {
+  margin-bottom: 1rem;
+}
+
+.projectList a {
+  color: #fdb99b;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.projectList a:hover {
+  color: #ffffff;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}

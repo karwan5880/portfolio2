@@ -1,0 +1,150 @@
+'use client'
+
+import { useEffect, useMemo, useRef, useState } from 'react'
+
+import styles from './Finale.module.css'
+import { useSnippetPool } from '@/hooks/useSnippetPool'
+
+const SyntaxHighlightedCode = ({ content }) => {
+  if (typeof content !== 'string') {
+    console.log(`content undefined?: `, content, typeof content)
+    return null
+  }
+
+  const html = content
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/(const|let|class|return|def|fn|public|static|void)/g, '<span class="keyword">$1</span>')
+    .replace(/("[^"]*")/g, '<span class="string">$1</span>')
+    .replace(/(\/\/.*|\#.*|\/\*.*\*\/)/g, '<span class="comment">$1</span>')
+  return <pre dangerouslySetInnerHTML={{ __html: html }} />
+}
+
+const useParticleSystem = (config, createParticleData) => {
+  const [particles, setParticles] = useState([])
+  const lastSpawnTime = useRef(0)
+  const requestRef = useRef()
+  const startTimeRef = useRef(0) // <-- ADD THIS to track the start time
+
+  // Use a ref to hold the latest config. This prevents the useEffect from re-running.
+  const configRef = useRef(config)
+  useEffect(() => {
+    configRef.current = config
+  }, [config])
+
+  useEffect(() => {
+    const animate = (currentTime) => {
+      const currentConfig = configRef.current
+      // --- Spawning logic is now gated by isActive inside the loop ---
+      if (currentConfig.isActive) {
+        if (startTimeRef.current === 0) {
+          startTimeRef.current = currentTime
+        }
+        const elapsedTime = currentTime - startTimeRef.current
+        const isBursting = true // We are always bursting now
+
+        // if (config.isActive) {
+        //   startTimeRef.current = 0
+        //   setParticles([]) // Also good to clear old particles
+        // }
+        // const animate = (currentTime) => {
+        //   if (startTimeRef.current === 0) {
+        //     startTimeRef.current = currentTime
+        //   }
+        // const elapsedTime = currentTime - startTimeRef.current
+
+        const cycleTime = elapsedTime % (config.burstDuration + config.pauseDuration)
+        // const isBursting = cycleTime < config.burstDuration
+
+        if (isBursting && currentTime - lastSpawnTime.current > config.spawnRate) {
+          lastSpawnTime.current = currentTime
+          const data = createParticleData()
+          if (data) {
+            const newParticle = {
+              id: Math.random(),
+              data: data, // The data from our factory
+              style: {
+                // top: `${Math.random() * 90}%`,
+                // left: `${Math.random() * 80 + 10}%`,
+                top: `${Math.random() * 120 - 10}%`,
+                left: `${Math.random() * 120 - 10}%`,
+                '--particle-color': `hsl(${Math.random() * 360}, 70%, 70%)`,
+                opacity: Math.random() * 0.4 + 0.3,
+              },
+            }
+            setParticles((prev) => [...prev.slice(-200), newParticle])
+          }
+        }
+
+        // requestRef.current = requestAnimationFrame(animate)
+      } else {
+        // Reset the start time when not active, so the next burst is fresh.
+        startTimeRef.current = 0
+      }
+      requestRef.current = requestAnimationFrame(animate)
+    }
+    requestRef.current = requestAnimationFrame(animate)
+    // if (config.isActive) {
+    //   requestRef.current = requestAnimationFrame(animate)
+    // }
+    // return () => {
+    //   if (requestRef.current) {
+    //     cancelAnimationFrame(requestRef.current)
+    //   }
+    // }
+    return () => cancelAnimationFrame(requestRef.current)
+  }, [createParticleData]) // We can simplify dependencies here
+
+  return particles
+}
+
+export function DataStorm({ isActive, particleLifetime = 1000 }) {
+  const { getSnippet } = useSnippetPool()
+  const [isCollapsing, setIsCollapsing] = useState(false) // <-- NEW STATE
+
+  // This effect correctly triggers the collapse.
+  useEffect(() => {
+    let timer
+    if (!isActive && !isCollapsing) {
+      setIsCollapsing(true)
+      // Optional: Clean up the remaining DOM nodes after the collapse animation finishes
+      timer = setTimeout(() => {
+        // Here you could decide to fully unmount or clear the particles array
+      }, 2000) // 1.5s for gravity well + 0.5s buffer
+    }
+    return () => clearTimeout(timer)
+  }, [isActive, isCollapsing])
+
+  const config = useMemo(
+    () => ({
+      isActive: isActive && !isCollapsing, // Stop spawning when collapsing starts
+      spawnRate: 2, // Spawn a new particle every 40ms (25 per second)
+      // particleLifetime, // Each particle lives for 1 second
+      // burstDuration: 10000, // Burst for 1 second
+      // pauseDuration: 0, // Pause for 0.5 seconds
+      // totalDuration: 40000, // The entire effect lasts for ~4 seconds
+    }),
+    [isActive, isCollapsing]
+  )
+
+  const particles = useParticleSystem(config, getSnippet)
+
+  // console.log(`particles: `, particles)
+
+  // --- Change the render condition ---
+  // Don't unmount immediately. Stay mounted during the collapse.
+  if (!isActive && !isCollapsing) {
+    return null
+  }
+
+  return (
+    <div className={styles.dataStormOverlay}>
+      {particles.map((particle) => (
+        <div key={particle.id} className={`${styles.stormBlock} ${isCollapsing ? styles.collapsing : ''}`} style={{ ...particle.style, '--particle-lifetime': `${particleLifetime}ms`, opacity: particle.style.opacity }}>
+          <div className={styles.codeTitle}>{particle.data.title}</div>
+          <SyntaxHighlightedCode content={particle.data.code} />
+        </div>
+      ))}
+    </div>
+  )
+}

@@ -1,0 +1,86 @@
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  background-color: #111;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin: 0 0 0 0;
+  color: #00ff9d;
+}
+
+.header p {
+  color: #a0a0a0;
+  max-width: 500px;
+}
+
+/* .map {
+  width: 100%;
+  height: auto;
+  max-height: 100vh;
+} */
+/* Base map style */
+.map {
+  width: 100%;
+  height: auto;
+}
+
+.tooltip {
+  position: fixed;
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  pointer-events: none; /* Important so it doesn't block mouse events */
+  z-index: 1001;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  .wrapper {
+    padding: 1rem;
+  }
+}
+
+/* NEW: A container to wrap the map and handle mouse events */
+.mapContainer {
+  position: relative; /* This is crucial for positioning the magnifier inside */
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- NEW: Styles for the Magnifier --- */
+.magnifierContainer {
+  position: absolute;
+  border-radius: 50%; /* Makes the container circular */
+  overflow: hidden; /* This clips the square map inside into a circle */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* A nice drop shadow */
+  border: 3px solid white; /* The "lens" border */
+  z-index: 100;
+  pointer-events: none; /* So the magnifier doesn't block tooltips on the map below */
+  background-color: #1a1e24; /* A fallback background for the lens */
+}
+
+.magnifierMap {
+  width: 100%;
+  height: auto;
+  /* We need to apply an offset to the map inside the lens to make it look right */
+  transform: translate(-55%, -55%);
+}

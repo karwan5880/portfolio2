@@ -1,0 +1,206 @@
+'use client'
+
+import { CubicBezierLine, ScrollControls, Stars, Text, useScroll } from '@react-three/drei'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { MathUtils, Vector3 } from 'three'
+
+import { DogEar } from '@/components/DogEar'
+
+import styles from './dev-history.module.css'
+import { devHistoryData } from '@/data/dev-history-data'
+import { useGatekeeper } from '@/hooks/useGatekeeper'
+import { useAudioStore } from '@/stores/audioStore'
+import { useStore } from '@/stores/useStore'
+
+function EtherealNode({ id, title, year, position }) {
+  const textRef = useRef()
+  const heartRef = useRef()
+  const isActive = useStore((state) => state.selectedNode === id)
+
+  useFrame(() => {
+    if (heartRef.current && heartRef.current.material) {
+      const targetIntensity = isActive ? 2.5 : 0.5
+      heartRef.current.material.emissiveIntensity = MathUtils.lerp(heartRef.current.material.emissiveIntensity, targetIntensity, 0.1)
+    }
+    if (textRef.current) {
+      const targetScale = isActive ? 1.2 : 1
+      textRef.current.scale.lerp(new Vector3(targetScale, targetScale, targetScale), 0.1)
+    }
+  })
+
+  return (
+    <group position={position}>
+      <group ref={textRef}>
+        <Text position={[0, 0.8, 0]} fontSize={0.5} color="white" anchorX="center">
+          {title}
+        </Text>
+        <Text position={[0, -0.8, 0]} fontSize={0.25} color="#999" anchorX="center">
+          {year}
+        </Text>
+      </group>
+      <mesh ref={heartRef}>
+        <sphereGeometry args={[0.3, 16, 16]} />
+        <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={0.5} toneMapped={false} />
+      </mesh>
+    </group>
+  )
+}
+
+function Synapse({ start, end }) {
+  const midPoint = new Vector3().addVectors(start, end).multiplyScalar(0.5)
+  const controlOffset = new Vector3(end.y - start.y, start.x - end.x, 0).normalize().multiplyScalar(5)
+  const controlPoint1 = new Vector3().addVectors(midPoint, controlOffset)
+
+  return <CubicBezierLine start={start} end={end} midA={controlPoint1} midB={controlPoint1} lineWidth={1} color="#fff" transparent opacity={0.15} frustumCulled={false} />
+}
+
+function GlitchedText({ text, isActive }) {
+  const [displayText, setDisplayText] = useState('')
+  const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()'
+
+  useEffect(() => {
+    let interval
+    if (isActive) {
+      let iteration = 0
+      interval = setInterval(() => {
+        const newText = text
+          .split('')
+          .map((char, index) => {
+            if (index < iteration) return text[index]
+            if (char === ' ') return ' '
+            return scrambleChars[Math.floor(Math.random() * scrambleChars.length)]
+          })
+          .join('')
+        setDisplayText(newText)
+        if (iteration >= text.length) clearInterval(interval)
+        iteration += text.length / 45
+      }, 30)
+    } else {
+      setDisplayText('')
+    }
+    return () => clearInterval(interval)
+  }, [isActive, text])
+
+  return <p>{displayText}</p>
+}
+
+function DescriptionOverlay() {
+  const selectedNodeId = useStore((state) => state.selectedNode)
+  const nodeData = devHistoryData.find((n) => n.id === selectedNodeId)
+
+  return (
+    <div className={`${styles.overlayContainer} ${selectedNodeId ? styles.isVisible : ''}`}>
+      {nodeData && (
+        <>
+          <h2>
+            {nodeData.title} ({nodeData.year})
+          </h2>
+          <GlitchedText text={nodeData.description} isActive={!!selectedNodeId} />
+          <button className={styles.closeButton}>Scroll to Resume Journey</button>
+        </>
+      )}
+    </div>
+  )
+}
+
+function CameraRig() {
+  const [isWarping, setIsWarping] = useState(true)
+  const { camera } = useThree()
+  const scroll = useScroll()
+  const setSelectedNode = useStore((state) => state.setSelectedNode)
+
+  const WARP_START_POS = new Vector3(10, 20, 150)
+  const NORMAL_FOV = 75
+  const WARP_FOV = 140
+
+  useEffect(() => {
+    camera.position.copy(WARP_START_POS)
+    camera.fov = WARP_FOV
+    camera.updateProjectionMatrix()
+    const timer = setTimeout(() => setIsWarping(false), 2500)
+    return () => clearTimeout(timer)
+  }, [camera])
+
+  useFrame((state, delta) => {
+    if (isWarping) {
+      const firstNodePos = new Vector3(...devHistoryData[0].position)
+      const arrivalTarget = new Vector3(firstNodePos.x, firstNodePos.y + 1, firstNodePos.z + 5)
+      state.camera.position.lerp(arrivalTarget, delta * 1.5)
+      state.camera.fov = MathUtils.lerp(state.camera.fov, NORMAL_FOV, delta * 2.0)
+      state.camera.updateProjectionMatrix()
+      state.camera.lookAt(firstNodePos)
+      return
+    }
+
+    const offset = MathUtils.clamp(scroll.offset, 0, 1)
+    const sectionIndex = Math.floor(offset * (devHistoryData.length - 1))
+    const nextSectionIndex = Math.min(sectionIndex + 1, devHistoryData.length - 1)
+    const startNode = new Vector3(...devHistoryData[sectionIndex].position)
+    const endNode = new Vector3(...devHistoryData[nextSectionIndex].position)
+    const sectionProgress = (offset * (devHistoryData.length - 1)) % 1
+
+    const cameraTarget = new Vector3()
+    cameraTarget.lerpVectors(startNode, endNode, sectionProgress)
+    cameraTarget.x += state.pointer.x * 0.5
+    cameraTarget.y += state.pointer.y * 0.5
+    cameraTarget.z += 5
+    state.camera.position.lerp(cameraTarget, delta * 2)
+
+    const lookAtTarget = new Vector3()
+    lookAtTarget.lerpVectors(startNode, endNode, sectionProgress)
+    state.camera.lookAt(lookAtTarget)
+
+    let closestNode = null
+    let minDistance = Infinity
+    const focusRadius = 12.0
+    devHistoryData.forEach((node) => {
+      const nodePosition = new Vector3(...node.position)
+      const distance = state.camera.position.distanceTo(nodePosition)
+      if (distance < minDistance) {
+        minDistance = distance
+        closestNode = node.id
+      }
+    })
+    if (minDistance < focusRadius) {
+      setSelectedNode(closestNode)
+    } else {
+      setSelectedNode(null)
+    }
+  })
+
+  return null
+}
+
+export default function DevHistoryPage() {
+  useGatekeeper('/dev-history')
+  const grantPermission = useAudioStore((state) => state.grantPermission)
+
+  return (
+    <div className={styles.wrapper}>
+      <Canvas camera={{ fov: 75 }}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <Stars count={5000} />
+
+        <ScrollControls pages={devHistoryData.length - 1} damping={0.3}>
+          {devHistoryData.map((node) => (
+            <EtherealNode key={node.id} {...node} />
+          ))}
+          {devHistoryData.map((node) =>
+            node.connectsTo.map((targetId) => {
+              const startNodeData = devHistoryData.find((n) => n.id === targetId)
+              if (!startNodeData) return null
+              return <Synapse key={`${node.id}-${targetId}`} start={new Vector3(...startNodeData.position)} end={new Vector3(...node.position)} />
+            })
+          )}
+          <CameraRig />
+        </ScrollControls>
+      </Canvas>
+
+      <DescriptionOverlay />
+      <DogEar href="/applications" position="bottom-left" aria-label="Return to applications" />
+      <DogEar href="/finale" position="bottom-right" aria-label="View finale" onAfterClick={grantPermission} />
+    </div>
+  )
+}

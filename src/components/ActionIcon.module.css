@@ -1,0 +1,30 @@
+.resumeLink {
+  position: absolute; /* Position relative to the parent */
+  top: 2rem; /* Distance from the top of the paper */
+  right: 2rem; /* Distance from the right of the paper */
+  z-index: 10; /* Make sure it's on top of other content */
+  color: #a0a0a0;
+  transition: color 0.3s ease;
+}
+
+.resumeLink:hover {
+  color: #ffffff;
+}
+
+/* Add a media query for mobile */
+@media (max-width: 768px) {
+  .resumeLink {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+.actionLink {
+  color: #a0a0a0;
+  transition: color 0.3s ease;
+  display: block; /* Ensures proper alignment in the flex container */
+}
+
+.actionLink:hover {
+  color: #ffffff;
+}

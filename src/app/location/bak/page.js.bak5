@@ -1,0 +1,203 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+
+// Import useState
+import { CornerLink } from '@/components/CornerLink'
+
+import styles from './location.module.css'
+
+const worldGeoUrl = '/world.json' // We'll use the 50m world.json
+const seaGeoUrl = '/sea_10m.json'
+
+// --- Define our two "camera" settings ---
+const worldProjectionConfig = {
+  scale: 160,
+  center: [0, 0],
+}
+
+const seaProjectionConfig = {
+  scale: 800, // Zoomed in
+  center: [118, 15], // Centered on SE Asia
+}
+
+const viewConfigs = {
+  WORLD: {
+    geoUrl: worldGeoUrl,
+    config: { scale: 160, center: [0, 20] },
+    label: 'World View',
+  },
+  MYS: {
+    geoUrl: seaGeoUrl,
+    config: { scale: 2000, center: [108, 4] },
+    label: 'Malaysia',
+  },
+  SGP: {
+    geoUrl: seaGeoUrl,
+    config: { scale: 15000, center: [103.8, 1.35] },
+    label: 'Singapore',
+  },
+  HKG: {
+    geoUrl: seaGeoUrl,
+    config: { scale: 15000, center: [114.1, 22.3] },
+    label: 'Hong Kong',
+  },
+  TWN: {
+    geoUrl: seaGeoUrl,
+    config: { scale: 4000, center: [120.9, 23.9] },
+    label: 'Taiwan',
+  },
+  JPN: {
+    geoUrl: seaGeoUrl,
+    config: { scale: 1200, center: [138, 36] },
+    label: 'Japan',
+  },
+  KOR: {
+    geoUrl: seaGeoUrl,
+    config: { scale: 4000, center: [127.5, 35.9] },
+    label: 'South Korea',
+  },
+}
+
+// --- Define our target countries ---
+// const targetCountries = ['HKG', 'TWN', 'SGP', 'AUS', 'JPN', 'GBR', 'USA', 'CAN', 'DNK', 'SWE', 'FIN', 'FRA', 'NOR']
+const targetCountries = [
+  // Asia-Pacific
+  'HKG',
+  'TWN',
+  'SGP',
+  'AUS',
+  'JPN',
+  'KOR',
+  'NZL',
+  // Europe
+  'GBR',
+  'DNK',
+  'SWE',
+  'FIN',
+  'FRA',
+  'DEU',
+  'IRL',
+  'NLD',
+  'NOR',
+  'CHE',
+  'ESP',
+  'ITA',
+  // North America
+  'USA',
+  'CAN',
+  // Middle East
+  'ARE',
+]
+const homeCountry = 'MYS'
+
+const countryStyles = {
+  default: { fill: '#2C2C2C', stroke: '#555555', strokeWidth: 0.5, outline: 'none' },
+  hover: { fill: '#00FF9D', stroke: '#00FF9D', strokeWidth: 0.75, outline: 'none' },
+  pressed: { fill: '#00FF9D', stroke: '#00FF9D', outline: 'none' },
+}
+
+export default function LocationPage() {
+  const [tooltipContent, setTooltipContent] = useState('')
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
+
+  // --- NEW: State to control the current map view ---
+  const [view, setView] = useState('WORLD') // 'WORLD' or 'SEA'
+  const [geoData, setGeoData] = useState(null)
+  const [activeViewKey, setActiveViewKey] = useState('WORLD')
+
+  // This effect fetches the correct map data whenever the view key changes
+  useEffect(() => {
+    const currentView = viewConfigs[activeViewKey]
+    fetch(currentView.geoUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        setGeoData(data)
+      })
+  }, [activeViewKey])
+
+  useEffect(() => {
+    const url = view === 'WORLD' ? worldGeoUrl : seaGeoUrl
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setGeoData(data)
+      })
+  }, [view]) // This effect re-runs whenever the 'view' state changes
+
+  const handleMouseMove = (e) => {
+    setTooltipPosition({ x: e.clientX, y: e.clientY })
+  }
+
+  // --- NEW: Function to toggle the view state ---
+  const toggleView = () => {
+    setView((currentView) => (currentView === 'WORLD' ? 'SEA' : 'WORLD'))
+  }
+
+  // Don't render anything until the initial map data has loaded
+  if (!geoData) {
+    return <div className={styles.loading}>Loading Map...</div>
+  }
+
+  const currentConfig = viewConfigs[activeViewKey].config
+  const targetCountries = ['HKG', 'TWN', 'SGP', 'JPN', 'KOR']
+  const homeCountry = 'MYS'
+
+  return (
+    <div className={styles.wrapper} onMouseMove={handleMouseMove}>
+      <div className={styles.header}>
+        {/* The header can also be dynamic based on the view */}
+        {/* <h1>{view === 'WORLD' ? 'Global Relocation Availability' : 'Target Region: Asia-Pacific'}</h1> */}
+        {/* <p>Ready to engage worldwide. Visa sponsorship required for all locations outside of Malaysia.</p> */}
+        <h1>Relocation Availability</h1>
+        <p>Currently based in Malaysia. Open to opportunities in key global tech hubs.</p>
+      </div>
+
+      <div className={styles.viewSelector}>
+        {Object.keys(viewConfigs).map((key) => (
+          <button key={key} onClick={() => setActiveViewKey(key)} className={`${styles.viewButton} ${activeViewKey === key ? styles.active : ''}`}>
+            {viewConfigs[key].label}
+          </button>
+        ))}
+      </div>
+
+      <div className={styles.mapContainer}>
+        <ComposableMap
+          key={activeViewKey} // Changing the key forces a re-mount for smooth transitions
+          projectionConfig={currentConfig}
+          className={styles.map}
+        >
+          <Geographies geography={geoData}>
+            {({ geographies }) =>
+              geographies.map((geo) => {
+                const isTarget = targetCountries.includes(geo.properties.iso_a3)
+                const isHome = geo.properties.iso_a3 === homeCountry
+
+                let style = { ...countryStyles.default, strokeWidth: activeViewKey === 'WORLD' ? 0.5 : 0.2 }
+                if (isHome) style.fill = '#FFC300'
+                if (isTarget) style.fill = 'rgba(0, 255, 157, 0.4)'
+
+                return <Geography key={geo.rsmKey} geography={geo} style={{ default: style }} />
+              })
+            }
+          </Geographies>
+        </ComposableMap>
+      </div>
+
+      {tooltipContent && (
+        <div style={{ left: tooltipPosition.x + 15, top: tooltipPosition.y + 15 }} className={styles.tooltip}>
+          {tooltipContent}
+        </div>
+      )}
+
+      {/* --- NEW: The Toggle Button --- */}
+      <button className={styles.toggleButton} onClick={toggleView}>
+        {view === 'WORLD' ? 'SEA' : 'World'}
+      </button>
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/finale" position="bottom-right" label="Finale" />
+    </div>
+  )
+}

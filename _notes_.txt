@@ -50,3 +50,25 @@ https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/
 pip install audioop-lts
 
 npm install zustand
+
+npm install @react-three/fiber three
+
+pip install geopandas matplotlib
+pip install geopandas shapely fiona
+npm install react-simple-maps
+npm install lamina leva
+npm uninstall lamina leva
+npm install framer-motion
+
+https://www.solarsystemscope.com/textures/
+https://cgbeginner.net/space-stars-footage/
+
+npm install camera-controls
+
+npm install three-stdlib
+
+Drone by Silly Fear [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/3Ae_y67lzvd)
+
+npm install leva
+
+npm install troika-three-text

@@ -1,0 +1,25 @@
+'use client'
+
+import { useMemo } from 'react'
+
+import styles from './Finale.module.css'
+
+export function SingleLineStream({ data = [], speed = 70, isEnding = false }) {
+  console.log(`SingleLineStream speed: `, speed)
+
+  const duplicatedData = useMemo(() => {
+    if (data.length === 0) return []
+    const secondCopy = data.map((item) => ({ ...item, keyPrefix: 'copy-2-' }))
+    return [...data, ...secondCopy]
+  }, [data])
+
+  return (
+    <div className={`${styles.singleLineStream} ${styles.scrolling} ${isEnding ? styles.ending : ''}`} style={{ '--scroll-duration': `${speed}s` }}>
+      {duplicatedData.map((item, index) => (
+        <div key={`${item.keyPrefix || ''}${item.content.slice(0, 10)}-${index}`} className={`${styles.streamItem} ${styles[item.type]}`}>
+          <span>{item.content}</span>
+        </div>
+      ))}
+    </div>
+  )
+}

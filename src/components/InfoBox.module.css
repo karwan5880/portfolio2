@@ -1,0 +1,223 @@
+.main {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+  background: linear-gradient(90deg, #a770ef, #cf8bf3, #fdb99b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header p {
+  font-size: 1rem;
+  color: #c0c0c0;
+  margin-top: 8px;
+}
+
+.infoBox {
+  position: absolute;
+  top: 50%;
+  /* We are changing the positioning slightly to match your page.js code */
+  right: 3rem;
+  transform: translateY(-50%);
+  width: 90%;
+  max-width: 500px; /* Or whatever you prefer */
+  background: rgba(20, 20, 30, 0.85);
+  border: 1px solid rgba(171, 71, 239, 0.5);
+  border-radius: 16px;
+  padding: 2rem;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  /* --- THE FIX --- */
+  /* REMOVE these two lines */
+  /* opacity: 0; */
+  /* visibility: hidden; */
+
+  /* And change the transition to only be on opacity */
+  transition: opacity 0.4s ease-in-out;
+}
+/* .infoBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background: rgba(20, 20, 30, 0.85);
+  border: 1px solid rgba(171, 71, 239, 0.5);
+  border-radius: 16px;
+  padding: 2rem;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+} */
+
+.infoBox.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.infoBox h2 {
+  margin-top: 0;
+  color: #cf8bf3;
+  border-bottom: 1px solid #a770ef;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.infoBox p {
+  line-height: 1.6;
+}
+
+.projectList {
+  list-style: none;
+  padding: 0;
+}
+
+.projectList li {
+  margin-bottom: 1rem;
+}
+
+.projectList a {
+  color: #fdb99b;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.projectList a:hover {
+  color: #ffffff;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.infoBoxHeader {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(171, 71, 239, 0.5);
+}
+.infoBoxHeader h2 {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  color: #cf8bf3;
+}
+.infoBoxHeader p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #c0c0c0;
+}
+
+.slideshowContainer {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.slideshowImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slideArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slideArrow:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+.slideDots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dot:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.dot.active {
+  background-color: white;
+}

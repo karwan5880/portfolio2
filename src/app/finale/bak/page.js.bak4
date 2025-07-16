@@ -1,0 +1,358 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+
+import { DogEar } from '@/components/DogEar'
+import { LightningEffect } from '@/components/LightningEffect'
+import { SnowEffect } from '@/components/SnowEffect'
+import { ThunderEffect } from '@/components/ThunderEffect'
+import { DataStorm } from '@/components/finale/DataStorm'
+import { FinaleDataProvider, useFinaleData } from '@/components/finale/FinaleDataProvider'
+import { GlitchOverlay } from '@/components/finale/GlitchOverlay'
+import { SingleLineStream } from '@/components/finale/SingleLineStream'
+import { StaticHeader } from '@/components/finale/StaticHeader'
+import { StreamColumn } from '@/components/finale/StreamColumn'
+import { SyntaxHighlightedCode } from '@/components/finale/SyntaxHighlightedCode'
+
+import styles from './finale.module.css'
+import { useAudioStore } from '@/stores/audioStore'
+
+const THEME_CONFIGS = {
+  main_theme: {
+    singlespeeds: 2,
+    speeds: [1000, 1500, 1000],
+    directions: ['up', 'up', 'up'],
+  },
+  snow: {
+    singlespeeds: 160,
+    speeds: [40, 40, 40],
+    directions: ['up', 'up', 'up'],
+  },
+  thunder: {
+    singlespeeds: 150,
+    speeds: [50, 50, 50],
+    directions: ['up', 'up', 'up'],
+  },
+  lightning: {
+    singlespeeds: 140,
+    speeds: [60, 60, 60],
+    directions: ['up', 'up', 'up'],
+  },
+  default_theme: {
+    singlespeeds: 40,
+    speeds: [120, 120, 120],
+    directions: ['up', 'up', 'up'],
+  },
+}
+
+function FinaleStreams({ isEnding, activeTheme }) {
+  const { data, isLoading } = useFinaleData()
+
+  const themeConfig = THEME_CONFIGS[activeTheme] || THEME_CONFIGS.default_theme
+
+  const columnData1 = useMemo(() => {
+    if (!data?.multiStream) return []
+    return data.multiStream.slice(0, 20)
+  }, [data?.multiStream])
+
+  const columnData2 = useMemo(() => {
+    if (!data?.multiStream) return []
+    return data.multiStream.slice(20, 40)
+  }, [data?.multiStream])
+
+  const columnData3 = useMemo(() => {
+    if (!data?.multiStream) return []
+    return data.multiStream.slice(40, 60)
+  }, [data?.multiStream])
+
+  const renderCodeBlock = useCallback(
+    (snip, node) => {
+      if (!node) return
+
+      // Set class names directly on the node
+      node.className = `${styles.streamItemContainer} ${styles.codeBlock} ${snip.isDistant ? styles.distant : ''}`
+
+      // IMPORTANT: Sanitize the title and code to prevent HTML injection issues.
+      const sanitizedTitle = snip.title.replace(/</g, '<').replace(/>/g, '>')
+      const sanitizedCode = snip.code.replace(/</g, '<').replace(/>/g, '>')
+      // Set inner HTML to populate the content
+      node.innerHTML = `
+      <div class="${styles.codeTitle}">${sanitizedTitle}</div>
+      <pre>${sanitizedCode}</pre>
+    `
+    },
+    [styles]
+  ) // The dependency array ensures it only updates if `styles` changes (which it won't).
+
+  if (isLoading || !data?.multiStream?.length) {
+    return null
+  }
+
+  return (
+    <div className={styles.contentWrapper}>
+      {/* <StreamColumn
+        initialData={data.singleStream}
+        speed={10}
+        className={styles.singleLineStream}
+        renderItem={(item, index) => (
+          <div key={item.content.slice(0, 10) + index} className={`${styles.streamItem} ${styles[item.type]}`}>
+            <span>{item.content}</span>
+          </div>
+        )}
+      /> */}
+      <SingleLineStream
+        data={data.singleStream}
+        speed={themeConfig.singlespeeds} // Remember: lower is faster for CSS animation duration
+      />
+
+      <div className={styles.codeWall}>
+        <StreamColumn
+          initialData={columnData1}
+          speed={themeConfig.speeds[0]}
+          direction={themeConfig.directions[0]}
+          isEnding={isEnding}
+          className={styles.columnWrapper}
+          renderItem={(snip) => (
+            <div className={`${styles.codeBlock} ${snip.isDistant ? styles.distant : ''}`}>
+              <div className={styles.codeTitle}>{snip.title}</div>
+              <SyntaxHighlightedCode content={snip.code} />
+            </div>
+          )}
+        />
+        <StreamColumn
+          initialData={columnData2}
+          speed={themeConfig.speeds[1]}
+          direction={themeConfig.directions[1]}
+          isEnding={isEnding}
+          className={styles.columnWrapper}
+          renderItem={(snip) => (
+            <div className={`${styles.codeBlock} ${snip.isDistant ? styles.distant : ''}`}>
+              <div className={styles.codeTitle}>{snip.title}</div>
+              <SyntaxHighlightedCode content={snip.code} />
+            </div>
+          )}
+        />
+        <StreamColumn
+          initialData={columnData3}
+          speed={themeConfig.speeds[2]}
+          direction={themeConfig.directions[2]}
+          isEnding={isEnding}
+          className={styles.columnWrapper}
+          renderItem={(snip) => (
+            <div className={`${styles.codeBlock} ${snip.isDistant ? styles.distant : ''}`}>
+              <div className={styles.codeTitle}>{snip.title}</div>
+              <SyntaxHighlightedCode content={snip.code} />
+            </div>
+          )}
+        />
+      </div>
+    </div>
+  )
+}
+
+const initialState = {
+  pageState: 'DORMANT', // DORMANT -> IDLE -> PRE_TYPE -> TYPING -> STATIC -> SCROLLING
+  isExiting: false,
+}
+function finaleReducer(state, action) {
+  switch (action.type) {
+    case 'SHOW_CURSOR':
+      return { ...state, pageState: 'IDLE' }
+    case 'HIDE_CURSOR':
+      return { ...state, pageState: 'PRE_TYPE' }
+    case 'START_TYPING':
+      return { ...state, pageState: 'TYPING' }
+    case 'FINISH_TYPING':
+      return { ...state, pageState: 'STATIC' }
+    case 'START_SCROLLING':
+      return { ...state, pageState: 'SCROLLING' }
+    case 'START_CREDITS':
+      return { ...state, pageState: 'CREDITS_ROLLING' }
+    case 'EXIT_HEADER':
+      return { ...state, pageState: 'HEADER_EXITING' }
+    case 'NAVIGATE':
+      return { ...state, pageState: 'NAVIGATING' }
+    case 'START_TRANSITION':
+      return { ...state, pageState: 'TRANSITIONING' }
+    case 'EXIT':
+      return { ...state, isExiting: true }
+    default:
+      throw new Error()
+  }
+}
+
+export default function FinalePage() {
+  const router = useRouter() // Initialize the router
+  const [state, dispatch] = useReducer(finaleReducer, initialState)
+  const [showDataStorm, setShowDataStorm] = useState(false)
+  const hasInitialized = useRef(false)
+
+  const { hasPermission, startExperience, cleanupAudio, activeTheme, playlistEnded } = useAudioStore()
+
+  // --- This is where we derive clean boolean flags from the state ---
+  const isStreamVisible = state.pageState === 'SCROLLING' || state.pageState === 'CREDITS_ROLLING'
+  const isTransitioning = state.pageState === 'TRANSITIONING'
+  const isEnding = state.pageState === 'CREDITS_ROLLING'
+
+  // This useEffect now handles the transition between themes
+  useEffect(() => {
+    // hasInitialized is a good way to prevent this on first load
+    if (hasInitialized.current) {
+      if (state.pageState !== 'CREDITS_ROLLING' && state.pageState !== 'HEADER_EXITING') {
+        dispatch({ type: 'START_TRANSITION' })
+      }
+    }
+  }, [activeTheme])
+
+  // --- NEW: This useEffect handles the entire end-of-playlist sequence ---
+  useEffect(() => {
+    // 1. Trigger the start of the credits when the playlist ends
+    if (playlistEnded) {
+      console.log('Playlist ended. Starting credits roll...')
+      dispatch({ type: 'START_CREDITS' })
+    }
+  }, [playlistEnded])
+
+  // // This useEffect will now manage the transition effect
+  // useEffect(() => {
+  //   // Don't run this on the very first load
+  //   const isFirstRun = hasInitialized.current === false
+  //   if (!isFirstRun) {
+  //     // 1. Activate the transition
+  //     setIsTransitioning(true)
+  //     setShowDataStorm(true)
+  //     // 2. Set a timer to hide the storm and end the transition
+  //     const timer = setTimeout(() => {
+  //       setShowDataStorm(false)
+  //       setIsTransitioning(false)
+  //     }, 2000) // The transition lasts for 2 seconds
+  //     return () => clearTimeout(timer)
+  //   }
+  // }, [activeTheme]) // This effect runs every time the song/theme changes
+
+  useEffect(() => {
+    if (hasInitialized.current) {
+      return
+    }
+    hasInitialized.current = true
+    const startSequence = async () => {
+      if (hasPermission) {
+        await new Promise((resolve) => setTimeout(resolve, 7000))
+        startExperience()
+      } else {
+      }
+    }
+    startSequence()
+    return () => {
+      cleanupAudio()
+    }
+  }, [hasPermission, startExperience, cleanupAudio])
+
+  useEffect(() => {
+    let timer
+    if (state.pageState === 'STATIC') {
+      timer = setTimeout(() => dispatch({ type: 'START_SCROLLING' }), 13600)
+    } else if (state.pageState === 'TRANSITIONING') {
+      // The glitch transition is 1.5 seconds long
+      timer = setTimeout(() => dispatch({ type: 'START_SCROLLING' }), 1500)
+    } else if (state.pageState === 'CREDITS_ROLLING') {
+      timer = setTimeout(() => dispatch({ type: 'EXIT_HEADER' }), 8000)
+    } else if (state.pageState === 'HEADER_EXITING') {
+      timer = setTimeout(() => dispatch({ type: 'NAVIGATE' }), 2000)
+    } else if (state.pageState === 'NAVIGATING') {
+      router.push('/post-scene')
+    }
+    // if (state.pageState === 'DORMANT') {
+    //   const timer = setTimeout(() => dispatch({ type: 'SHOW_CURSOR' }), 1000)
+    //   return () => clearTimeout(timer)
+    // }
+    // if (state.pageState === 'IDLE') {
+    //   const timer = setTimeout(() => dispatch({ type: 'HIDE_CURSOR' }), 3000)
+    //   return () => clearTimeout(timer)
+    // }
+    // if (state.pageState === 'PRE_TYPE') {
+    //   const timer = setTimeout(() => dispatch({ type: 'START_TYPING' }), 500)
+    //   return () => clearTimeout(timer)
+    // }
+    // if (state.pageState === 'STATIC') {
+    //   const timer = setTimeout(() => dispatch({ type: 'START_SCROLLING' }), 13600)
+    //   return () => clearTimeout(timer)
+    // }
+    // if (state.pageState === 'SCROLLING') {
+    //   setShowDataStorm(true)
+    //   timer = setTimeout(() => setShowDataStorm(false), 2000)
+    //   return () => clearTimeout(timer)
+    // }
+    // // --- NEW: Timers for the final sequence ---
+    // else if (state.pageState === 'CREDITS_ROLLING') {
+    //   // After 8 seconds (giving streams time to clear), exit the header
+    //   console.log('State: CREDITS_ROLLING. Waiting 8s to exit header.')
+    //   timer = setTimeout(() => dispatch({ type: 'EXIT_HEADER' }), 8000)
+    // } else if (state.pageState === 'HEADER_EXITING') {
+    //   // After 2 seconds (giving header time to animate), navigate
+    //   console.log('State: HEADER_EXITING. Waiting 2s to navigate.')
+    //   timer = setTimeout(() => dispatch({ type: 'NAVIGATE' }), 2000)
+    // } else if (state.pageState === 'NAVIGATING') {
+    //   console.log('State: NAVIGATING. Pushing to /post-scene.')
+    //   router.push('/post-scene')
+    // }
+    // if (state.pageState === 'TRANSITIONING') {
+    //   // After 1.5 seconds, finish the transition and go back to scrolling
+    //   timer = setTimeout(() => dispatch({ type: 'START_SCROLLING' }), 1500)
+    // }
+    return () => clearTimeout(timer)
+  }, [state.pageState, router])
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        console.log('Escape key pressed. Disconnecting.')
+        dispatch({ type: 'EXIT' })
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  return (
+    <div className={`${styles.finaleWrapper} ${styles[activeTheme] || ''} ${state.isExiting ? styles.exiting : ''}`}>
+      {isStreamVisible && (activeTheme === 'snow' || activeTheme === 'main_theme') && <SnowEffect />}
+      {isStreamVisible && (activeTheme === 'thunder' || activeTheme === 'main_theme') && <ThunderEffect />}
+      {isStreamVisible && (activeTheme === 'lightning' || activeTheme === 'main_theme') && <LightningEffect />}
+      {/* {state.pageState === 'SCROLLING' && (activeTheme === 'snow' || activeTheme === 'main_theme') && <SnowEffect />}
+      {state.pageState === 'SCROLLING' && (activeTheme === 'thunder' || activeTheme === 'main_theme') && <ThunderEffect />}
+      {state.pageState === 'SCROLLING' && (activeTheme === 'lightning' || activeTheme === 'main_theme') && <LightningEffect />} */}
+
+      <StaticHeader pageState={state.pageState} onTypingComplete={() => dispatch({ type: 'FINISH_TYPING' })} isExiting={state.pageState === 'HEADER_EXITING'} />
+
+      {isTransitioning && (
+        <FinaleDataProvider theme={activeTheme}>
+          <GlitchOverlay isScrolling={true} />
+        </FinaleDataProvider>
+      )}
+
+      {isStreamVisible && (
+        <FinaleDataProvider theme={activeTheme}>
+          <FinaleStreams isEnding={isEnding} activeTheme={activeTheme} />
+        </FinaleDataProvider>
+      )}
+
+      {state.pageState === 'SCROLLING' && <DataStorm isActive={showDataStorm} particleLifetime={2500} cname="c1" />}
+      {state.pageState === 'SCROLLING' && <DataStorm isActive={showDataStorm} particleLifetime={2500} cname="c2" />}
+      {/* {state.pageState === 'SCROLLING' && <DataStorm isActive={showDataStorm} particleLifetime={2500} cname="c3" />} */}
+      {/* {state.pageState === 'SCROLLING' && <DataStorm isActive={showDataStorm} particleLifetime={2500} cname="c4" />} */}
+
+      {/* {state.pageState === 'TRANSITIONING' && <GlitchOverlay theme={activeTheme} isScrolling={true} />} */}
+      {/* {!isTransitioning && (state.pageState === 'SCROLLING' || state.pageState === 'CREDITS_ROLLING') && (
+        <FinaleDataProvider theme={activeTheme}>
+          {state.pageState === 'TRANSITIONING' && <GlitchOverlay isScrolling={true} />}
+          {(state.pageState === 'SCROLLING' || state.pageState === 'CREDITS_ROLLING') && <FinaleStreams isEnding={isEnding} activeTheme={activeTheme} />}
+        </FinaleDataProvider>
+      )} */}
+
+      <DogEar href="/dev-history" position="bottom-left" aria-label="Return to dev-history" />
+      <DogEar href="/" position="bottom-right" aria-label="View main page" />
+    </div>
+  )
+}

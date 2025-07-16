@@ -1,0 +1,55 @@
+'use client'
+
+// This component needs to be a client component to use state
+import dynamic from 'next/dynamic'
+import { useRef, useState } from 'react'
+
+import { CornerLink } from '@/components/CornerLink'
+import InfoBox from '@/components/InfoBox'
+import Scene from '@/components/Scene'
+
+import styles from './page.module.css'
+import { useAudioStore } from '@/stores/audioStore'
+
+// // Dynamically import the Scene component with SSR disabled
+// const Scene = dynamic(() => import('@/components/Scene'), {
+//   ssr: false,
+//   loading: () => <p style={{ color: 'white', textAlign: 'center' }}>Loading 3D Scene...</p>,
+// })
+
+export default function Home() {
+  const [selectedSection, setSelectedSection] = useState(null)
+  const grantPermission = useAudioStore((state) => state.grantPermission)
+  const sceneRef = useRef()
+
+  const handleMarkerClick = (sectionName) => {
+    setSelectedSection(sectionName)
+  }
+
+  const handleCloseInfoBox = () => {
+    setSelectedSection(null)
+    if (sceneRef.current) {
+      sceneRef.current.resetCamera()
+    }
+  }
+
+  return (
+    <main className={styles.main}>
+      {/* <header className={styles.header}> */}
+      <div className={styles.overlay}>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>Relocation Availability</h1>
+          <p className={styles.subtitle}>Currently based in Malaysia. Open to opportunities worldwide.</p>
+        </div>
+      </div>
+      {/* </header> */}
+
+      <Scene ref={sceneRef} onMarkerClick={handleMarkerClick} selectedSection={selectedSection} />
+
+      <InfoBox selectedSection={selectedSection} onClose={handleCloseInfoBox} />
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/finale" position="bottom-right" label="Finale" />
+    </main>
+  )
+}

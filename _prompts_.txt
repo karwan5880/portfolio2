@@ -1,0 +1,149 @@
+OK THIS IS NEAT, now, i have a new proposal, at the start, we just show the centered blinking cursor, after awhile, it disappeared, then the texts start typing, what if we seperate the initial blinking cursor and the typing texts, will it be better? the starting idle and blank screen and centered blinking cursor is very good, i hope not to touch them, let's create a separate div or p or span for the typing animation, so that the blinking cursor can be hidden, and this new separated elements will show and take its place. 
+
+ok, before we continue to manage the state of the pagestate, now, i want to focus on styling the singleline, left, middle, right, glitch data for a moment, now, i have these newly added comments: 
+comment-rb, 
+comment-php, 
+comment-swift, 
+comment-kt, 
+comment-ex, 
+comment-scala, 
+comment-ipync, 
+comment-emacs, 
+comment-js, 
+comment-c, 
+comment-py, 
+comment-dart, 
+comment-gd, 
+comment-sh, 
+comment-asm, 
+comment-cpp, 
+comment-csharp, 
+comment-solidity, 
+comment-julia, 
+comment-assembly, 
+comment-lua, 
+comment-kotlin, 
+comment-gdscript, 
+comment-matlab, 
+comment-sh, 
+comment-jl, 
+comment-pl, 
+comment-hs, 
+comment-yml, 
+comment-wasm, 
+comment-md, 
+comment-sol, 
+comment-qc, 
+comment-shell, 
+comment-powershell, 
+comment-perl, 
+comment-fortran, 
+comment-lisp, 
+comment-ps1, 
+comment-bat, 
+comment-vim, 
+comment-rs, 
+comment-docker, 
+comment-regex, 
+can you help me generate their styles? thanks
+
+ok cool, what about 'code-line' and 'thought'? what style should we give them?
+
+i use:
+{activeTheme === 'snow' && <SnowEffect />}
+{activeTheme === 'thunder' && <ThunderEffect />}
+{activeTheme === 'lightning' && <LightningEffect />}
+to show different effect on different team, what if i want to show all three effects on main_theme, how do i do that?
+
+this is my song list:
+export const masterPlaylist = [
+  { path: '/sound/megamanx5.mp3', theme: 'main_theme' },
+  { path: '/sound/harvestmoon.mp3', theme: 'snow' },
+  { path: '/sound/yangguxian.mp3', theme: 'thunder' },
+  { path: '/sound/cangzoucheng.mp3', theme: 'lightning' },
+]
+is it possible to shuffle harvestmoon.mp3, yangguxian.mp3, cangzoucheng.mp3, so that every time a user come in /finale, it will play difference sequence, not just snow -> thunder -> lightning every single time?
+
+well the audio 0 is main_theme song, it is intended to always play that song as first song on page load, however, for second song onwards, i want the sequence to be random, i have second song, third song, and fourth song, how to i scramble these three songs' sequence? and of course, each song only play once, after these three songs had finished, no more song will be played, we will then enter new page state. 
+
+why is that the first song (main_theme) being played twice? 
+
+wait i think we have some misunderstanding here, this is my song list:
+export const masterPlaylist = [
+  { path: '/sound/megamanx5.mp3', theme: 'main_theme' },
+  { path: '/sound/harvestmoon.mp3', theme: 'snow' },
+  { path: '/sound/yangguxian.mp3', theme: 'thunder' },
+  { path: '/sound/cangzoucheng.mp3', theme: 'lightning' },
+]
+what i want is, upon page load, the main_theme song to be played ONCE, then, the remaining 3 songs (snow, thunder, lightning) will shuffle, and so every time user reach /finale page, the song sequence will be different starting from song number 2, it can be 2->3->4, or 3->2->4, or 4->3->2, these three songs can be randomed, however, the first song 'main_theme' will always play as the first song upon page load, and now the current problem is that, the first song is being played twice, upon page loaded, and AGAIN immediately after its first play finished, it should proceed to randomized song 2/3/4. 
+
+ok, very cool, now, i want to make a very special and cool effect, it is about the glitchoverlay, how much do you know about it? do you think we can optimize/improve/redesign/reengineer glitchoverlay?
+
+i wanna something cool, on page load, music plays after some delay, page state change to scrolling, on the first few seconds after page changed to scrolling, the glitchoverlay massively bursting everywhere, on the whole screen, we can see many glitchoverlay multi-column divs, literally everywhere, on top of that, they burst out of existence, appear all of a sudden somewhere randomly, then their box collapse into their mid point / center, collapsing, this effect happens to all glitchoverlay divs, appearing out of nowhere, then collapse into their own center. 
+
+this is good, but this is not enough, i only see 4 glitch box appears, how to have more glitch boxes? perhaps we need to make 100 glitch box within 4 seconds, also, their appearing time should be around 0.5 seconds, meaning, they appear suddenly for 0.5 seconds, then they collapse, not like they appear for the whole 4 sec duration. 
+
+hmm.. i want to test if it appearing for 1s better or 0.1s better, how to i change its appearing duration?
+
+ok, i tested it, 0.1s is better, but, i need to spawn more div boxes, like a hundred in 0.1s, meaning, a thousand in 1s, 3 thousands in 3s, also, how do i adjust it from 4000ms to 3000ms?
+
+ok, i tested it, 0.1s is better, but, i need to spawn more div boxes, like a hundred in 0.1s, meaning, a thousand in 1s, 3 thousands in 3s, also, how do i adjust it from 4000ms to 3000ms? and how do i change its opacity? maybe do like between 0.3 to 0.7 opacity will be good. 
+
+how about random colors and shiny and glowing effect? is it possible? also, i have a brilliant idea, how about, a burst of glitch divs in 1 second, then, pause for 0.5 second, meaning, nothing will appear, and immediately 1 sec after, another round of bursts, 1s -> 0.5s -> 1s, is it even possible to achieve such high intensity effect?
+
+ok well listen, we've hit a major performance issue, i had over 4000 rows of data in my finale-stream-data.js, i think it just takes too much time for DataStorm.js to load and run all the logics, and to make them appear like 1000 divs per second, next, I've also hit an error where the .replace receives undefined as content in our SyntaxHighlightedCode() function: Uncaught Error: Cannot read properties of undefined (reading 'replace')
+    at SyntaxHighlightedCode (DataStorm.js:10:6)
+    at DataStorm.js:99:11
+
+i think the loading time is still too long, apparently, it might be due to how our finale page.js process the data on page load, or something else, the data on multi-column is just too many (4000+), how to solve this problem?
+
+i think we need to fix the /finale page.js usememo logic: const { singleLineData, leftColumnData, middleColumnData, rightColumnData, glitchData } = useMemo(() => {
+} because apparently, i think this logic is affecting our DataStorm.js timing, it just too large to process 4000+ data, don't you think so?
+
+can you write me the new CodeStream.js, GlitchOverlay.js, SingleLineStream, wait, we don't have SingleLineStream.js, should we create one?
+
+
+GET http://192.168.0.100:3000/api/snippets 500 (Internal Server Error)
+useParticleSystem.useCallback[fetchMoreSnippets] @ DataStorm.js:33
+useParticleSystem.useEffect @ DataStorm.js:43
+DataStorm.js:37 Failed to fetch snippets: SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    
+ok well, it works better now, has no error, but, i got a few symptoms, first, the singlelinestream isn't showing, next, the data storm colorful div boxes did show, but there is no words or texts or any contents inside, when i debug it using console log, they just show content undefined, typeof undefined in the SyntaxHighlighedCode function in DataStream.js, did we pass in undefined particle.code?
+what should we do and how do we debug DataStream.js?
+
+let's add one more page after /dev-history and before /finale, /location, on this page, i want to tell user which working location i am willing to relocate to / interested in, i am currently based in Malaysia, i am a Malaysia Citizen, i don't need any visa sponsorship to work in Malaysia, but other than that, i need visa sponsorship for other countries. 
+the countries  i am interested to work in / willing to relocate are: Hong Kong, Taiwan, Singapore, Australia, Japan, Denmark/Sweden/Finland (basically all the Europe country), UK, US, Canada. 
+what ideas do you have? i am thinking if we can have a nice world map graphic and then we pinpoint those locations, that would be nice. 
+
+maybe i want to revamp/redesign/rewrite the atmosphere logic a little bit, it seems that there is a permanent teal-ish blue at the half right side of the globe, and for the left half with clouds and air is fine, let's think, how can we improve its aesthetic to make it feels truly elegant atmosphere looking, and the thickness as well, it seems very thick, making earth look very small, actually, is our earth this small? perhaps our fundamental circle is just too small in size? if we increase our circle globe size, is it many elements need to be rewritten?
+
+how about the calculations of drones, must we use SIZE? i still think 64*64*64 is too much, it is like 262144 drones, for our basic setup, we only need like 20*20*4 + 12*12*12 = 3328 drones, with 3328 drones, we can already form many unique shapes and figures, look at the images i sent you, at the first stage, they were all laid on ground, very neat, the left side is the one im talking, 20*20, then they send to the sky in 4 groups, on the right, that is the other group, 12*12, and was sent up to sky 12 times. 
+next thing i want to address is, the lighting of the drones, they all can be light on and light off of different timing, forming different patterns and animations, look at one of the picture i sent you, only certain drones are lighted on to show the numbers 2024, Dreams come true, and it is 3D, observe the depth/z-axis, it has two drones depth. 
+also, all drones can have all kinds of color, therefore forming mixing of colors, colorful, dynamic, beautiful patterns, not just one color for all drones. 
+next, each drones have their own flight path, but are all nicely coordinated, e.g., the tail of the dragon moves towards left slowly, the head of the dragon moves towards right to catch the ball. 
+lastly, i hope we can have a starting animation where the drones flying in from offscreen to the center of the screen to form a shape, then in the end, all drones fly back out to off screen. 
+
+alright, so, this is very cool, i like it, now that i can adjust all the parameters to control their flight timing and sequence, can you teach me how to adjust them such that, 
+the current flight pattern is from bottom row to top row, from left to right, what if i can change it such that, out of the 64 * 64 drones, all of them have a random value, they will start at a random start time? that will be very cool. 
+
+thanks, this is truly amazing, now, all of the drones flying in from behind the camera, so we can observe the particles coming from bottom, left, right, top, and to form the 2D grid perpendicular to the camera. 
+now, listen, i have this view where, how about, the drones only flying in from the lower half of the screen, now, instead of forming a 64 * 64 2D grid, now, we gonna switch gear up, we will form a 16 * 16 * 16 3D cube. 
+is this difficult to achieve? do you accept this challenge?
+
+ok, truly amazing, thank you, now, i have one suggestion, is it possible to fly the top 16*16 drones first as first batch, then if done, start flying up the second batch, which will be the second row, repeat until the last batch. is this difficult to achieve? do you accept this challenge?
+
+that is great! truly amazing. now, the drones is flying layer by layer, is it possible to change the layer? like, it is now flying like the front layer, then next layer, then next, etc, what if instead of flying front layer first, we fly the top layer first, from the top, then following the next lower layer, then next one, then the next one, is this difficult to achieve? do you accept this challenge?
+
+that is really really cool, now, the starting position of each drones are random, like for the first top layer, some of the drones are from left, some are from right, is it possible to arrange their starting position to be in sequence, like for example, for the top first 16*16 drones, these drones are from drone-0 to drone-63, then for the top second layer, these drones are from the drone-4032 to drone-4095 (from the other end), is this difficult to achieve? do you accept this challenge?
+
+ok, that actually bring the whole thing up to a whole new level. thank you. one question tho, for the startPos, can you explain the random(a_id * 2.0) - 0.5 * 200.0, and for the y value? i just want to understand what is the value of them after random() function. thank you. what is the default value without random() looks like?
+
+what if i want to arrange my drones' starting pos in a tidy way so that when they take off, it looks very tidy and neat, what starting x and y should i put?
+
+that is really cool. now, the starting position of drones is arranged in a way such that they are like one wall of drones, so, i am thinking, instead of one wall of drones, what if we arrange the starting position of drones as a laid down layer of drones staying still on the ground, so that they are not a wall, one drone on top of another drone, instead, they are all one flat layer, meaning, x-value * z-value of drones instead of x-value * y-value of drones.
+
+alright, i understood, I've decided, the roadmap/plan is:
+1. we do instancedmesh first. 
+2. we will save images-to-shapes for later. 
+3. we will do monkey.glb. 
+4. we still need to engineer the orchestrated flight path of drones so that they don't collide with each other, we need to properly research the algorithm that the real world drone show is using. 

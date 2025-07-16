@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import styles from './Preloader.module.css'
 
 const bootLines = [
+  ' ',
   'Initializing Mainframe...',
   'Loading Sentient Background...',
   'Compiling 3D Assets...',

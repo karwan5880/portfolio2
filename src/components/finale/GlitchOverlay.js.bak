@@ -1,0 +1,57 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+
+import styles from './Finale.module.css'
+
+const SyntaxHighlightedCode = ({ content }) => {
+  console.log(`replace: `, content)
+  const html = content
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/(const|let|class|return|def|fn|public|static|void)/g, '<span class="keyword">$1</span>')
+    .replace(/("[^"]*")/g, '<span class="string">$1</span>')
+    .replace(/(\/\/.*|\#.*|\/\*.*\*\/)/g, '<span class="comment">$1</span>')
+  return <pre dangerouslySetInnerHTML={{ __html: html }} />
+}
+
+const GlitchSnippet = ({ snippet }) => {
+  if (!snippet) return null
+  console.log(`snippet: `, snippet)
+  return (
+    <div className={styles.glitchItem} style={{ top: snippet.top, left: snippet.left }}>
+      <div className={styles.codeBlock}>
+        <div className={styles.codeTitle}>{snippet.title}</div>
+        <SyntaxHighlightedCode content={snippet.code} />
+      </div>
+    </div>
+  )
+}
+
+export function GlitchOverlay({ glitchData, isScrolling }) {
+  const [currentGlitch, setCurrentGlitch] = useState(null)
+  const glitchIndex = useRef(0)
+
+  useEffect(() => {
+    if (isScrolling && glitchData.length > 0) {
+      const interval = setInterval(() => {
+        const nextSnippet = glitchData[glitchIndex.current]
+        setCurrentGlitch({
+          ...nextSnippet,
+          top: `${Math.random() * 80 + 10}%`,
+          left: `${Math.random() * 80 + 10}%`,
+        })
+        glitchIndex.current = (glitchIndex.current + 1) % glitchData.length
+      }, 3000)
+      return () => clearInterval(interval)
+    }
+  }, [isScrolling, glitchData])
+
+  if (!isScrolling) return null
+
+  return (
+    <div className={styles.glitchOverlay}>
+      <GlitchSnippet snippet={currentGlitch} />
+    </div>
+  )
+}

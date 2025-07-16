@@ -1,0 +1,176 @@
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  color: white;
+}
+
+.canvasContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* For the text overlay */
+.textOverlay {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  text-align: center;
+}
+
+.textOverlay.isVisible {
+  opacity: 1;
+}
+
+/* For the permission gate */
+.gateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  background-color: #000;
+  color: white;
+}
+
+.gateContainer h1 {
+  color: #ff4d4d;
+}
+
+.gateLink {
+  margin-top: 2rem;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #8a2be2;
+  color: #8a2be2;
+  text-decoration: none;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.gateLink:hover {
+  background-color: #8a2be2;
+  color: white;
+}
+
+.textContainer {
+  /* display: flex; */
+  /* justify-content: center;  */
+  white-space: nowrap;
+  /* These properties remain the same */
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  text-align: center;
+}
+
+/* NEW: Container for the social links */
+.linksContainer {
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  transition: opacity 2s ease-in-out 0.5s; /* Add a slight delay to the transition */
+}
+
+/* The class to make things visible */
+.isVisible {
+  opacity: 1;
+}
+
+/* NEW: Style for the individual links */
+.socialLink {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #8a2be2;
+  color: #8a2be2;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.socialLink:hover {
+  background-color: #8a2be2;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .textContainer {
+    font-size: 1.5rem; /* Adjust font size to look better on small screens */
+  }
+
+  /* Optional: Adjust the social links for mobile too */
+  .socialLink {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* .overlayContent {
+  position: absolute;
+  bottom: 15%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+} */
+/* Add this to the end of your CSS file */
+.overlayContent p {
+  position: absolute;
+  bottom: 60px; /* Position it above the corner links */
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: sans-serif;
+  font-size: 16px;
+  pointer-events: none; /* Allows mouse clicks to go "through" the text */
+}
+
+.beginOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.beginButton {
+  padding: 15px 30px;
+  font-size: 20px;
+  color: white;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.beginButton:hover {
+  background-color: white;
+  color: black;
+}

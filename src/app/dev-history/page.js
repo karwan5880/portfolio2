@@ -1,236 +1,88 @@
 'use client'
 
-import { CubicBezierLine, ScrollControls, Stars, Text, useScroll } from '@react-three/drei'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import * as THREE from 'three'
-import { MathUtils, Vector3 } from 'three'
+import { Stars } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { MathUtils } from 'three'
 
+import { CornerLink } from '@/components/CornerLink'
 import { DogEar } from '@/components/DogEar'
 
-import styles from './dev-history.module.css'
+import styles from './page.module.css'
 import { devHistoryData } from '@/data/dev-history-data'
-import { useStore } from '@/stores/useStore'
+import { useGatekeeper } from '@/hooks/useGatekeeper'
+// We keep the import but won't use it yet. This makes it easy to add back.
+import { useAudioStore } from '@/stores/audioStore'
 
-// --- Component 1: The Ethereal Node (Simple & Stable) ---
-function EtherealNode({ id, title, year, position }) {
-  const textRef = useRef()
-  const heartRef = useRef()
-  const isActive = useStore((state) => state.selectedNode === id)
-
-  useFrame(() => {
-    // Animate the heart's glow
-    if (heartRef.current && heartRef.current.material) {
-      const targetIntensity = isActive ? 2.5 : 0.5
-      heartRef.current.material.emissiveIntensity = MathUtils.lerp(
-        heartRef.current.material.emissiveIntensity,
-        targetIntensity,
-        0.1
-      )
-    }
-    // Animate the text's scale for a subtle "focus" effect
-    if (textRef.current) {
-      const targetScale = isActive ? 1.2 : 1
-      textRef.current.scale.lerp(new Vector3(targetScale, targetScale, targetScale), 0.1)
-    }
+/**
+ * A simple R3F component to render a starfield background.
+ */
+function StarfieldBackground() {
+  useFrame((state) => {
+    state.camera.position.x = MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.5, 0.02)
+    state.camera.position.y = MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.5, 0.02)
   })
-
-  return (
-    <group position={position}>
-      <group ref={textRef}>
-        <Text position={[0, 0.8, 0]} fontSize={0.5} color="white" anchorX="center">
-          {title}
-        </Text>
-        <Text position={[0, -0.8, 0]} fontSize={0.25} color="#999" anchorX="center">
-          {year}
-        </Text>
-      </group>
-      <mesh ref={heartRef}>
-        <sphereGeometry args={[0.3, 16, 16]} />
-        <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={0.5} toneMapped={false} />
-      </mesh>
-    </group>
-  )
+  return <Stars count={5000} factor={4} saturation={0} fade speed={1} />
 }
 
-// --- Component 2: The Ethereal Synapse (Simple & Stable) ---
-function Synapse({ start, end }) {
-  const midPoint = new Vector3().addVectors(start, end).multiplyScalar(0.5)
-  const controlOffset = new Vector3(end.y - start.y, start.x - end.x, 0).normalize().multiplyScalar(5)
-  const controlPoint1 = new Vector3().addVectors(midPoint, controlOffset)
-
+/**
+ * A component to render a single event on the timeline.
+ * It receives the data for one event and which side to display it on.
+ */
+function TimelineItem({ node, side }) {
+  const alignmentClass = side === 'left' ? styles.alignLeft : styles.alignRight
   return (
-    <CubicBezierLine
-      start={start}
-      end={end}
-      midA={controlPoint1}
-      midB={controlPoint1}
-      lineWidth={1}
-      color="#fff"
-      transparent
-      opacity={0.15}
-      frustumCulled={false}
-    />
-  )
-}
-
-// --- Component 3: The Glitched Text UI ---
-
-function GlitchedText({ text, isActive }) {
-  const [displayText, setDisplayText] = useState('')
-  const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()'
-
-  useEffect(() => {
-    let interval
-    if (isActive) {
-      let iteration = 0
-      interval = setInterval(() => {
-        const newText = text
-          .split('')
-          .map((char, index) => {
-            if (index < iteration) return text[index]
-            if (char === ' ') return ' '
-            return scrambleChars[Math.floor(Math.random() * scrambleChars.length)]
-          })
-          .join('')
-        setDisplayText(newText)
-        if (iteration >= text.length) clearInterval(interval)
-        iteration += text.length / 45
-      }, 30)
-    } else {
-      setDisplayText('')
-    }
-    return () => clearInterval(interval)
-  }, [isActive, text])
-
-  return <p>{displayText}</p>
-}
-
-// --- Component 4: The Description Overlay UI ---
-
-function DescriptionOverlay() {
-  const selectedNodeId = useStore((state) => state.selectedNode)
-  const nodeData = devHistoryData.find((n) => n.id === selectedNodeId)
-
-  // We add the GlitchedText component here now!
-  return (
-    <div className={`${styles.overlayContainer} ${selectedNodeId ? styles.isVisible : ''}`}>
-      {nodeData && (
-        <>
-          <h2>
-            {nodeData.title} ({nodeData.year})
-          </h2>
-          <GlitchedText text={nodeData.description} isActive={!!selectedNodeId} />
-          <button className={styles.closeButton}>Scroll to Resume Journey</button>
-        </>
-      )}
+    <div className={`${styles.timelineItem} ${alignmentClass}`}>
+      <div className={styles.timelineDot}></div>
+      <div className={styles.timelineContent}>
+        <h3>{node.title}</h3>
+        <span className={styles.year}>{node.year}</span>
+        <p>{node.description}</p>
+      </div>
     </div>
   )
 }
 
-// --- Component 5: The Camera & State Controller (The Brain) ---
-function CameraRig() {
-  const [isWarping, setIsWarping] = useState(true)
-  const { camera } = useThree()
-  const scroll = useScroll()
-  const setSelectedNode = useStore((state) => state.setSelectedNode)
-
-  const WARP_START_POS = new Vector3(10, 20, 150)
-  const NORMAL_FOV = 75
-  const WARP_FOV = 140
-
-  useEffect(() => {
-    camera.position.copy(WARP_START_POS)
-    camera.fov = WARP_FOV
-    camera.updateProjectionMatrix()
-    const timer = setTimeout(() => setIsWarping(false), 2500)
-    return () => clearTimeout(timer)
-  }, [camera])
-
-  useFrame((state, delta) => {
-    if (isWarping) {
-      const firstNodePos = new Vector3(...devHistoryData[0].position)
-      const arrivalTarget = new Vector3(firstNodePos.x, firstNodePos.y + 1, firstNodePos.z + 5)
-      state.camera.position.lerp(arrivalTarget, delta * 1.5)
-      state.camera.fov = MathUtils.lerp(state.camera.fov, NORMAL_FOV, delta * 2.0)
-      state.camera.updateProjectionMatrix()
-      state.camera.lookAt(firstNodePos)
-      return
-    }
-
-    const offset = MathUtils.clamp(scroll.offset, 0, 1)
-    const sectionIndex = Math.floor(offset * (devHistoryData.length - 1))
-    const nextSectionIndex = Math.min(sectionIndex + 1, devHistoryData.length - 1)
-    const startNode = new Vector3(...devHistoryData[sectionIndex].position)
-    const endNode = new Vector3(...devHistoryData[nextSectionIndex].position)
-    const sectionProgress = (offset * (devHistoryData.length - 1)) % 1
-
-    const cameraTarget = new Vector3()
-    cameraTarget.lerpVectors(startNode, endNode, sectionProgress)
-    cameraTarget.x += state.pointer.x * 0.5
-    cameraTarget.y += state.pointer.y * 0.5
-    cameraTarget.z += 5
-    state.camera.position.lerp(cameraTarget, delta * 2)
-
-    const lookAtTarget = new Vector3()
-    lookAtTarget.lerpVectors(startNode, endNode, sectionProgress)
-    state.camera.lookAt(lookAtTarget)
-
-    let closestNode = null
-    let minDistance = Infinity
-    const focusRadius = 12.0
-    devHistoryData.forEach((node) => {
-      const nodePosition = new Vector3(...node.position)
-      const distance = state.camera.position.distanceTo(nodePosition)
-      if (distance < minDistance) {
-        minDistance = distance
-        closestNode = node.id
-      }
-    })
-    if (minDistance < focusRadius) {
-      setSelectedNode(closestNode)
-    } else {
-      setSelectedNode(null)
-    }
-  })
-
-  return null
-}
-
-// --- The Main Page Assembly ---
+/**
+ * The main page component for the Development History experience.
+ */
 export default function DevHistoryPage() {
-  // Sound logic can be added here
+  useGatekeeper('/dev-history')
+  const grantPermission = useAudioStore((state) => state.grantPermission)
+
   return (
-    <div className={styles.wrapper}>
-      <Canvas camera={{ fov: 75 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
-        <Stars count={5000} />
+    <div className={styles.pageContainer}>
+      {/* <div className={styles.wrapper}> */}
+      {/* 3D background canvas */}
+      <div className={styles.canvasContainer}>
+        <Canvas camera={{ position: [0, 0, 1], fov: 75 }}>
+          <StarfieldBackground />
+        </Canvas>
+      </div>
 
-        <ScrollControls pages={devHistoryData.length - 1} damping={0.3}>
-          {devHistoryData.map((node) => (
-            <EtherealNode key={node.id} {...node} />
-          ))}
-          {devHistoryData.map((node) =>
-            node.connectsTo.map((targetId) => {
-              const startNodeData = devHistoryData.find((n) => n.id === targetId)
-              if (!startNodeData) return null
-              return (
-                <Synapse
-                  key={`${node.id}-${targetId}`}
-                  start={new Vector3(...startNodeData.position)}
-                  end={new Vector3(...node.position)}
-                />
-              )
-            })
-          )}
-          <CameraRig />
-        </ScrollControls>
-      </Canvas>
+      {/* 2D timeline content */}
+      <main className={styles.scrollWrapper}>
+        <div className={styles.content}>
+          <div className={styles.intro}>
+            <h1>My Development Journey</h1>
+            <p>A timeline of key projects and milestones.</p>
+          </div>
+          <div className={styles.timelineContainer}>
+            {devHistoryData.map((node, index) => (
+              <TimelineItem
+                key={node.id}
+                node={node}
+                side={index % 2 === 0 ? 'left' : 'right'} // Alternate sides
+              />
+            ))}
+          </div>
+        </div>
+      </main>
 
-      <DescriptionOverlay />
-      <DogEar href="/applications" position="bottom-left" aria-label="Return to applications" />
-      <DogEar href="/finale" position="bottom-right" />
+      {/* Corner navigation links */}
+      {/* <DogEar href="/applications" position="bottom-left" aria-label="Return to applications" />
+      <DogEar href="/finale" position="bottom-right" aria-label="View finale" onNavigateStart={grantPermission} /> */}
+      <CornerLink href="/applications" position="bottom-left" label="Applications" aria-label="Return to applications" />
+      <CornerLink href="/location" position="bottom-right" label="World" aria-label="Go to finale" onNavigateStart={grantPermission} />
     </div>
   )
 }

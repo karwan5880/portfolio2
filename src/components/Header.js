@@ -1,6 +1,7 @@
 'use client'
 
 import styles from './Header.module.css'
+import { ResumeIcon } from './ResumeIcon'
 import { ScrambledText } from './ScrambledText'
 
 export function Header() {
@@ -8,7 +9,6 @@ export function Header() {
     <header className={styles.header}>
       <div className={styles.infoContainer}>
         <ScrambledText targetText="KAR WAN LEONG" />
-
         <div className={styles.contactBar}>
           <span>Malaysia</span>
           <span className={styles.separator}>•</span>

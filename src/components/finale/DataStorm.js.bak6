@@ -1,0 +1,221 @@
+'use client'
+
+import { useEffect, useMemo, useRef, useState } from 'react'
+
+import styles from './Finale.module.css'
+import { useSnippetPool } from '@/hooks/useSnippetPool'
+
+const SyntaxHighlightedCode = ({ content }) => {
+  if (typeof content !== 'string') {
+    return null
+  }
+  const html = content
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/(const|let|class|return|def|fn|public|static|void)/g, '<span class="keyword">$1</span>')
+    .replace(/("[^"]*")/g, '<span class="string">$1</span>')
+    .replace(/(\/\/.*|\#.*|\/\*.*\*\/)/g, '<span class="comment">$1</span>')
+  return <pre dangerouslySetInnerHTML={{ __html: html }} />
+}
+
+const useParticleSystem = (config, createParticleData) => {
+  const [particles, setParticles] = useState([])
+  const lastSpawnTime = useRef(0)
+  const requestRef = useRef()
+  const startTimeRef = useRef(0)
+
+  useEffect(() => {
+    if (config.isActive) {
+      startTimeRef.current = 0
+      setParticles([])
+    }
+
+    const animate = (currentTime) => {
+      if (startTimeRef.current === 0) {
+        startTimeRef.current = currentTime
+      }
+      const elapsedTime = currentTime - startTimeRef.current
+      const isBursting = config.pauseDuration === 0 ? true : elapsedTime % (config.burstDuration + config.pauseDuration) < config.burstDuration
+
+      if (isBursting && currentTime - lastSpawnTime.current > config.spawnRate) {
+        lastSpawnTime.current = currentTime
+        const data = createParticleData()
+        if (data) {
+          const scale = Math.random() * 0.7 + 0.5 // Random scale between 0.5 and 1.2
+          const lifetime = config.particleLifetime * scale + 1000 // e.g., 3500ms to 7000ms
+
+          const newParticle = {
+            id: Math.random(),
+            data: data,
+            style: {
+              // Allows spawning across the entire screen for a full-screen effect
+              top: `${Math.random() * 120 - 10}%`,
+              left: `${Math.random() * 120 - 10}%`,
+              opacity: Math.random() * 0.4 + 0.3,
+              '--particle-color': `hsl(${Math.random() * 360}, 70%, 70%)`,
+              '--particle-scale': scale,
+              '--particle-lifetime': `${lifetime}ms`,
+              '--x-drift': `${(Math.random() - 0.5) * 40}vw`, // Drifts left/right
+              '--y-drift': `${(Math.random() - 0.5) * 40}vh`, // Drifts up/down
+              '--rotation': `${(Math.random() - 0.5) * 60}deg`, // A slight initial tilt
+              // Sets a random initial opacity for each bubble
+            },
+          }
+          setParticles((prev) => [...prev.slice(-200), newParticle])
+        }
+      }
+      requestRef.current = requestAnimationFrame(animate)
+    }
+
+    if (config.isActive) {
+      requestRef.current = requestAnimationFrame(animate)
+    }
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current)
+      }
+    }
+  }, [config, createParticleData])
+
+  return particles
+}
+
+export function DataStorm({ isActive, particleLifetime = 5000 }) {
+  const { getSnippet } = useSnippetPool()
+  const [targetCoords, setTargetCoords] = useState({ x: '50%', y: '50%' })
+  const [phase, setPhase] = useState('ACTIVE') // ACTIVE -> RESOLVING -> DISSOLVING -> FINISHED
+  const stormRef = useRef(null) // Ref to the main container
+
+  // This new state triggers the final "Gravity Well" animation
+  const [isCollapsing, setIsCollapsing] = useState(false)
+
+  // useEffect(() => {
+  //   if (!isActive && !isCollapsing) {
+  //     // When collapse is triggered, find the target element
+  //     const targetElement = document.getElementById('implosion-target')
+  //     if (targetElement) {
+  //       const rect = targetElement.getBoundingClientRect()
+  //       // Get the center of the element
+  //       setTargetCoords({
+  //         x: `${rect.left + rect.width / 2}px`,
+  //         y: `${rect.top + rect.height / 2}px`,
+  //       })
+  //     }
+  //     setIsCollapsing(true)
+  //   }
+  // }, [isActive, isCollapsing])
+
+  // This is the main orchestrator effect
+  useEffect(() => {
+    // 1. The Trigger: The parent component signals the end
+    if (!isActive && phase === 'ACTIVE') {
+      setPhase('RESOLVING')
+    }
+
+    // 2. The Chain Reaction
+    if (phase === 'RESOLVING') {
+      const stormContainer = stormRef.current
+      if (!stormContainer) return
+
+      // --- GRID ALIGNMENT ---
+      const particles = stormContainer.querySelectorAll(`.${styles.stormBlock}`)
+      const COLUMNS = 10
+      const GAP_X = 11 // in vw
+      const GAP_Y = 20 // in vh
+      const START_X = -10 // in vw
+      const START_Y = -20 // in vh
+      particles.forEach((p, i) => {
+        const col = i % COLUMNS
+        const row = Math.floor(i / COLUMNS)
+        const x = START_X + col * GAP_X
+        const y = START_Y + row * GAP_Y
+        p.style.transform = `translate(${x}vw, ${y}vh) scale(var(--particle-scale, 1))`
+      })
+
+      // --- CODE SCRAMBLE ---
+      const scrambleInterval = setInterval(() => {
+        particles.forEach((p) => {
+          const codeEl = p.querySelector('pre')
+          const titleEl = p.querySelector(`.${styles.codeTitle}`)
+          if (codeEl && titleEl) {
+            const snippet = getSnippet()
+            if (snippet) {
+              titleEl.innerText = snippet.title
+              codeEl.innerHTML = snippet.code.replace(/(const|let|class|return|def|fn|public|static|void)/g, '<span class="keyword">$1</span>')
+            }
+          }
+        })
+      }, 100)
+
+      // --- ADVANCE TO NEXT PHASE ---
+      const resolveTimer = setTimeout(() => {
+        clearInterval(scrambleInterval)
+        setPhase('DISSOLVING')
+      }, 1000) // Scramble for 1 second
+
+      return () => clearTimeout(resolveTimer)
+    }
+
+    if (phase === 'DISSOLVING') {
+      const targetElement = document.getElementById('implosion-target')
+      if (targetElement) {
+        const rect = targetElement.getBoundingClientRect()
+        setTargetCoords({
+          x: `${rect.left + rect.width / 2}px`,
+          y: `${rect.top + rect.height / 2}px`,
+        })
+      }
+      // --- FINAL CLEANUP ---
+      const dissolveTimer = setTimeout(() => setPhase('FINISHED'), 2000) // Animation duration
+      return () => clearTimeout(dissolveTimer)
+    }
+  }, [isActive, phase, getSnippet])
+
+  // const config = useMemo(
+  //   () => ({
+  //     isActive,
+  //     spawnRate: 5,
+  //     particleLifetime,
+  //     burstDuration: 1000,
+  //     pauseDuration: 0, // Continuous spawning
+  //   }),
+  //   [isActive, particleLifetime]
+  // )
+  const config = useMemo(
+    () => ({
+      isActive: phase === 'ACTIVE', // Only spawn particles when truly active
+      spawnRate: 2,
+      particleLifetime,
+      burstDuration: 1000,
+      pauseDuration: 0,
+    }),
+    [phase, particleLifetime]
+  )
+
+  const particles = useParticleSystem(config, getSnippet)
+
+  // // Keep the component rendered while it's collapsing
+  // if (!isActive && !isCollapsing) {
+  //   return null
+  // }
+  // If the entire sequence is done, render nothing.
+  if (phase === 'FINISHED') {
+    return null
+  }
+
+  return (
+    <div ref={stormRef} className={styles.dataStormOverlay} style={{ '--target-x': targetCoords.x, '--target-y': targetCoords.y }}>
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          // Add the .collapsing class when the final animation should play
+          className={`${styles.stormBlock} ${styles[phase.toLowerCase()]}`}
+          style={{ ...particle.style }}
+        >
+          <div className={styles.codeTitle}>{particle.data.title}</div>
+          <SyntaxHighlightedCode content={particle.data.code} />
+        </div>
+      ))}
+    </div>
+  )
+}

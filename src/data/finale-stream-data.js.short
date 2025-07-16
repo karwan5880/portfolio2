@@ -1,0 +1,60 @@
+const createCodeBlock = (title, code) => ({ stream: 'multi', type: 'multi-column', columns: [{ title, code }] })
+
+export const finaleStream = {
+  main_theme: [
+    { stream: 'single', type: 'thought', content: 'The journey is the reward.' },
+    { stream: 'single', type: 'thought', content: 'For every "no", a new line of code.' },
+    // more thought ..
+    { stream: 'single', type: 'comment-rb', content: '# Everything is an object. Even nothing.' },
+    { stream: 'single', type: 'comment-sh', content: '# First, do it. Then, do it right. Then, do it better.' },
+    // more comment-*
+    { stream: 'single', type: 'code-line', content: 'make && ./run_simulation' },
+    { stream: 'single', type: 'code-line', content: '$ echo "Hello, World"' },
+    // more code-line
+    createCodeBlock('RUBY METHOD', `def greet(name)\n  puts "Hello, #{name}!"\nend`),
+    createCodeBlock('PHP FUNCTION', `<?php\nfunction greet($name) {\n  echo "Hello, $name!";\n}`),
+    // more createCodeBlock(...)
+  ],
+  snow: [
+    { stream: 'single', type: 'thought', content: 'The journey is the reward.' },
+    { stream: 'single', type: 'thought', content: 'For every "no", a new line of code.' },
+    // more thought ..
+    { stream: 'single', type: 'comment-rb', content: '# Everything is an object. Even nothing.' },
+    { stream: 'single', type: 'comment-sh', content: '# First, do it. Then, do it right. Then, do it better.' },
+    // more comment-*
+    { stream: 'single', type: 'code-line', content: 'make && ./run_simulation' },
+    { stream: 'single', type: 'code-line', content: '$ echo "Hello, World"' },
+    // more code-line
+    createCodeBlock('RUBY METHOD', `def greet(name)\n  puts "Hello, #{name}!"\nend`),
+    createCodeBlock('PHP FUNCTION', `<?php\nfunction greet($name) {\n  echo "Hello, $name!";\n}`),
+    // more createCodeBlock(...)
+  ],
+  thunder: [
+    { stream: 'single', type: 'thought', content: 'The journey is the reward.' },
+    { stream: 'single', type: 'thought', content: 'For every "no", a new line of code.' },
+    // more thought ..
+    { stream: 'single', type: 'comment-rb', content: '# Everything is an object. Even nothing.' },
+    { stream: 'single', type: 'comment-sh', content: '# First, do it. Then, do it right. Then, do it better.' },
+    // more comment-*
+    { stream: 'single', type: 'code-line', content: 'make && ./run_simulation' },
+    { stream: 'single', type: 'code-line', content: '$ echo "Hello, World"' },
+    // more code-line
+    createCodeBlock('RUBY METHOD', `def greet(name)\n  puts "Hello, #{name}!"\nend`),
+    createCodeBlock('PHP FUNCTION', `<?php\nfunction greet($name) {\n  echo "Hello, $name!";\n}`),
+    // more createCodeBlock(...)
+  ],
+  lightning: [
+    { stream: 'single', type: 'thought', content: 'The journey is the reward.' },
+    { stream: 'single', type: 'thought', content: 'For every "no", a new line of code.' },
+    // more thought ..
+    { stream: 'single', type: 'comment-rb', content: '# Everything is an object. Even nothing.' },
+    { stream: 'single', type: 'comment-sh', content: '# First, do it. Then, do it right. Then, do it better.' },
+    // more comment-*
+    { stream: 'single', type: 'code-line', content: 'make && ./run_simulation' },
+    { stream: 'single', type: 'code-line', content: '$ echo "Hello, World"' },
+    // more code-line
+    createCodeBlock('RUBY METHOD', `def greet(name)\n  puts "Hello, #{name}!"\nend`),
+    createCodeBlock('PHP FUNCTION', `<?php\nfunction greet($name) {\n  echo "Hello, $name!";\n}`),
+    // more createCodeBlock(...)
+  ],
+}

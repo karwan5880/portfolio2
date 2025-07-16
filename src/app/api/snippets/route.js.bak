@@ -1,0 +1,36 @@
+import { NextResponse } from 'next/server'
+
+import { finaleStream } from '@/data/finale-stream-data'
+
+let allCodeSnippets = []
+let dataError = null
+
+try {
+  allCodeSnippets = Object.values(finaleStream)
+    .flatMap((theme) => theme.filter((item) => item.type === 'multi-column'))
+    .flatMap((block) => block.columns)
+  console.log(`Successfully processed ${allCodeSnippets.length} code snippets for the API.`)
+} catch (error) {
+  console.error('!!! FATAL ERROR: Failed to parse finale-stream-data.js !!!', error)
+  dataError = error
+}
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
+}
+
+export async function GET() {
+  if (dataError) {
+    return NextResponse.json({ error: 'Server-side data processing failed. Check the server console.', message: dataError.message }, { status: 500 })
+  }
+
+  const batchSize = 500
+  const shuffled = shuffleArray([...allCodeSnippets])
+  const batch = shuffled.slice(0, batchSize)
+
+  return NextResponse.json(batch)
+}

@@ -1,0 +1,215 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+
+import { CornerLink } from '@/components/CornerLink'
+import { LocationModal } from '@/components/LocationModal'
+
+import styles from './location.module.css'
+import { useAudioStore } from '@/stores/audioStore'
+
+const countryData = {
+  MYS: {
+    name: 'Malaysia',
+    cities: [
+      { id: 'KUL', name: 'Kuala Lumpur', image: '/images/locations/night/kuala_lumpur_night.jpg', status: 'Home Base', coordinates: [101.6869, 3.139] },
+      { id: 'PEN', name: 'Penang', image: '/images/locations/night/penang_night.jpg', status: 'Home Base', coordinates: [100.3327, 5.4112] },
+    ],
+  },
+  SGP: { name: 'Singapore', cities: [{ id: 'SGP', name: 'Singapore', image: '/images/locations/night/singapore_night.jpg', status: 'Visa Sponsorship Required', coordinates: [103.8198, 1.3521] }] },
+  HKG: { name: 'Hong Kong', cities: [{ id: 'HKG', name: 'Hong Kong', image: '/images/locations/night/hongkong_night.jpg', status: 'Visa Sponsorship Required', coordinates: [114.1694, 22.3193] }] },
+  TWN: { name: 'Taiwan', cities: [{ id: 'TPE', name: 'Taipei', image: '/images/locations/night/taipei_night.jpg', status: 'Visa Sponsorship Required', coordinates: [121.5654, 25.033] }] },
+  JPN: { name: 'Japan', cities: [{ id: 'TYO', name: 'Tokyo', image: '/images/locations/night/tokyo_night.png', status: 'Visa Sponsorship Required', coordinates: [139.6917, 35.6895] }] },
+  KOR: { name: 'South Korea', cities: [{ id: 'ICN', name: 'Seoul', image: '/images/locations/night/seoul_night.jpg', status: 'Visa Sponsorship Required', coordinates: [126.978, 37.5665] }] },
+  AUS: {
+    name: 'Australia',
+    cities: [
+      { id: 'SYD', name: 'Sydney', image: '/images/locations/night/sydney_night.jpg', status: 'Visa Sponsorship Required', coordinates: [151.2093, -33.8688] },
+      { id: 'MEL', name: 'Melbourne', image: '/images/locations/night/melbourne_night.jpg', status: 'Visa Sponsorship Required', coordinates: [144.9631, -37.8136] },
+    ],
+  },
+  USA: {
+    name: 'United States',
+    cities: [
+      { id: 'NYC', name: 'New York City', image: '/images/locations/night/nyc_night.jpg', status: 'Visa Sponsorship Required', coordinates: [-74.006, 40.7128] },
+      { id: 'SFO', name: 'San Francisco', image: '/images/locations/night/sfo_night.jpg', status: 'Visa Sponsorship Required', coordinates: [-122.4194, 37.7749] },
+    ],
+  },
+  CAN: {
+    name: 'Canada',
+    cities: [
+      { id: 'TOR', name: 'Toronto', image: '/images/locations/night/toronto_night.jpg', status: 'Visa Sponsorship Required', coordinates: [-79.3832, 43.6532] },
+      { id: 'VAN', name: 'Vancouver', image: '/images/locations/night/vancouver_night.jpg', status: 'Visa Sponsorship Required', coordinates: [-123.1207, 49.2827] },
+    ],
+  },
+  GBR: { name: 'United Kingdom', cities: [{ id: 'LON', name: 'London', image: '/images/locations/night/london_night.jpg', status: 'Visa Sponsorship Required', coordinates: [-0.1278, 51.5074] }] },
+  DEU: { name: 'Germany', cities: [{ id: 'BER', name: 'Berlin', image: '/images/locations/night/berlin_night.jpg', status: 'Visa Sponsorship Required', coordinates: [13.405, 52.52] }] },
+  NLD: { name: 'Netherlands', cities: [{ id: 'AMS', name: 'Amsterdam', image: '/images/locations/night/amsterdam_night.jpg', status: 'Visa Sponsorship Required', coordinates: [4.8952, 52.3702] }] },
+  // ... Add other countries similarly
+}
+
+const targetCountryCodes = Object.keys(countryData)
+const geoUrl = '/world.json'
+const worldGeoUrl = '/world.json' // We'll use the 50m world.json
+const seaGeoUrl = '/sea_10m.json'
+
+// --- Define our two "camera" settings ---
+const worldProjectionConfig = {
+  scale: 160,
+  center: [0, 0],
+}
+
+const seaProjectionConfig = {
+  scale: 800, // Zoomed in
+  center: [118, 15], // Centered on SE Asia
+}
+
+// --- Define our target countries ---
+// const targetCountries = ['HKG', 'TWN', 'SGP', 'AUS', 'JPN', 'GBR', 'USA', 'CAN', 'DNK', 'SWE', 'FIN', 'FRA', 'NOR']
+const targetCountries = [
+  // Asia-Pacific
+  'HKG',
+  'TWN',
+  'SGP',
+  'AUS',
+  'JPN',
+  'KOR',
+  'NZL',
+  // Europe
+  'GBR',
+  'DNK',
+  'SWE',
+  'FIN',
+  'FRA',
+  'DEU',
+  'IRL',
+  'NLD',
+  'NOR',
+  'CHE',
+  'ESP',
+  'ITA',
+  // North America
+  'USA',
+  'CAN',
+  // Middle East
+  'ARE',
+]
+const homeCountry = 'MYS'
+
+const countryStyles = {
+  default: { fill: '#2C2C2C', stroke: '#555555', strokeWidth: 0.5, outline: 'none' },
+  hover: { fill: '#00FF9D', stroke: '#00FF9D', strokeWidth: 0.75, outline: 'none' },
+  pressed: { fill: '#00FF9D', stroke: '#00FF9D', outline: 'none' },
+}
+
+export default function LocationPage() {
+  const [tooltipContent, setTooltipContent] = useState('')
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
+  const [activeLocationIndex, setActiveLocationIndex] = useState(null)
+  const [selectedCity, setSelectedCity] = useState(null)
+  const [activeCountryKey, setActiveCountryKey] = useState(null)
+
+  // --- NEW: State to control the current map view ---
+  const [view, setView] = useState('WORLD') // 'WORLD' or 'SEA'
+  const [geoData, setGeoData] = useState(null)
+
+  useEffect(() => {
+    const url = view === 'WORLD' ? worldGeoUrl : seaGeoUrl
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setGeoData(data)
+      })
+  }, [view]) // This effect re-runs whenever the 'view' state changes
+
+  // const handleOpenModal = (geoId) => {
+  //   const index = targetLocations.findIndex((loc) => loc.id === geoId)
+  //   if (index !== -1) {
+  //     setActiveLocationIndex(index)
+  //   }
+  // }
+  // const handleCloseModal = () => {
+  //   setActiveLocationIndex(null)
+  // }
+  const handleOpenModal = (countryKey) => {
+    setActiveCountryKey(countryKey)
+  }
+  const handleCloseModal = () => {
+    setActiveCountryKey(null)
+  }
+
+  const handleNextLocation = () => {
+    if (activeLocationIndex !== null) {
+      setActiveLocationIndex((prevIndex) => (prevIndex + 1) % targetLocations.length)
+    }
+  }
+
+  const handlePrevLocation = () => {
+    if (activeLocationIndex !== null) {
+      setActiveLocationIndex((prevIndex) => (prevIndex - 1 + targetLocations.length) % targetLocations.length)
+    }
+  }
+  const handleMouseMove = (e) => {
+    setTooltipPosition({ x: e.clientX, y: e.clientY })
+  }
+
+  // --- NEW: Function to toggle the view state ---
+  const toggleView = () => {
+    setView((currentView) => (currentView === 'WORLD' ? 'SEA' : 'WORLD'))
+  }
+
+  // Don't render anything until the initial map data has loaded
+  if (!geoData) {
+    return <div className={styles.loading}>Loading Map...</div>
+  }
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.header}>
+        <h1>Global Relocation Availability</h1>
+        <p>Click on a highlighted country to explore target cities.</p>
+      </div>
+
+      <ComposableMap projectionConfig={{ scale: 160, center: [0, 20] }} className={styles.map}>
+        <Geographies geography={geoUrl}>
+          {({ geographies }) =>
+            geographies.map((geo) => {
+              const geoId = geo.properties.iso_a3
+              const isTarget = targetCountryCodes.includes(geoId)
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  onClick={() => isTarget && handleOpenModal(geoId)}
+                  style={{
+                    default: {
+                      fill: isTarget ? '#0077b6' : '#E9E9E9',
+                      stroke: '#FFFFFF',
+                      strokeWidth: 0.75,
+                      outline: 'none',
+                    },
+                    hover: { fill: '#00b4d8', outline: 'none' },
+                    pressed: { fill: '#00b4d8', outline: 'none' },
+                  }}
+                />
+              )
+            })
+          }
+        </Geographies>
+        {Object.values(countryData)
+          .flatMap((country) => country.cities)
+          .map((city) => (
+            <Marker key={city.id} coordinates={city.coordinates}>
+              <circle r={2} fill="#FFFFFF" stroke="#333333" strokeWidth={0.5} />
+            </Marker>
+          ))}
+      </ComposableMap>
+
+      <LocationModal isOpen={activeCountryKey !== null} onClose={handleCloseModal} country={activeCountryKey ? countryData[activeCountryKey] : null} />
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/finale" position="bottom-right" label="Finale" />
+    </div>
+  )
+}

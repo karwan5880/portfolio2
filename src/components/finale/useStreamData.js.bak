@@ -1,0 +1,29 @@
+import { useCallback, useEffect, useState } from 'react'
+
+export function useStreamData(theme, type, isScrolling) {
+  const [data, setData] = useState([])
+
+  const fetchData = useCallback(async () => {
+    if (!theme) return
+    try {
+      const response = await fetch(`/api/snippets?type=${type}&theme=${theme}&batchSize=100`)
+      const newSnippets = await response.json()
+      // Add the new snippets to the existing data to make the columns longer
+      setData((prev) => [...prev, ...newSnippets])
+    } catch (error) {
+      console.error(`Failed to fetch ${type} data:`, error)
+    }
+  }, [type, theme])
+
+  useEffect(() => {
+    // Only start fetching when the scrolling begins
+    if (isScrolling) {
+      fetchData() // Fetch initial batch
+      // Optional: Fetch more data on an interval to make it truly infinite
+      const interval = setInterval(fetchData, 15000) // Fetch more every 15s
+      return () => clearInterval(interval)
+    }
+  }, [isScrolling, fetchData])
+
+  return data
+}

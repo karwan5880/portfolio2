@@ -3,10 +3,12 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
+import { CornerLink } from '@/components/CornerLink'
 import { DogEar } from '@/components/DogEar'
 
-import styles from './applications.module.css'
+import styles from './page.module.css'
 import { applications } from '@/data/applications2'
+import { useGatekeeper } from '@/hooks/useGatekeeper'
 
 // A simple helper function to generate a random-looking file size
 const randomFileSize = () => {
@@ -15,6 +17,7 @@ const randomFileSize = () => {
 }
 
 export default function ApplicationWallPage() {
+  useGatekeeper('/applications')
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -35,11 +38,7 @@ export default function ApplicationWallPage() {
               <span className={styles.owner}>1 kw_leong root</span>
               <span className={styles.size}>{isMounted ? randomFileSize() : '1.0M'}</span>
               <span className={styles.date}>Mar 25</span>
-              <span
-                className={`${styles.fileName} ${app.status === 'interviewed' ? styles.interviewed : styles.applied}`}
-              >
-                {app.name.replace(/ /g, '_')}.log
-              </span>
+              <span className={`${styles.fileName} ${app.status === 'interviewed' ? styles.interviewed : styles.applied}`}>{app.name.replace(/ /g, '_')}.log</span>
             </div>
           ))}
         </div>
@@ -49,9 +48,11 @@ export default function ApplicationWallPage() {
       {/* <Link href="/dossier/applications/finale" className={styles.dogEar} aria-label="Go to the final page"></Link> */}
       {/* <DogEar href="/dossier/applications/finale" aria-label="Go to the final page" />
       <DogEar direction="previous" aria-label="Go to previous page" /> */}
-      <DogEar href="/job-hunt" position="bottom-left" aria-label="Return to job-hunt" />
       {/* <DogEar href="/finale" position="bottom-right" aria-label="View finale" /> */}
-      <DogEar href="/dev-history" position="bottom-right" aria-label="View dev-history" />
+      {/* <DogEar href="/job-hunt" position="bottom-left" aria-label="Return to job-hunt" />
+      <DogEar href="/dev-history" position="bottom-right" aria-label="View dev-history" /> */}
+      <CornerLink href="/job-hunt" position="bottom-left" label="Job Hunt" aria-label="Return to job-hunt" />
+      <CornerLink href="/dev-history" position="bottom-right" label="Timeline" aria-label="Go to dev-history" />
     </div>
   )
 }

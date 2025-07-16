@@ -1,0 +1,20 @@
+/* components/AudioControl.module.css */
+.audioButton {
+  position: fixed;
+  /* bottom: 20px;
+  left: 20px; */
+  top: 20px;
+  right: 20px;
+  z-index: 1001; /* Ensure it's on top of everything, even the escape hatch */
+  background: none;
+  border: none;
+  color: #777;
+  font-family: monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.audioButton:hover {
+  color: #fff;
+}

@@ -1,0 +1,120 @@
+/* /app/job-spec/job-spec.module.css */
+
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0d0d0d; /* A dark, techy background */
+  color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  font-family: 'ui-monospace', 'Menlo', 'Monaco', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 3rem;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.primaryDirectives h1 {
+  font-size: 2.5rem;
+  color: #00ff9d; /* A vibrant, "online" green */
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+}
+
+.secondaryProtocols {
+  margin-top: 2rem;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  padding-left: 1rem;
+}
+
+.secondaryProtocols h2 {
+  font-size: 1rem;
+  color: #999;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 1px;
+}
+
+.secondaryProtocols p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.proficiencies {
+  margin-top: 3rem;
+}
+
+.proficiencies h3 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.skillGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+}
+
+.skillEntry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.skillName {
+  flex-basis: 120px;
+  flex-shrink: 0;
+}
+
+.barContainer {
+  flex-grow: 1;
+  height: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease-out;
+}
+
+.optimized {
+  background-color: #00ff9d;
+}
+
+.overclocked {
+  background-color: #ff47a6; /* A vibrant pink for overclocked skills */
+  box-shadow: 0 0 8px #ff47a6;
+}
+
+.skillLevel {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Responsive Styles for Mobile --- */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 1rem;
+    align-items: flex-start;
+  }
+  .container {
+    padding: 1.5rem;
+  }
+  .primaryDirectives h1 {
+    font-size: 1.8rem;
+  }
+  .skillGrid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+}

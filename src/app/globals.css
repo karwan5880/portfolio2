@@ -4,9 +4,9 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevents horizontal scrollbars */
-  background-color: #000; /* Use the black from our theme */
-  color-scheme: dark; /* A hint for the browser to use dark-mode scrollbars, etc. */
+  overflow-x: hidden;
+  background-color: #000;
+  color-scheme: dark;
 }
 
 body {
@@ -18,5 +18,4 @@ body {
 
   background-color: transparent;
   overscroll-behavior-y: contain;
-  /* Prevents the "bounce" effect and pull-to-refresh on some browsers */
 }

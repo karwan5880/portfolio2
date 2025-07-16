@@ -1,0 +1,10 @@
+.pin-tooltip {
+  background: rgba(20, 20, 30, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none; /* Crucial */
+}

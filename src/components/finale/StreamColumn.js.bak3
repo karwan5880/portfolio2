@@ -1,0 +1,85 @@
+'use client'
+
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+
+// How many reusable divs should we render per column?
+const POOL_SIZE = 30
+
+export function StreamColumn({
+  initialData = [],
+  speed = 100,
+  direction = 'up',
+  isEnding = false,
+  className = '',
+  renderItem, // This will now return JSX
+}) {
+  const [visibleItems, setVisibleItems] = useState([])
+  const containerRef = useRef(null)
+  const dataPoolRef = useRef([])
+  const positionsRef = useRef(new Map())
+  const animationFrameId = useRef(null)
+  const lastTimeRef = useRef(null)
+
+  // Setup effect
+  useEffect(() => {
+    dataPoolRef.current = [...initialData]
+    positionsRef.current.clear()
+    const initialPool = dataPoolRef.current.splice(0, POOL_SIZE)
+    setVisibleItems(initialPool)
+  }, [initialData])
+
+  // Measurement and Positioning effect
+  useLayoutEffect(() => {
+    let currentPos = 0
+    visibleItems.forEach((item) => {
+      positionsRef.current.set(item.id, currentPos)
+      currentPos += 200 // Use a stable estimate
+    })
+  }, [visibleItems])
+
+  // Animation Loop
+  useEffect(() => {
+    const animate = (timestamp) => {
+      if (!lastTimeRef.current) lastTimeRef.current = timestamp
+      const dt = (timestamp - lastTimeRef.current) / 1000
+      lastTimeRef.current = timestamp
+
+      let hasChanged = false
+      const nextItems = [...visibleItems]
+      const containerHeight = containerRef.current?.offsetHeight || 0
+
+      for (let i = nextItems.length - 1; i >= 0; i--) {
+        const item = nextItems[i]
+        const oldPos = positionsRef.current.get(item.id) || 0
+        const newPos = direction === 'up' ? oldPos - speed * dt : oldPos + speed * dt
+        positionsRef.current.set(item.id, newPos)
+
+        const node = document.getElementById(item.id)
+        if (node) node.style.transform = `translateY(${newPos}px)`
+
+        const isOffScreen = direction === 'up' ? newPos < -200 : newPos > containerHeight
+        if (isOffScreen) {
+          hasChanged = true
+          nextItems.splice(i, 1)
+          if (!isEnding && dataPoolRef.current.length > 0) {
+            nextItems.push(dataPoolRef.current.shift())
+          }
+        }
+      }
+
+      if (hasChanged) {
+        setVisibleItems(nextItems)
+      }
+
+      animationFrameId.current = requestAnimationFrame(animate)
+    }
+    animationFrameId.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(animationFrameId.current)
+  }, [visibleItems, speed, direction, isEnding])
+
+  return (
+    <div ref={containerRef} className={`${className}`}>
+      {visibleItems.map((item) => renderItem(item))}
+    </div>
+  )
+}

@@ -1,0 +1,65 @@
+'use client'
+
+import styles from './Finale.module.css'
+
+const SyntaxHighlightedCode = ({ content }) => {
+  const html = content
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/(const|let|class|return|def|fn|public|static|void)/g, '<span class="keyword">$1</span>')
+    .replace(/("[^"]*")/g, '<span class="string">$1</span>')
+    .replace(/(\/\/.*|\#.*|\/\*.*\*\/)/g, '<span class="comment">$1</span>')
+  return <pre dangerouslySetInnerHTML={{ __html: html }} />
+}
+
+export function SingleLineStream({ items, isScrolling }) {
+  if (!isScrolling) return null
+
+  return (
+    <div className={`${styles.singleLineStream} ${styles.xFast}`}>
+      {items.map((item, index) => (
+        <div key={index} className={`${styles.streamItem} ${styles[item.type]}`}>
+          <span>{item.content}</span>
+        </div>
+      ))}
+    </div>
+    // <div className={`${styles.streamItem} ${styles[item.type]} ${item.secret ? styles.secret : ''}`} onClick={item.secret ? handleSecretClick : null}>
+    //   <span>{item.content}</span>
+    // </div>
+  )
+}
+
+export function CodeStream({ left, middle, right, isScrolling }) {
+  if (!isScrolling) return null // Don't render if not scrolling
+
+  // The CodeColumn is now just a simple renderer, it doesn't need animation classes
+  const CodeColumn = ({ data }) => (
+    <div className={styles.codeColumn}>
+      {data.map((snippet, index) => (
+        <div key={index} className={styles.codeBlock}>
+          <div className={styles.codeTitle}>{snippet.title}</div>
+          <SyntaxHighlightedCode content={snippet.code} />
+        </div>
+      ))}
+    </div>
+  )
+  return (
+    <div className={styles.codeWall}>
+      <div className={`${styles.columnWrapper} ${styles.slow}`}>
+        <CodeColumn data={left} />
+      </div>
+      <div className={`${styles.columnWrapper} ${styles.fast}`}>
+        <CodeColumn data={middle} />
+      </div>
+      <div className={`${styles.columnWrapper} ${styles.medium}`}>
+        <CodeColumn data={right} />
+      </div>
+    </div>
+
+    // <div className={`${styles.streamGrid} ${isScrolling ? styles.visible : ''}`}>
+    //   <CodeColumn data={left} animationClass="slow" />
+    //   <CodeColumn data={middle} animationClass="fast" />
+    //   <CodeColumn data={right} animationClass="medium" />
+    // </div>
+  )
+}

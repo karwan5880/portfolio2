@@ -5,14 +5,18 @@ import Link from 'next/link'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { DogEar } from '@/components/DogEar'
+import { GitHubIcon } from '@/components/GithubIcon'
 import { Header } from '@/components/Header'
 import { Preloader } from '@/components/Preloader'
 import { Project } from '@/components/Project'
+import { ResumeIcon } from '@/components/ResumeIcon'
 import { Section } from '@/components/Section'
 import { Skills } from '@/components/Skills'
 
 import styles from './Page.module.css'
+import { useGatekeeper } from '@/hooks/useGatekeeper'
 import { useWindowSize } from '@/hooks/useWindowSize'
+import { useAudioStore } from '@/stores/audioStore'
 
 const SentientBackground = dynamic(() => import('@/components/SentientBackground'), {
   ssr: false,
@@ -26,52 +30,33 @@ const commonStyles = {
 }
 
 export default function Home() {
+  useGatekeeper('/')
+  const armAudio = useAudioStore((state) => state.armAudio)
   const main = useRef(null)
   const resumeContainer = useRef(null)
   const { width } = useWindowSize()
   const isMobile = width < 768
-  const [isBooting, setIsBooting] = useState(true) // Start in "booting" state
-
-  // This logic is for the main page content after the loader is gone
-  useEffect(() => {
-    // Prevent this from running while the preloader is active
-    if (isBooting) return
-
-    // ... any GSAP or other animations for your main page can go here ...
-  }, [isBooting]) // Re-run when booting is finished
-
-  // If we are booting, only render the preloader
-  if (isBooting) {
-    return <Preloader onBootComplete={() => setIsBooting(false)} />
-  }
+  const [isBooting, setIsBooting] = useState(true)
 
   return (
     <div ref={main}>
       <SentientBackground />
-      {/* {!isMobile && <SentientBackground />} */}
       <div ref={resumeContainer}>
         <div className={styles.pageWrapper}>
           <div className={styles.documentContainer}>
+            <GitHubIcon />
+            <ResumeIcon />
             <Header />
             <Section title="Summary" isInteractive>
               <ul style={commonStyles.ul}>
-                <li>
-                  Developing software solutions since 2018, starting with web technologies (2018-2019) and advancing to
-                  Python/C++ development (2020-2024).
-                </li>
-                <li>
-                  Developed diverse projects including a new Windows driver, Python library, Godot game, Flutter app,
-                  and Next.js landing page.
-                </li>
+                <li>Developing software solutions since 2018, starting with web technologies (2018-2019) and advancing to Python/C++ development (2020-2024).</li>
+                <li>Developed diverse projects including a new Windows driver, Python library, Godot game, Flutter app, and Next.js landing page.</li>
                 <li>Continuously expanding expertise through self-study in AI, LLM, and reinforcement learning.</li>
               </ul>
             </Section>
             <Section title="Education" isInteractive>
               <h3 style={commonStyles.h3}>Universiti Tunku Abdul Rahman (UTAR)</h3>
-              <p style={commonStyles.p}>
-                Master of Engineering Science | Dissertation: License Plate Detection Using Deep Learning Object
-                Detection Models
-              </p>
+              <p style={commonStyles.p}>Master of Engineering Science | Dissertation: License Plate Detection Using Deep Learning Object Detection Models</p>
               <p style={commonStyles.p}>Bachelor of Computer Science (Honours)</p>
             </Section>
             <Section title="Experience" isInteractive>
@@ -84,28 +69,19 @@ export default function Home() {
               </div>
               <ul style={commonStyles.ul}>
                 <li>Designed and implemented front-end and back-end solutions using Angular and .Net Core.</li>
-                <li>
-                  Developed SQL queries to optimize data extraction efficiency, enabling real-time visualization of
-                  product metrics.
-                </li>
+                <li>Developed SQL queries to optimize data extraction efficiency, enabling real-time visualization of product metrics.</li>
               </ul>
             </Section>
             <Section title="Projects" isInteractive>
               <Project title="License Plate Detection Using Deep Learning Object Detection Models">
                 <ul style={{ ...commonStyles.ul, marginBottom: '0.5rem', marginTop: 0 }}>
                   <li>Fine-tuned YOLOv4, EfficientDet, CenterNet, Faster R-CNN, and SSD models on the CCPD dataset.</li>
-                  <li>
-                    Improved YOLOv4 accuracy by 13.32% on the CCPD dataset through custom convolution layers and
-                    optimized preprocessing.
-                  </li>
+                  <li>Improved YOLOv4 accuracy by 13.32% on the CCPD dataset through custom convolution layers and optimized preprocessing.</li>
                 </ul>
               </Project>
               <Project title="WinRT Windows Graphics Capture Library">
                 <ul style={{ ...commonStyles.ul, marginTop: 0 }}>
-                  <li>
-                    Developed high-performance screen capture tool using WinRT, compiled into a DLL and integrated with
-                    Python using ctypes.
-                  </li>
+                  <li>Developed high-performance screen capture tool using WinRT, compiled into a DLL and integrated with Python using ctypes.</li>
                 </ul>
               </Project>
             </Section>
@@ -115,9 +91,7 @@ export default function Home() {
             <Section title="Languages" isInteractive>
               <p style={commonStyles.p}>English, Mandarin, Malay</p>
             </Section>
-            {/* <Link href="/dossier" onClick={playSound} className={styles.dogEar} aria-label="Go to next page"></Link> */}
-            {/* <DogEar href="/dossier" aria-label="Go to next page" /> */}
-            <DogEar href="/dossier" position="bottom-right" aria-label="View the dossier" />
+            <DogEar href="/dossier" position="bottom-right" aria-label="View the dossier" onNavigateStart={armAudio} />
           </div>
         </div>
       </div>

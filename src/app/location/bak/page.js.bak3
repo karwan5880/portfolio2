@@ -1,0 +1,116 @@
+'use client'
+
+import { useMemo, useState } from 'react'
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+
+import { CornerLink } from '@/components/CornerLink'
+
+import styles from './location.module.css'
+
+const geoUrl = '/world.json'
+
+const targetCountries = ['HKG', 'TWN', 'SGP', 'AUS', 'JPN', 'GBR', 'USA', 'CAN', 'DNK', 'SWE', 'FIN', 'FRA', 'NOR']
+const homeCountry = 'MYS'
+
+const countryStyles = {
+  default: { fill: '#2C2C2C', stroke: '#555555', strokeWidth: 0.5, outline: 'none' },
+  hover: { fill: '#00FF9D', stroke: '#00FF9D', strokeWidth: 0.75, outline: 'none' },
+}
+
+const ZOOM_LEVEL = 3 // How much to magnify
+const LENS_SIZE = 120 // The radius of the lens
+
+export default function LocationPage() {
+  // State to track the mouse position on the SVG canvas
+  const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 })
+
+  const handleMouseMove = (e) => {
+    // Get the position relative to the SVG element
+    const svg = e.currentTarget
+    const pt = svg.createSVGPoint()
+    pt.x = e.clientX
+    pt.y = e.clientY
+    const { x, y } = pt.matrixTransform(svg.getScreenCTM().inverse())
+    setMousePosition({ x, y })
+  }
+
+  const handleMouseLeave = () => {
+    setMousePosition({ x: -1000, y: -1000 }) // Move it off-screen
+  }
+
+  // Memoize the transform string for performance
+  const lensTransform = useMemo(() => {
+    const { x, y } = mousePosition
+    // This is a standard graphics technique to scale around a pivot point:
+    // 1. Translate the pivot point to the origin (0,0).
+    // 2. Scale up.
+    // 3. Translate the origin back to the pivot point.
+    return `translate(${x}, ${y}) scale(${ZOOM_LEVEL}) translate(${-x}, ${-y})`
+  }, [mousePosition])
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.header}>
+        <h1>Global Relocation Availability</h1>
+        <p>Ready to engage worldwide. Sponsorship required for all locations outside of Malaysia.</p>
+      </div>
+
+      <div className={styles.mapContainer}>
+        <ComposableMap projectionConfig={{ scale: 160, center: [0, 20] }} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className={styles.map}>
+          {/* SVG definitions for our clip path */}
+          <defs>
+            <clipPath id="lens-clip">
+              <circle cx={mousePosition.x} cy={mousePosition.y} r={LENS_SIZE} />
+            </clipPath>
+          </defs>
+
+          {/* --- LAYER 1: The Base Map --- */}
+          <g>
+            <Geographies geography={geoUrl}>{({ geographies }) => geographies.map((geo) => <Geography key={geo.rsmKey} geography={geo} style={{ default: countryStyles.default }} />)}</Geographies>
+          </g>
+
+          {/* --- LAYER 2: The Magnified Lens Layer --- */}
+          <g clipPath="url(#lens-clip)">
+            {/* The base layer of the lens is a slightly brighter version of the map */}
+            <g transform={lensTransform}>
+              <Geographies geography={geoUrl}>{({ geographies }) => geographies.map((geo) => <Geography key={geo.rsmKey} geography={geo} style={{ default: { ...countryStyles.default, fill: '#3a3a3a' } }} />)}</Geographies>
+            </g>
+
+            {/* Highlighted countries are drawn on top, inside the lens */}
+            <g transform={lensTransform}>
+              <Geographies geography={geoUrl}>
+                {({ geographies }) =>
+                  geographies.map((geo) => {
+                    const isTarget = targetCountries.includes(geo.properties.iso_a3)
+                    const isHome = geo.properties.iso_a3 === homeCountry
+                    if (!isTarget && !isHome) return null
+
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        style={{
+                          default: {
+                            fill: isHome ? '#FFC300' : 'rgba(0, 255, 157, 0.6)',
+                            stroke: isHome ? '#FFC300' : '#00FF9D',
+                            strokeWidth: 0.2,
+                          },
+                        }}
+                      />
+                    )
+                  })
+                }
+              </Geographies>
+            </g>
+          </g>
+
+          {/* --- The Border for the Lens --- */}
+          <circle cx={mousePosition.x} cy={mousePosition.y} r={LENS_SIZE} className={styles.lensBorder} />
+        </ComposableMap>
+      </div>
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/finale" position="bottom-right" label="Finale" />
+    </div>
+  )
+}
