@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Text Renderer Test</title>
+  </head>
+  <body>
+    <h1>Text Renderer Test</h1>
+    <canvas id="testCanvas" width="128" height="32" style="border: 1px solid black; image-rendering: pixelated; width: 512px; height: 128px"></canvas>
+
+    <script>
+      // Simple test of our text rendering logic
+      const canvas = document.getElementById('testCanvas')
+      const ctx = canvas.getContext('2d')
+
+      // Configure canvas for crisp text rendering
+      ctx.imageSmoothingEnabled = false
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+
+      function renderText(text, fontSize = 24) {
+        // Clear canvas with black background
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Configure font
+        ctx.font = `bold ${fontSize}px Arial`
+        ctx.fillStyle = 'white'
+
+        // Auto-scale text to fit if needed
+        const textWidth = ctx.measureText(text).width
+        if (textWidth > 120) {
+          // Leave some margin
+          const scaleFactor = 120 / textWidth
+          const newFontSize = Math.floor(fontSize * scaleFactor)
+          ctx.font = `bold ${newFontSize}px Arial`
+        }
+
+        // Render text centered
+        ctx.fillText(text, 64, 16)
+      }
+
+      // Test different texts
+      const texts = ['HELLO', 'THANK YOU', '恭喜發財', '2025']
+      let currentIndex = 0
+
+      function nextText() {
+        renderText(texts[currentIndex])
+        currentIndex = (currentIndex + 1) % texts.length
+      }
+
+      // Initial render
+      nextText()
+
+      // Change text every 2 seconds
+      setInterval(nextText, 2000)
+    </script>
+  </body>
+</html>

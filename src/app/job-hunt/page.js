@@ -1,94 +1,150 @@
 'use client'
 
 import { CornerLink } from '@/components/CornerLink'
-import { DogEar } from '@/components/DogEar'
 
 import styles from './page.module.css'
-import { skillsData } from '@/data/skills-data'
 import { useGatekeeper } from '@/hooks/useGatekeeper'
 
-// Separate Python from the other skills
-const pythonSkill = skillsData.find((skill) => skill.name.toLowerCase() === 'python')
-const otherSkills = skillsData.filter((skill) => skill.name.toLowerCase() !== 'python')
+// Core skills data
+const coreSkills = [
+  {
+    name: 'Python',
+    level: 9,
+    description: 'Automation, Scripting, App Development',
+    category: 'primary',
+    icon: '🐍',
+    tags: ['Flask', 'FastAPI', 'Automation'],
+  },
+  {
+    name: 'C++',
+    level: 8,
+    description: 'Performance-Critical Applications, Game Development, Dynamic Libraries, Drivers',
+    category: 'primary',
+    icon: '⚡',
+    tags: ['Performance', 'Memory Management', 'Algorithms'],
+  },
+  {
+    name: 'React',
+    level: 8,
+    description: 'Frontend Development, Modern Web Apps, Portfolio, Landing Page, Business',
+    category: 'primary',
+    icon: '⚛️',
+    tags: ['Hooks', 'State Management', 'UI/UX'],
+  },
+  {
+    name: 'Computer Vision',
+    level: 7,
+    description: 'OpenCV, Image Processing, YOLO, Object Detection, Linux, Ubuntu, Script',
+    category: 'primary',
+    icon: '👁️',
+    tags: ['OpenCV', 'YOLO', 'Image Processing'],
+  },
+]
 
-// A reusable progress bar component for clarity
-function SkillBar({ level }) {
-  const getBarClass = (lvl) => {
-    if (lvl > 10) return `${styles.barFill} ${styles.overclocked}`
-    if (lvl > 7) return `${styles.barFill} ${styles.optimized}`
-    return styles.barFill
+// Emerging skills - technologies I'm interested in learning
+const emergingSkills = [
+  {
+    name: 'Flutter',
+    level: 3,
+    description: 'Cross-platform Mobile Development',
+    category: 'emerging',
+    icon: '📱',
+    tags: ['Mobile', 'Cross-platform', 'Dart'],
+  },
+  {
+    name: 'Godot',
+    level: 2,
+    description: 'Game Engine, 2D/3D Game Development',
+    category: 'emerging',
+    icon: '🎮',
+    tags: ['Game Engine', 'GDScript', 'Indie Games'],
+  },
+  {
+    name: 'Rust',
+    level: 0,
+    description: 'Systems Programming, Memory Safety',
+    category: 'emerging',
+    icon: '🦀',
+    tags: ['Systems', 'Memory Safety', 'Performance'],
+  },
+  {
+    name: 'Go',
+    level: 0,
+    description: 'Backend Services, Microservices',
+    category: 'emerging',
+    icon: '🐹',
+    tags: ['Backend', 'Concurrency', 'Microservices'],
+  },
+]
+
+// Skill card component
+function SkillCard({ skill }) {
+  const getBarClass = (level) => {
+    if (level >= 9) return `${styles.barFill} ${styles.expert}`
+    if (level >= 7) return `${styles.barFill} ${styles.advanced}`
+    if (level >= 4) return `${styles.barFill} ${styles.intermediate}`
+    return `${styles.barFill} ${styles.beginner}`
+  }
+
+  const getCardClass = (category) => {
+    return category === 'emerging' ? `${styles.skillCard} ${styles.emergingCard}` : styles.skillCard
   }
 
   return (
-    <div className={styles.barContainer}>
-      <div className={getBarClass(level)} style={{ width: `calc(10% * ${Math.min(level, 11)})` }}></div>
+    <div className={getCardClass(skill.category)}>
+      <div className={styles.skillIcon}>{skill.icon}</div>
+      {skill.category === 'emerging' && <div className={styles.emergingBadge}>Learning</div>}
+      <div className={styles.skillHeader}>
+        <h3 className={styles.skillName}>{skill.name}</h3>
+        <span className={styles.skillLevel}>{skill.level}/10</span>
+      </div>
+      <div className={styles.skillBar}>
+        <div className={getBarClass(skill.level)} style={{ width: `${skill.level * 10}%` }} />
+      </div>
+      <p className={styles.skillDescription}>{skill.description}</p>
+      <div className={styles.skillTags}>
+        {skill.tags.map((tag) => (
+          <span key={tag} className={styles.tag}>
+            {tag}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }
 
-export default function JobSpecPage() {
+export default function JobHuntPage() {
   useGatekeeper('/job-hunt')
 
   return (
     <div className={styles.wrapper}>
       <main className={styles.container}>
-        {/* SECTION 1: PRIMARY JOB TARGETS */}
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>PRIMARY TARGETS</h2>
-          <div className={styles.primaryTargets}>
-            <h1>AI ENGINEER</h1>
-            <h1>EMBEDDED SYSTEMS ENGINEER</h1>
-            <h1>LINUX ENGINEER</h1>
+        <header className={styles.header}>
+          <h1 className={styles.title}>Technical Skills</h1>
+          <p className={styles.subtitle}>Current expertise and future interests</p>
+        </header>
+
+        <section className={styles.skillSection}>
+          <h2 className={styles.sectionTitle}>Core Competencies</h2>
+          <div className={styles.skillsGrid}>
+            {coreSkills.map((skill) => (
+              <SkillCard key={skill.name} skill={skill} />
+            ))}
           </div>
         </section>
 
-        {/* SECTION 2: PYTHON CORE COMPETENCY */}
-        {pythonSkill && (
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>CORE LANGUAGE PROFICIENCY</h2>
-            <div className={styles.coreProficiency}>
-              <div className={styles.skillName}>
-                {pythonSkill.name}
-                <span className={styles.coreTag}>CORE</span>
-              </div>
-              <div className={styles.coreBarContainer}>
-                <div className={styles.coreBarFill} style={{ width: `calc(10% * ${pythonSkill.level})` }}></div>
-              </div>
-              <span className={styles.skillLevel}>{pythonSkill.level}/10</span>
-            </div>
-          </section>
-        )}
-
-        {/* SECTION 3: EXTENDED SKILLSET & SECONDARY ROLES */}
-        <div className={styles.dualSection}>
-          <section className={`${styles.section} ${styles.fullHeight}`}>
-            <h2 className={styles.sectionTitle}>EXTENDED SKILLSET</h2>
-            <div className={styles.skillGrid}>
-              {otherSkills.map((skill) => (
-                <div key={skill.name} className={styles.skillEntry}>
-                  <span className={styles.skillName}>{skill.name}</span>
-                  <SkillBar level={skill.level} />
-                  <span className={styles.skillLevel}>{skill.level}/10</span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className={`${styles.section} ${styles.fullHeight}`}>
-            <h2 className={styles.sectionTitle}>SECONDARY PROTOCOLS</h2>
-            <div className={styles.secondaryTargets}>
-              <p>Software Engineer</p>
-              <p>Frontend Engineer</p>
-              <p>Backend Engineer</p>
-              <p>Full-Stack Developer</p>
-            </div>
-          </section>
-        </div>
+        <section className={styles.skillSection}>
+          <h2 className={styles.sectionTitle}>Emerging Interests</h2>
+          <div className={styles.skillsGrid}>
+            {emergingSkills.map((skill) => (
+              <SkillCard key={skill.name} skill={skill} />
+            ))}
+          </div>
+        </section>
       </main>
-      {/* <DogEar href="/dossier" position="bottom-left" aria-label="Return to dossier" />
-      <DogEar href="/applications" position="bottom-right" aria-label="View applications" /> */}
-      <CornerLink href="/dossier" position="bottom-left" label="Life Log" aria-label="Return to dossier" />
-      <CornerLink href="/applications" position="bottom-right" label="Applications" aria-label="Go to applications" />
+
+      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" aria-label="Return to dev-history" />
+      <CornerLink href="/location" position="bottom-right" label="Location" aria-label="Go to location" />
     </div>
   )
 }

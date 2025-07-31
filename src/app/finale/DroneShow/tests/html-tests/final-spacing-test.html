@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Spacing Test - THANK YOU</title>
+    <style>
+      body {
+        font-family: 'Trebuchet MS', sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 20px;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .test-box {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #1a1a1a;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+        position: relative;
+      }
+      canvas {
+        border: 1px solid #555;
+        image-rendering: pixelated;
+        transform: scale(8);
+        transform-origin: top left;
+      }
+      .dimension-overlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 128px;
+        height: 32px;
+        border: 2px solid #ff0;
+        background: rgba(255, 255, 0, 0.1);
+        transform: scale(8);
+        transform-origin: top left;
+        pointer-events: none;
+      }
+      .results {
+        font-family: monospace;
+        font-size: 12px;
+        color: #0f0;
+        background: #000;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📏 Final Spacing Test - "THANK YOU"</h1>
+
+    <div class="test-container">
+      <div class="test-box">
+        <h3>Final Configuration Test</h3>
+        <p>Word spacing: 0.3, Letter spacing: 0.2, Font size: 22px</p>
+        <div class="canvas-wrapper">
+          <canvas id="finalCanvas" width="128" height="32"></canvas>
+          <div class="dimension-overlay"></div>
+        </div>
+        <div id="finalResults" class="results"></div>
+      </div>
+
+      <div class="test-box">
+        <h3>All Messages Test</h3>
+        <p>Testing all timeline messages with current settings</p>
+        <div id="allMessagesContainer"></div>
+        <div id="allResults" class="results"></div>
+      </div>
+    </div>
+
+    <script>
+      function renderTextWithSpacing(canvas, text, wordSpacing, letterSpacing, fontSize = 22) {
+        const ctx = canvas.getContext('2d')
+
+        // Clear canvas
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Configure font
+        ctx.font = `bold ${fontSize}px Trebuchet MS`
+        ctx.fillStyle = 'white'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        // Apply letter spacing if supported
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = letterSpacing + 'px'
+        }
+
+        const centerX = 64
+        const centerY = 16.5
+
+        if (text.includes(' ')) {
+          // Custom word spacing
+          const words = text.split(' ')
+          let totalWidth = 0
+
+          // Calculate total width with custom spacing
+          for (let i = 0; i < words.length; i++) {
+            totalWidth += ctx.measureText(words[i]).width
+            if (i < words.length - 1) {
+              totalWidth += fontSize * wordSpacing
+            }
+          }
+
+          // Check if it fits
+          const maxWidth = 128 * 0.92 // 92% of canvas width
+          const fits = totalWidth <= maxWidth
+
+          if (fits) {
+            // Render words with custom spacing
+            let currentX = centerX - totalWidth / 2
+            for (let i = 0; i < words.length; i++) {
+              const word = words[i]
+              const wordWidth = ctx.measureText(word).width
+
+              ctx.fillText(word, currentX + wordWidth / 2, centerY)
+
+              currentX += wordWidth
+              if (i < words.length - 1) {
+                currentX += fontSize * wordSpacing
+              }
+            }
+          }
+
+          return {
+            totalWidth: totalWidth,
+            maxWidth: maxWidth,
+            fits: fits,
+            widthUsage: ((totalWidth / 128) * 100).toFixed(1),
+          }
+        } else {
+          // Single word
+          const width = ctx.measureText(text).width
+          const fits = width <= 128 * 0.92
+
+          if (fits) {
+            ctx.fillText(text, centerX, centerY)
+          }
+
+          return {
+            totalWidth: width,
+            maxWidth: 128 * 0.92,
+            fits: fits,
+            widthUsage: ((width / 128) * 100).toFixed(1),
+          }
+        }
+      }
+
+      // Test final configuration
+      window.onload = function () {
+        const canvas = document.getElementById('finalCanvas')
+        const result = renderTextWithSpacing(canvas, 'THANK YOU', 0.3, 0.2, 22)
+
+        document.getElementById('finalResults').innerHTML = `Text: "THANK YOU"\n` + `Width: ${result.totalWidth.toFixed(1)}px (${result.widthUsage}% of 128px)\n` + `Max allowed: ${result.maxWidth.toFixed(1)}px\n` + `Fits: ${result.fits ? '✅ YES - COMPLETE TEXT VISIBLE' : '❌ NO - TEXT TRUNCATED'}\n` + `Status: ${result.fits ? 'SUCCESS - T and U should be visible' : 'NEEDS MORE REDUCTION'}`
+
+        // Test all messages
+        const messages = [
+          { text: 'HELLO', spacing: { word: 0.3, letter: 0.5, size: 24 } },
+          { text: 'WELCOME', spacing: { word: 0.3, letter: 0.5, size: 24 } },
+          { text: 'TO MY', spacing: { word: 0.3, letter: 0.5, size: 24 } },
+          { text: 'PORTFOLIO', spacing: { word: 0.3, letter: 0.5, size: 24 } },
+          { text: 'ENJOY', spacing: { word: 0.3, letter: 0.5, size: 24 } },
+          { text: 'THE SHOW', spacing: { word: 0.3, letter: 0.5, size: 24 } },
+          { text: 'THANK YOU', spacing: { word: 0.3, letter: 0.2, size: 22 } },
+        ]
+
+        const container = document.getElementById('allMessagesContainer')
+        let allResults = 'All Messages Fit Test:\n\n'
+
+        messages.forEach((msg) => {
+          const testCanvas = document.createElement('canvas')
+          testCanvas.width = 128
+          testCanvas.height = 32
+          testCanvas.style.transform = 'scale(3)'
+          testCanvas.style.transformOrigin = 'top left'
+          testCanvas.style.border = '1px solid #555'
+          testCanvas.style.margin = '5px'
+          testCanvas.style.display = 'inline-block'
+
+          const result = renderTextWithSpacing(testCanvas, msg.text, msg.spacing.word, msg.spacing.letter, msg.spacing.size)
+
+          container.appendChild(testCanvas)
+
+          allResults += `"${msg.text}": ${result.widthUsage}% width, ${result.fits ? '✅' : '❌'}\n`
+        })
+
+        document.getElementById('allResults').textContent = allResults
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Refined New Year Messages - Final Sequence</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .test-section {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .message-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .message-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .message-info {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .chinese-display {
+        font-size: 56px;
+        color: #ff4500;
+        text-shadow:
+          0 0 5px #ff4500,
+          0 0 10px #ff4500,
+          0 0 15px #ff4500,
+          0 0 20px #ff4500;
+        margin: 15px 0;
+        font-family: 'Noto Sans CJK SC', 'Microsoft YaHei';
+        font-weight: normal;
+        letter-spacing: 1px;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 10px 0;
+      }
+      canvas {
+        border: 1px solid #333;
+        image-rendering: pixelated;
+        transform: scale(6);
+        transform-origin: top left;
+      }
+      .message-analysis {
+        font-size: 10px;
+        color: #aaa;
+        margin-top: 8px;
+        line-height: 1.3;
+      }
+      .meaning {
+        color: #4a9eff;
+        font-size: 10px;
+        margin: 5px 0;
+        font-style: italic;
+      }
+      .timeline-overview {
+        background: #1a1a1a;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      .timeline-entry {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        padding: 10px;
+        background: #222;
+        border-radius: 4px;
+        border-left: 3px solid #ff4500;
+      }
+      .timeline-text {
+        font-size: 24px;
+        color: #ff4500;
+        font-family: 'Noto Sans CJK SC', 'Microsoft YaHei';
+      }
+      .timeline-info {
+        text-align: right;
+        font-size: 11px;
+        color: #888;
+      }
+      .sequence-preview {
+        background: #000;
+        padding: 30px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .animated-text {
+        font-size: 72px;
+        color: #ff4500;
+        text-shadow:
+          0 0 5px #ff4500,
+          0 0 10px #ff4500,
+          0 0 15px #ff4500,
+          0 0 20px #ff4500,
+          0 0 35px #ff4500;
+        font-family: 'Noto Sans CJK SC', 'Microsoft YaHei';
+        font-weight: normal;
+        letter-spacing: 2px;
+        transition: all 0.5s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎊 Refined New Year Messages - Final Sequence</h1>
+    <p>Testing the refined Chinese New Year blessing sequence with enhanced meanings</p>
+
+    <div class="test-container">
+      <div class="test-section">
+        <h3>📅 Final Message Timeline</h3>
+        <div class="timeline-overview">
+          <div class="timeline-entry">
+            <div>
+              <div class="timeline-text">新年快樂</div>
+              <div class="meaning">Happy New Year - Traditional greeting</div>
+            </div>
+            <div class="timeline-info">55-60s<br />(5 seconds)</div>
+          </div>
+          <div class="timeline-entry">
+            <div>
+              <div class="timeline-text">家承運昌</div>
+              <div class="meaning">Family inherits prosperity - Generational success</div>
+            </div>
+            <div class="timeline-info">61-67s<br />(6 seconds)</div>
+          </div>
+          <div class="timeline-entry">
+            <div>
+              <div class="timeline-text">身安心安</div>
+              <div class="meaning">Health & peace of mind - Physical and mental wellness</div>
+            </div>
+            <div class="timeline-info">68-75s<br />(7 seconds)</div>
+          </div>
+          <div class="timeline-entry">
+            <div>
+              <div class="timeline-text">藝臻恬然</div>
+              <div class="meaning">Art reaches tranquil perfection - Artistic mastery brings serenity</div>
+            </div>
+            <div class="timeline-info">76s+<br />(forever)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔤 128×32 Drone Display Test</h3>
+        <p>Testing all refined messages with optimized settings:</p>
+        <div class="message-grid" id="messageGrid">
+          <!-- Message samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 Animated Sequence Preview</h3>
+        <div class="sequence-preview">
+          <div class="animated-text" id="animatedText">新年快樂</div>
+          <div style="color: #888; font-size: 12px; margin-top: 15px">Chongqing neon style - cycling through all messages</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Refined message sequence
+      const REFINED_MESSAGES = [
+        {
+          text: '新年快樂',
+          duration: '5s',
+          meaning: 'Happy New Year',
+          description: 'Traditional New Year greeting',
+        },
+        {
+          text: '家承運昌',
+          duration: '6s',
+          meaning: 'Family inherits prosperity',
+          description: 'Generational success and flourishing fortune',
+        },
+        {
+          text: '身安心安',
+          duration: '7s',
+          meaning: 'Health & peace of mind',
+          description: 'Physical wellness and mental tranquility',
+        },
+        {
+          text: '藝臻恬然',
+          duration: 'forever',
+          meaning: 'Art reaches tranquil perfection',
+          description: 'Artistic mastery brings inner serenity',
+        },
+      ]
+
+      function createMessageSample(messageInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'message-sample'
+
+        const info = document.createElement('div')
+        info.className = 'message-info'
+        info.textContent = `${messageInfo.text} (${messageInfo.duration})`
+
+        const meaning = document.createElement('div')
+        meaning.className = 'meaning'
+        meaning.textContent = messageInfo.meaning
+
+        const display = document.createElement('div')
+        display.className = 'chinese-display'
+        display.textContent = messageInfo.text
+
+        // Canvas test with optimized settings
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Apply all optimizations
+        ctx.save()
+        ctx.scale(1.0, 1.1) // Height scaling
+
+        ctx.font = 'normal 34px Noto Sans CJK SC, Microsoft YaHei'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.03px'
+        }
+
+        // Position with 4-drone offset
+        const centerX = 64
+        const centerY = (16 + 4.5) / 1.1
+
+        // Ultra-minimal character spacing
+        const chars = messageInfo.text.split('')
+        let totalWidth = 0
+
+        for (let i = 0; i < chars.length; i++) {
+          totalWidth += ctx.measureText(chars[i]).width
+          if (i < chars.length - 1) {
+            totalWidth += 34 * 0.05
+          }
+        }
+
+        const maxWidth = 128 * 0.92
+        const fits = totalWidth <= maxWidth
+
+        if (fits) {
+          let currentX = centerX - totalWidth / 2
+          for (let i = 0; i < chars.length; i++) {
+            const char = chars[i]
+            const charWidth = ctx.measureText(char).width
+
+            ctx.fillText(char, currentX + charWidth / 2, centerY)
+
+            currentX += charWidth
+            if (i < chars.length - 1) {
+              currentX += 34 * 0.05
+            }
+          }
+        }
+
+        ctx.restore()
+
+        canvasWrapper.appendChild(canvas)
+
+        const analysis = document.createElement('div')
+        analysis.className = 'message-analysis'
+        analysis.innerHTML = `Width: ${totalWidth.toFixed(1)}px (${((totalWidth / 128) * 100).toFixed(1)}%)<br>` + `Fits: ${fits ? '✅ YES' : '❌ NO'}<br>` + `${messageInfo.description}`
+
+        sample.appendChild(info)
+        sample.appendChild(meaning)
+        sample.appendChild(display)
+        sample.appendChild(canvasWrapper)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      // Generate tests and animation
+      window.onload = function () {
+        // Message grid
+        const messageContainer = document.getElementById('messageGrid')
+        REFINED_MESSAGES.forEach((message) => {
+          messageContainer.appendChild(createMessageSample(message))
+        })
+
+        // Animated preview
+        const animatedText = document.getElementById('animatedText')
+        let messageIndex = 0
+
+        setInterval(() => {
+          animatedText.textContent = REFINED_MESSAGES[messageIndex].text
+          messageIndex = (messageIndex + 1) % REFINED_MESSAGES.length
+        }, 2500)
+      }
+    </script>
+  </body>
+</html>

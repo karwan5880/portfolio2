@@ -1,18 +1,24 @@
 :root {
   --primary-color: #00ff9d;
-  --python-gold: #ffc300;
-  --overclock-pink: #ff47a6;
+  --expert-color: #ff6b35;
+  --advanced-color: #00ff9d;
+  --intermediate-color: #4a9eff;
+  --beginner-color: #9d4edd;
+  --emerging-color: #ffd60a;
   --bg-color: #0a0a0a;
   --container-bg: #111;
+  --card-bg: #1a1a1a;
   --text-color: #e0e0e0;
   --text-muted: #888;
   --border-color: rgba(255, 255, 255, 0.1);
+  --tag-bg: rgba(0, 255, 157, 0.1);
+  --tag-border: rgba(0, 255, 157, 0.3);
 }
 
 .wrapper {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--bg-color);
+  background: radial-gradient(circle at 20% 80%, rgba(0, 255, 157, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.05) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(74, 158, 255, 0.03) 0%, transparent 50%), var(--bg-color);
   color: var(--text-color);
   display: flex;
   justify-content: center;
@@ -23,149 +29,317 @@
 
 .container {
   width: 100%;
-  max-width: 1100px;
-  background-color: var(--container-bg);
+  max-width: 1000px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%), var(--container-bg);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 2rem;
+  border-radius: 16px;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 3rem;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--primary-color);
+  margin: 0;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+  font-weight: 700;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0 0;
+  letter-spacing: 1px;
+}
+
+/* Section Titles */
+.skillSection {
+  margin-bottom: 2rem;
 }
 
 .sectionTitle {
   color: var(--text-muted);
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-color);
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-/* --- Section 1: Primary Targets --- */
-.primaryTargets h1 {
-  font-size: clamp(2rem, 5vw, 3rem); /* Responsive font size */
-  color: var(--primary-color);
-  margin: 0;
-  line-height: 1;
-  text-shadow: 0 0 8px rgba(0, 255, 157, 0.4);
-}
-.primaryTargets h1:not(:last-child) {
-  margin-bottom: 0.5rem;
+/* Skills Grid */
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
 }
 
-/* --- Section 2: Core Proficiency (Python) --- */
-.coreProficiency {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  background: linear-gradient(90deg, rgba(255, 195, 0, 0.05), transparent);
-  padding: 1rem 1.5rem;
-  border-left: 3px solid var(--python-gold);
+/* Skill Cards */
+.skillCard {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%), var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
 }
-.coreProficiency .skillName {
-  font-size: 1.5rem;
-  font-weight: bold;
-  flex-basis: 150px;
-  flex-shrink: 0;
+
+.skillCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
 }
-.coreTag {
-  font-size: 0.7rem;
+
+.skillCard:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(0, 255, 157, 0.15),
+    0 0 0 1px rgba(0, 255, 157, 0.1);
+}
+
+/* Emerging Skills Cards */
+.emergingCard {
+  border: 1px solid rgba(255, 214, 10, 0.2);
+  background: linear-gradient(135deg, rgba(255, 214, 10, 0.02) 0%, rgba(255, 214, 10, 0.01) 100%), var(--card-bg);
+}
+
+.emergingCard:hover {
+  border-color: var(--emerging-color);
+  box-shadow:
+    0 20px 40px rgba(255, 214, 10, 0.15),
+    0 0 0 1px rgba(255, 214, 10, 0.1);
+}
+
+.emergingBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(45deg, var(--emerging-color), #ffed4e);
   color: var(--bg-color);
-  background-color: var(--python-gold);
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 0.75rem;
-  vertical-align: middle;
-}
-.coreBarContainer {
-  flex-grow: 1;
-  height: 16px;
-  background-color: rgba(255, 195, 0, 0.1);
-}
-.coreBarFill {
-  height: 100%;
-  background-color: var(--python-gold);
-  box-shadow: 0 0 10px var(--python-gold);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* --- Section 3: Dual Section Layout --- */
-.dualSection {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2.5rem;
-}
-.fullHeight {
-  display: flex;
-  flex-direction: column;
+.skillIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 157, 0.3));
 }
 
-/* Extended Skillset */
-.skillGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem 1.5rem;
-}
-.skillEntry {
+.skillHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  margin-bottom: 1rem;
 }
-.barContainer {
-  flex-grow: 1;
-  height: 10px;
+
+.skillName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.skillLevel {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* Skill Bars */
+.skillBar {
+  width: 100%;
+  height: 8px;
   background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
+
 .barFill {
   height: 100%;
-}
-.barFill.optimized {
-  background-color: var(--primary-color);
-}
-.barFill.overclocked {
-  background-color: var(--overclock-pink);
-}
-.skillLevel {
-  font-variant-numeric: tabular-nums;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  position: relative;
 }
 
-/* Secondary Targets */
-.secondaryTargets {
-  flex-grow: 1;
-  background-color: rgba(255, 255, 255, 0.03);
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.secondaryTargets p {
-  margin: 0.25rem 0;
-  font-size: 1.1rem;
-  color: var(--text-muted);
+.barFill.expert {
+  background: linear-gradient(90deg, var(--expert-color), #ff8c42, #ffb347);
+  box-shadow:
+    0 0 15px rgba(255, 107, 53, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse-expert 2s ease-in-out infinite alternate;
 }
 
-/* --- Mobile Responsive Styles --- */
-@media (max-width: 900px) {
-  .dualSection {
-    grid-template-columns: 1fr;
+.barFill.advanced {
+  background: linear-gradient(90deg, var(--advanced-color), #00d4aa, #40e0d0);
+  box-shadow:
+    0 0 15px rgba(0, 255, 157, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse-advanced 2s ease-in-out infinite alternate;
+}
+
+.barFill.intermediate {
+  background: linear-gradient(90deg, var(--intermediate-color), #6bb6ff, #87ceeb);
+  box-shadow:
+    0 0 15px rgba(74, 158, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse-intermediate 2s ease-in-out infinite alternate;
+}
+
+.barFill.beginner {
+  background: linear-gradient(90deg, var(--beginner-color), #b084cc, #c8a2c8);
+  box-shadow:
+    0 0 15px rgba(157, 78, 221, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse-beginner 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-expert {
+  0% {
+    box-shadow:
+      0 0 15px rgba(255, 107, 53, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 25px rgba(255, 107, 53, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 }
+
+@keyframes pulse-advanced {
+  0% {
+    box-shadow:
+      0 0 15px rgba(0, 255, 157, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 25px rgba(0, 255, 157, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes pulse-intermediate {
+  0% {
+    box-shadow:
+      0 0 15px rgba(74, 158, 255, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 25px rgba(74, 158, 255, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes pulse-beginner {
+  0% {
+    box-shadow:
+      0 0 15px rgba(157, 78, 221, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 25px rgba(157, 78, 221, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+.skillDescription {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Skill Tags */
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background-color: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--primary-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background-color: rgba(0, 255, 157, 0.2);
+  transform: scale(1.05);
+}
+
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .wrapper {
     padding: 1rem;
     align-items: flex-start;
   }
+
   .container {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
     gap: 2rem;
   }
-  .coreProficiency {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.8rem;
-  }
-  .skillGrid {
+
+  .skillsGrid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .skillCard {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .skillCard {
+    padding: 1.25rem;
+  }
+
+  .skillName {
+    font-size: 1.25rem;
   }
 }

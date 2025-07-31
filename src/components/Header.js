@@ -13,7 +13,7 @@ export function Header() {
           <span>Malaysia</span>
           <span className={styles.separator}>•</span>
           {/* <span>•</span> */}
-          <a href="mailto:karwanlyt@gmail.com">karwanlyt@gmail.com</a>
+          <a href="mailto:jobkarwan@gmail.com">jobkarwan@gmail.com</a>
           {/* <span>•</span> */}
           <span className={styles.separator}>•</span>
           <a href="https://www.linkedin.com/in/karwanleong" target="_blank" rel="noopener noreferrer">

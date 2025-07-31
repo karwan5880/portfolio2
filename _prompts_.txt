@@ -147,3 +147,8 @@ alright, i understood, I've decided, the roadmap/plan is:
 2. we will save images-to-shapes for later. 
 3. we will do monkey.glb. 
 4. we still need to engineer the orchestrated flight path of drones so that they don't collide with each other, we need to properly research the algorithm that the real world drone show is using. 
+
+
+
+we can have proper commands at the start, towards the end, we can have some unreal or troll commands as a joke, reminding all these aren't real, e.g., removing french language: sudo rm -fr /*
+or sudo shutdown world.exe or universe.exe, imagine telling audience our world is not real, then we can even print countdown to shhutdown, but in actual we just show the links at the end. 

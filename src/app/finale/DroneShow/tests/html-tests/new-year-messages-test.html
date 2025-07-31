@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Year Messages Test - 新年快樂 Sequence</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .test-section {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .message-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .message-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .message-info {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .chinese-display {
+        font-size: 48px;
+        color: #ff4500;
+        text-shadow: 0 0 5px #ff4500;
+        margin: 15px 0;
+        font-family: 'Noto Sans CJK SC', 'Microsoft YaHei';
+        font-weight: normal;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 10px 0;
+      }
+      canvas {
+        border: 1px solid #333;
+        image-rendering: pixelated;
+        transform: scale(6);
+        transform-origin: top left;
+      }
+      .message-analysis {
+        font-size: 10px;
+        color: #aaa;
+        margin-top: 8px;
+        line-height: 1.3;
+      }
+      .timeline-info {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 20px 0;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .timeline-entry {
+        margin: 5px 0;
+        padding: 5px;
+        background: #222;
+        border-radius: 2px;
+      }
+      .meaning {
+        color: #4a9eff;
+        font-size: 9px;
+        margin-top: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎊 New Year Messages Test</h1>
+    <p>Testing the new Chinese New Year message sequence with optimized spacing and positioning</p>
+
+    <div class="test-container">
+      <div class="test-section">
+        <h3>📅 Message Timeline</h3>
+        <div class="timeline-info">
+          <div class="timeline-entry">
+            <strong>55-60s (5s):</strong> 新年快樂
+            <div class="meaning">Happy New Year - Traditional New Year greeting</div>
+          </div>
+          <div class="timeline-entry">
+            <strong>61-67s (6s):</strong> 家和業興
+            <div class="meaning">Family harmony & business prosperity</div>
+          </div>
+          <div class="timeline-entry">
+            <strong>68-75s (7s):</strong> 身安心安
+            <div class="meaning">Health & peace of mind</div>
+          </div>
+          <div class="timeline-entry">
+            <strong>76s+ (forever):</strong> 藝養天恬
+            <div class="meaning">Art nourishes tranquility</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔤 Message Fit Test</h3>
+        <p>Testing all messages with optimized 34px font, 1.1x height scaling, and minimal spacing:</p>
+        <div class="message-grid" id="messageGrid">
+          <!-- Message samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 Neon Effect Preview</h3>
+        <div id="neonPreview"></div>
+      </div>
+    </div>
+
+    <script>
+      // New Year messages with meanings
+      const NEW_YEAR_MESSAGES = [
+        {
+          text: '新年快樂',
+          duration: '5s',
+          meaning: 'Happy New Year',
+          description: 'Traditional New Year greeting',
+        },
+        {
+          text: '家和業興',
+          duration: '6s',
+          meaning: 'Family harmony & business prosperity',
+          description: 'Wishing for harmonious family and thriving business',
+        },
+        {
+          text: '身安心安',
+          duration: '7s',
+          meaning: 'Health & peace of mind',
+          description: 'Wishing for physical health and mental peace',
+        },
+        {
+          text: '藝養天恬',
+          duration: '10s+',
+          meaning: 'Art nourishes tranquility',
+          description: 'Art cultivates inner peace and serenity',
+        },
+      ]
+
+      function createMessageSample(messageInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'message-sample'
+
+        const info = document.createElement('div')
+        info.className = 'message-info'
+        info.innerHTML = `${messageInfo.text} (${messageInfo.duration})<br>${messageInfo.meaning}`
+
+        const display = document.createElement('div')
+        display.className = 'chinese-display'
+        display.textContent = messageInfo.text
+
+        // Canvas test with optimized settings
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Apply optimized settings
+        ctx.save()
+        ctx.scale(1.0, 1.1) // Height scaling
+
+        ctx.font = 'normal 34px Noto Sans CJK SC, Microsoft YaHei'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.03px'
+        }
+
+        // Position with 4-drone offset
+        const centerX = 64
+        const centerY = (16 + 4.5) / 1.1 // Lowered by 4 drones, adjust for scaling
+
+        // Custom character spacing for Chinese
+        const chars = messageInfo.text.split('')
+        let totalWidth = 0
+
+        // Calculate total width with ultra-minimal spacing
+        for (let i = 0; i < chars.length; i++) {
+          totalWidth += ctx.measureText(chars[i]).width
+          if (i < chars.length - 1) {
+            totalWidth += 34 * 0.05 // Ultra-minimal spacing
+          }
+        }
+
+        // Check if it fits
+        const maxWidth = 128 * 0.92
+        const fits = totalWidth <= maxWidth
+
+        if (fits) {
+          // Render characters with minimal spacing
+          let currentX = centerX - totalWidth / 2
+          for (let i = 0; i < chars.length; i++) {
+            const char = chars[i]
+            const charWidth = ctx.measureText(char).width
+
+            ctx.fillText(char, currentX + charWidth / 2, centerY)
+
+            currentX += charWidth
+            if (i < chars.length - 1) {
+              currentX += 34 * 0.05
+            }
+          }
+        }
+
+        ctx.restore()
+
+        canvasWrapper.appendChild(canvas)
+
+        const analysis = document.createElement('div')
+        analysis.className = 'message-analysis'
+        analysis.innerHTML = `Width: ${totalWidth.toFixed(1)}px (${((totalWidth / 128) * 100).toFixed(1)}%)<br>` + `Fits: ${fits ? '✅ YES' : '❌ NO'}<br>` + `Characters: ${chars.length}<br>` + `${messageInfo.description}`
+
+        sample.appendChild(info)
+        sample.appendChild(display)
+        sample.appendChild(canvasWrapper)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      function createNeonPreview() {
+        const container = document.createElement('div')
+        container.style.textAlign = 'center'
+
+        const title = document.createElement('h4')
+        title.textContent = 'Chongqing Neon Style Preview'
+        title.style.color = '#888'
+        title.style.marginBottom = '20px'
+
+        // Create animated preview
+        const previewDiv = document.createElement('div')
+        previewDiv.style.background = '#000'
+        previewDiv.style.padding = '30px'
+        previewDiv.style.borderRadius = '8px'
+        previewDiv.style.border = '1px solid #333'
+
+        const neonText = document.createElement('div')
+        neonText.style.fontSize = '64px'
+        neonText.style.fontFamily = 'Noto Sans CJK SC, Microsoft YaHei'
+        neonText.style.fontWeight = 'normal'
+        neonText.style.color = '#ff4500'
+        neonText.style.textShadow = `
+                0 0 5px #ff4500,
+                0 0 10px #ff4500,
+                0 0 15px #ff4500,
+                0 0 20px #ff4500,
+                0 0 35px #ff4500
+            `
+        neonText.style.letterSpacing = '2px'
+        neonText.textContent = '新年快樂'
+
+        const description = document.createElement('div')
+        description.style.color = '#888'
+        description.style.fontSize = '12px'
+        description.style.marginTop = '15px'
+        description.innerHTML = 'Bright orange-red neon effect like Chongqing signs<br>' + 'Against almost-black background drones for maximum contrast'
+
+        previewDiv.appendChild(neonText)
+        previewDiv.appendChild(description)
+
+        container.appendChild(title)
+        container.appendChild(previewDiv)
+
+        // Animate through messages
+        let messageIndex = 0
+        setInterval(() => {
+          neonText.textContent = NEW_YEAR_MESSAGES[messageIndex].text
+          messageIndex = (messageIndex + 1) % NEW_YEAR_MESSAGES.length
+        }, 2000)
+
+        return container
+      }
+
+      // Generate tests
+      window.onload = function () {
+        // Message grid
+        const messageContainer = document.getElementById('messageGrid')
+        NEW_YEAR_MESSAGES.forEach((message) => {
+          messageContainer.appendChild(createMessageSample(message))
+        })
+
+        // Neon preview
+        const neonContainer = document.getElementById('neonPreview')
+        neonContainer.appendChild(createNeonPreview())
+      }
+    </script>
+  </body>
+</html>

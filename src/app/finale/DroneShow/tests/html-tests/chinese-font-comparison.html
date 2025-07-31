@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chinese Font Comparison for LED Display</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .font-test {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .font-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .font-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .font-name {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .chinese-text {
+        font-size: 32px;
+        font-weight: bold;
+        color: #ff4500;
+        text-shadow: 0 0 3px #ff4500;
+        margin: 10px 0;
+      }
+      .canvas-test {
+        margin: 10px 0;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 5px;
+        border-radius: 2px;
+        display: inline-block;
+      }
+      canvas {
+        border: 1px solid #333;
+        image-rendering: pixelated;
+        transform: scale(4);
+        transform-origin: top left;
+      }
+      .analysis {
+        font-size: 10px;
+        color: #aaa;
+        margin-top: 5px;
+      }
+      .recommended {
+        border-color: #ff4500 !important;
+        background: #1a0a00 !important;
+      }
+      .recommended .font-name {
+        color: #ff4500 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎨 Chinese Font Comparison for LED Display</h1>
+    <p>Testing different Chinese fonts for optimal LED/drone display visibility</p>
+
+    <div class="test-container">
+      <div class="font-test">
+        <h3>🔤 Font Comparison: 恭喜發財</h3>
+        <div class="font-grid" id="fontGrid">
+          <!-- Font samples will be generated here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Chinese fonts optimized for LED displays
+      const CHINESE_FONTS = [
+        { name: 'Microsoft YaHei UI', desc: 'Bold, solid characters (Windows)' },
+        { name: 'Microsoft JhengHei', desc: 'Bold Traditional Chinese (Windows)' },
+        { name: 'PingFang SC', desc: 'Clean Simplified Chinese (macOS)' },
+        { name: 'PingFang TC', desc: 'Clean Traditional Chinese (macOS)' },
+        { name: 'Hiragino Sans GB', desc: 'Solid Chinese characters (macOS)' },
+        { name: 'Source Han Sans SC', desc: 'Adobe Simplified Chinese' },
+        { name: 'Noto Sans CJK SC', desc: 'Google Chinese font' },
+        { name: 'SimHei', desc: 'Bold black Chinese (Windows)' },
+        { name: 'STHeiti', desc: 'Bold Chinese (macOS)' },
+        { name: 'Arial Black', desc: 'Bold fallback' },
+        { name: 'Impact', desc: 'Very bold fallback' },
+        { name: 'Arial', desc: 'Standard fallback' },
+      ]
+
+      function createFontSample(font) {
+        const sample = document.createElement('div')
+        sample.className = 'font-sample'
+
+        // Highlight recommended fonts
+        if (font.name.includes('YaHei') || font.name.includes('SimHei') || font.name.includes('Impact')) {
+          sample.classList.add('recommended')
+        }
+
+        const fontName = document.createElement('div')
+        fontName.className = 'font-name'
+        fontName.textContent = `${font.name} - ${font.desc}`
+
+        const chineseText = document.createElement('div')
+        chineseText.className = 'chinese-text'
+        chineseText.style.fontFamily = font.name
+        chineseText.textContent = '恭喜發財'
+
+        // Canvas test for 128x32
+        const canvasTest = document.createElement('div')
+        canvasTest.className = 'canvas-test'
+
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+
+        // Render text on canvas
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        ctx.font = `bold 22px ${font.name}`
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.3px'
+        }
+
+        ctx.fillText('恭喜發財', 64, 16)
+
+        // Measure text
+        const metrics = ctx.measureText('恭喜發財')
+        const textWidth = metrics.width
+        const fits = textWidth <= 128 * 0.92
+
+        canvasWrapper.appendChild(canvas)
+        canvasTest.appendChild(canvasWrapper)
+
+        const analysis = document.createElement('div')
+        analysis.className = 'analysis'
+        analysis.innerHTML = `Width: ${textWidth.toFixed(1)}px<br>` + `Fits: ${fits ? '✅' : '❌'}<br>` + `Quality: ${assessFontQuality(font.name)}`
+
+        sample.appendChild(fontName)
+        sample.appendChild(chineseText)
+        sample.appendChild(canvasTest)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      function assessFontQuality(fontName) {
+        // Assess font quality for LED displays
+        if (fontName.includes('YaHei') || fontName.includes('SimHei')) {
+          return '🌟 Excellent - Bold, solid'
+        } else if (fontName.includes('Impact') || fontName.includes('Arial Black')) {
+          return '⭐ Good - Very bold'
+        } else if (fontName.includes('PingFang') || fontName.includes('Hiragino')) {
+          return '⭐ Good - Clean'
+        } else if (fontName.includes('Source Han') || fontName.includes('Noto')) {
+          return '⚡ Fair - Comprehensive'
+        } else {
+          return '⚠️ Basic - Fallback'
+        }
+      }
+
+      // Generate font samples
+      window.onload = function () {
+        const container = document.getElementById('fontGrid')
+
+        CHINESE_FONTS.forEach((font) => {
+          container.appendChild(createFontSample(font))
+        })
+      }
+    </script>
+  </body>
+</html>

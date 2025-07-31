@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>喜 Character Stroke Separation Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .test-section {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .font-size-test {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .size-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .size-label {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .xi-display {
+        color: #ff4500;
+        text-shadow: 0 0 3px #ff4500;
+        margin: 10px 0;
+        font-family: 'Source Han Sans SC', 'Microsoft YaHei';
+        font-weight: normal;
+      }
+      .canvas-test {
+        margin: 10px 0;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 5px;
+        border-radius: 2px;
+        display: inline-block;
+      }
+      canvas {
+        border: 1px solid #333;
+        image-rendering: pixelated;
+        transform: scale(8);
+        transform-origin: top left;
+      }
+      .stroke-analysis {
+        font-size: 10px;
+        color: #aaa;
+        margin-top: 5px;
+        line-height: 1.3;
+      }
+      .excellent {
+        border-color: #00ff00 !important;
+        background: #001100 !important;
+      }
+      .excellent .size-label {
+        color: #00ff00 !important;
+      }
+      .font-comparison {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .font-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .font-label {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .xi-large {
+        font-size: 72px;
+        color: #ff4500;
+        margin: 10px 0;
+        font-weight: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 喜 Character Stroke Separation Test</h1>
+    <p>Focusing on the 士 (shi) radical at the top - the two horizontal lines should be clearly separated</p>
+
+    <div class="test-container">
+      <div class="test-section">
+        <h3>📏 Font Size Impact on Stroke Separation</h3>
+        <p>Testing different font sizes to see when the 士 strokes separate clearly:</p>
+        <div class="font-size-test" id="fontSizeTest">
+          <!-- Size samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 Font Family Comparison for Stroke Clarity</h3>
+        <p>Testing different fonts at 28px to find the best stroke separation:</p>
+        <div class="font-comparison" id="fontComparison">
+          <!-- Font samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📐 Final 128×32 LED Test</h3>
+        <div id="finalTest"></div>
+      </div>
+    </div>
+
+    <script>
+      // Test different font sizes
+      const FONT_SIZES = [
+        { size: 20, label: '20px - Too Small' },
+        { size: 22, label: '22px - Still Merged' },
+        { size: 24, label: '24px - Slightly Better' },
+        { size: 26, label: '26px - Getting There' },
+        { size: 28, label: '28px - Good Separation', excellent: true },
+        { size: 30, label: '30px - Excellent' },
+        { size: 32, label: '32px - May Not Fit' },
+      ]
+
+      // Test different fonts known for good Chinese character rendering
+      const CHINESE_FONTS = [
+        { name: 'Source Han Sans SC', desc: 'Adobe - Excellent stroke definition' },
+        { name: 'Noto Sans CJK SC', desc: 'Google - Clean strokes' },
+        { name: 'PingFang SC', desc: 'macOS - Very clean' },
+        { name: 'Hiragino Sans GB', desc: 'macOS - Good separation' },
+        { name: 'Microsoft YaHei Light', desc: 'Windows - Light weight' },
+        { name: 'STSong', desc: 'macOS - Serif with clear strokes' },
+        { name: 'SimSun', desc: 'Windows - Clear structure' },
+        { name: 'Microsoft YaHei', desc: 'Windows - Standard' },
+      ]
+
+      function createSizeSample(sizeInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'size-sample'
+        if (sizeInfo.excellent) {
+          sample.classList.add('excellent')
+        }
+
+        const label = document.createElement('div')
+        label.className = 'size-label'
+        label.textContent = sizeInfo.label
+
+        const display = document.createElement('div')
+        display.className = 'xi-display'
+        display.style.fontSize = sizeInfo.size + 'px'
+        display.textContent = '喜'
+
+        // Canvas test for LED display
+        const canvasTest = document.createElement('div')
+        canvasTest.className = 'canvas-test'
+
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 32
+        canvas.height = 32
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 32, 32)
+
+        ctx.font = `normal ${sizeInfo.size}px Source Han Sans SC, Microsoft YaHei`
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        ctx.fillText('喜', 16, 16)
+
+        canvasWrapper.appendChild(canvas)
+        canvasTest.appendChild(canvasWrapper)
+
+        const analysis = document.createElement('div')
+        analysis.className = 'stroke-analysis'
+
+        let strokeQuality = ''
+        if (sizeInfo.size <= 22) {
+          strokeQuality = '❌ 士 strokes merged<br>🔍 Cannot distinguish lines<br>📱 Too small for LED'
+        } else if (sizeInfo.size <= 26) {
+          strokeQuality = '⚠️ 士 strokes barely separated<br>🔍 Hard to see distinction<br>📱 Marginal for LED'
+        } else if (sizeInfo.size <= 30) {
+          strokeQuality = '✅ 士 strokes clearly separated<br>🔍 Good distinction<br>📱 Perfect for LED'
+        } else {
+          strokeQuality = '✅ 士 strokes very clear<br>🔍 Excellent distinction<br>⚠️ May not fit in 128px'
+        }
+
+        analysis.innerHTML = strokeQuality
+
+        sample.appendChild(label)
+        sample.appendChild(display)
+        sample.appendChild(canvasTest)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      function createFontSample(fontInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'font-sample'
+
+        const label = document.createElement('div')
+        label.className = 'font-label'
+        label.textContent = `${fontInfo.name} - ${fontInfo.desc}`
+
+        const display = document.createElement('div')
+        display.className = 'xi-large'
+        display.style.fontFamily = fontInfo.name
+        display.textContent = '喜'
+
+        // Small LED test
+        const canvas = document.createElement('canvas')
+        canvas.width = 32
+        canvas.height = 32
+        canvas.style.transform = 'scale(4)'
+        canvas.style.transformOrigin = 'top left'
+        canvas.style.border = '1px solid #333'
+        canvas.style.imageRendering = 'pixelated'
+        canvas.style.margin = '10px 0'
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 32, 32)
+
+        ctx.font = `normal 28px ${fontInfo.name}`
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        ctx.fillText('喜', 16, 16)
+
+        sample.appendChild(label)
+        sample.appendChild(display)
+        sample.appendChild(canvas)
+
+        return sample
+      }
+
+      function createFinalTest() {
+        const container = document.createElement('div')
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+        canvas.style.transform = 'scale(8)'
+        canvas.style.transformOrigin = 'top left'
+        canvas.style.border = '2px solid #00ff00'
+        canvas.style.imageRendering = 'pixelated'
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        ctx.font = 'normal 28px Source Han Sans SC, Microsoft YaHei'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.2px'
+        }
+
+        ctx.fillText('恭喜發財', 64, 16)
+
+        const info = document.createElement('div')
+        info.style.marginTop = '280px'
+        info.style.color = '#00ff00'
+        info.style.fontSize = '14px'
+        info.innerHTML = '✅ Optimized Configuration:<br>' + 'Font: Source Han Sans SC<br>' + 'Size: 28px (increased from 24px)<br>' + 'Letter spacing: 0.2px (reduced to fit)<br>' + 'Weight: normal<br>' + 'Result: Clear 士 stroke separation in 喜'
+
+        container.appendChild(canvas)
+        container.appendChild(info)
+
+        return container
+      }
+
+      // Generate tests
+      window.onload = function () {
+        // Font size test
+        const sizeContainer = document.getElementById('fontSizeTest')
+        FONT_SIZES.forEach((size) => {
+          sizeContainer.appendChild(createSizeSample(size))
+        })
+
+        // Font comparison
+        const fontContainer = document.getElementById('fontComparison')
+        CHINESE_FONTS.forEach((font) => {
+          fontContainer.appendChild(createFontSample(font))
+        })
+
+        // Final test
+        const finalContainer = document.getElementById('finalTest')
+        finalContainer.appendChild(createFinalTest())
+      }
+    </script>
+  </body>
+</html>

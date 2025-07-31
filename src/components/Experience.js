@@ -22,7 +22,7 @@ const Experience = React.forwardRef(function Experience(
   },
   ref
 ) {
-  const initialRotationSpeed = 0.52
+  const initialRotationSpeed = 0.25
   const initialStarsSpeed = 0.004
   const solidPlanetRef = useRef()
   const controlsRef = useRef()
@@ -50,7 +50,7 @@ const Experience = React.forwardRef(function Experience(
   useEffect(() => {
     if (isInitialDelayOver) {
       const accelerationInterval = setInterval(() => {
-        setPlanetRotationSpeed((prev) => Math.min(prev + 0.005, 1.69))
+        setPlanetRotationSpeed((prev) => Math.min(prev + 0.005, 0.8))
         setStarsRotationSpeed((prev) => prev + 0.001)
       }, 1000)
       return () => clearInterval(accelerationInterval)
@@ -75,7 +75,7 @@ const Experience = React.forwardRef(function Experience(
       resetDelayTimerRef.current = setTimeout(() => {
         console.log('Reset delay finished. Starting animations.')
         setIsInitialDelayOver(true)
-        setPlanetRotationSpeed(0.52)
+        setPlanetRotationSpeed(0.25)
         setStarsRotationSpeed(0.002)
       }, 3000)
     },
@@ -88,7 +88,7 @@ const Experience = React.forwardRef(function Experience(
     // const sunInitialAngle = 0
     // const sunInitialAngle = Math.PI / -2
     const sunInitialAngle = Math.PI / 2
-    const angle = time * 0.1 + sunInitialAngle
+    const angle = time * 0.2 + sunInitialAngle
     const orbitRadius = 60
     sunPosition.set(Math.sin(angle) * orbitRadius, 0, Math.cos(angle) * orbitRadius)
     if (sunRef) sunRef.position.copy(sunPosition)
@@ -115,7 +115,7 @@ const Experience = React.forwardRef(function Experience(
   return (
     <>
       <ambientLight intensity={0.05} />
-      <directionalLight ref={directionalLightRef} intensity={1.5} />
+      <directionalLight ref={directionalLightRef} intensity={1.0} />
       <Stars ref={starsRef} radius={500} depth={80} count={15000} factor={10} saturation={0} fade speed={1.5} />
       <AsteroidBelt />
       <group
@@ -134,6 +134,7 @@ const Experience = React.forwardRef(function Experience(
           />
         ))}
       </group>
+      {/* Test: Move atmosphere outside the rotating group */}
       <Atmosphere sunPosition={sunPosition} />
       <OrbitControls
         ref={controlsRef}

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Internal Space Optimization Test - 喜 Character</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .test-section {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .size-progression {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .size-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .size-label {
+        color: #888;
+        font-size: 10px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .xi-display {
+        color: #ff4500;
+        text-shadow: 0 0 3px #ff4500;
+        margin: 10px 0;
+        font-family: 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei';
+        font-weight: normal;
+      }
+      .canvas-test {
+        margin: 10px 0;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 3px;
+        border-radius: 2px;
+        display: inline-block;
+      }
+      canvas {
+        border: 1px solid #333;
+        image-rendering: pixelated;
+        transform: scale(6);
+        transform-origin: top left;
+      }
+      .space-analysis {
+        font-size: 9px;
+        color: #aaa;
+        margin-top: 5px;
+        line-height: 1.2;
+      }
+      .optimal {
+        border-color: #00ff00 !important;
+        background: #001100 !important;
+      }
+      .optimal .size-label {
+        color: #00ff00 !important;
+      }
+      .font-comparison {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .font-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .font-label {
+        color: #888;
+        font-size: 10px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .xi-large {
+        font-size: 64px;
+        color: #ff4500;
+        margin: 10px 0;
+        font-weight: normal;
+      }
+      .transform-test {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .transform-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .transform-label {
+        color: #888;
+        font-size: 10px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .xi-transform {
+        font-size: 48px;
+        color: #ff4500;
+        margin: 10px 0;
+        font-family: 'Noto Sans CJK SC';
+        font-weight: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 Internal Space Optimization Test</h1>
+    <p>Maximizing the 口 internal spaces in 喜 character using available drone space</p>
+
+    <div class="test-container">
+      <div class="test-section">
+        <h3>📏 Progressive Font Size Test</h3>
+        <p>Testing larger sizes to open up internal spaces (we have 7 rows bottom, 9 cols each side free):</p>
+        <div class="size-progression" id="sizeProgression">
+          <!-- Size samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 Font Comparison for Internal Space</h3>
+        <p>Testing fonts specifically for internal space preservation at 34px:</p>
+        <div class="font-comparison" id="fontComparison">
+          <!-- Font samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔄 Transform Test - Height Scaling</h3>
+        <p>Testing CSS transforms to stretch height without affecting width:</p>
+        <div class="transform-test" id="transformTest">
+          <!-- Transform samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📐 Final 128×32 Optimization Test</h3>
+        <div id="finalTest"></div>
+      </div>
+    </div>
+
+    <script>
+      // Test progressive font sizes
+      const FONT_SIZES = [
+        { size: 28, label: '28px - Current' },
+        { size: 30, label: '30px - Better' },
+        { size: 32, label: '32px - Good' },
+        { size: 34, label: '34px - Optimal', optimal: true },
+        { size: 36, label: '36px - Maximum' },
+        { size: 38, label: '38px - May Overflow' },
+      ]
+
+      // Fonts optimized for internal space
+      const SPACE_OPTIMIZED_FONTS = [
+        { name: 'Noto Sans CJK SC', desc: 'Google - Excellent internal spaces' },
+        { name: 'Source Han Sans SC', desc: 'Adobe - Great space preservation' },
+        { name: 'STSong', desc: 'macOS - Serif with clear spaces' },
+        { name: 'SimSun', desc: 'Windows - Clear internal definition' },
+        { name: 'PingFang SC', desc: 'macOS - Clean internal spaces' },
+        { name: 'Kaiti SC', desc: 'macOS - Script with good spaces' },
+        { name: 'Hiragino Sans GB', desc: 'macOS - Good space preservation' },
+        { name: 'Microsoft YaHei Light', desc: 'Windows - Light preserves space' },
+      ]
+
+      // Transform tests
+      const TRANSFORMS = [
+        { scaleX: 1.0, scaleY: 1.0, label: 'Normal - No Transform' },
+        { scaleX: 1.0, scaleY: 1.1, label: 'Height +10% - Opens Spaces' },
+        { scaleX: 1.0, scaleY: 1.2, label: 'Height +20% - More Space' },
+        { scaleX: 0.95, scaleY: 1.15, label: 'Width -5%, Height +15%' },
+        { scaleX: 0.9, scaleY: 1.2, label: 'Width -10%, Height +20%' },
+      ]
+
+      function createSizeSample(sizeInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'size-sample'
+        if (sizeInfo.optimal) {
+          sample.classList.add('optimal')
+        }
+
+        const label = document.createElement('div')
+        label.className = 'size-label'
+        label.textContent = sizeInfo.label
+
+        const display = document.createElement('div')
+        display.className = 'xi-display'
+        display.style.fontSize = sizeInfo.size + 'px'
+        display.textContent = '喜'
+
+        // Canvas test
+        const canvasTest = document.createElement('div')
+        canvasTest.className = 'canvas-test'
+
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 32
+        canvas.height = 32
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 32, 32)
+
+        ctx.font = `normal ${sizeInfo.size}px Noto Sans CJK SC, Microsoft YaHei`
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        ctx.fillText('喜', 16, 16)
+
+        canvasWrapper.appendChild(canvas)
+        canvasTest.appendChild(canvasWrapper)
+
+        const analysis = document.createElement('div')
+        analysis.className = 'space-analysis'
+
+        let spaceQuality = ''
+        if (sizeInfo.size <= 30) {
+          spaceQuality = '⚠️ 口 still narrow<br>🔍 Limited internal space<br>📱 Needs bigger'
+        } else if (sizeInfo.size <= 34) {
+          spaceQuality = '✅ 口 clearly visible<br>🔍 Good internal space<br>📱 Perfect for LED'
+        } else {
+          spaceQuality = '✅ 口 very clear<br>🔍 Excellent space<br>⚠️ Check if fits'
+        }
+
+        analysis.innerHTML = spaceQuality
+
+        sample.appendChild(label)
+        sample.appendChild(display)
+        sample.appendChild(canvasTest)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      function createFontSample(fontInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'font-sample'
+
+        const label = document.createElement('div')
+        label.className = 'font-label'
+        label.textContent = `${fontInfo.name} - ${fontInfo.desc}`
+
+        const display = document.createElement('div')
+        display.className = 'xi-large'
+        display.style.fontFamily = fontInfo.name
+        display.textContent = '喜'
+
+        // LED test canvas
+        const canvas = document.createElement('canvas')
+        canvas.width = 32
+        canvas.height = 32
+        canvas.style.transform = 'scale(3)'
+        canvas.style.transformOrigin = 'top left'
+        canvas.style.border = '1px solid #333'
+        canvas.style.imageRendering = 'pixelated'
+        canvas.style.margin = '10px 0'
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 32, 32)
+
+        ctx.font = `normal 34px ${fontInfo.name}`
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        ctx.fillText('喜', 16, 16)
+
+        sample.appendChild(label)
+        sample.appendChild(display)
+        sample.appendChild(canvas)
+
+        return sample
+      }
+
+      function createTransformSample(transformInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'transform-sample'
+
+        const label = document.createElement('div')
+        label.className = 'transform-label'
+        label.textContent = transformInfo.label
+
+        const display = document.createElement('div')
+        display.className = 'xi-transform'
+        display.style.transform = `scaleX(${transformInfo.scaleX}) scaleY(${transformInfo.scaleY})`
+        display.textContent = '喜'
+
+        // Canvas with transform
+        const canvas = document.createElement('canvas')
+        canvas.width = 32
+        canvas.height = 32
+        canvas.style.transform = `scale(4) scaleX(${transformInfo.scaleX}) scaleY(${transformInfo.scaleY})`
+        canvas.style.transformOrigin = 'top left'
+        canvas.style.border = '1px solid #333'
+        canvas.style.imageRendering = 'pixelated'
+        canvas.style.margin = '15px 0'
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 32, 32)
+
+        ctx.font = 'normal 32px Noto Sans CJK SC'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        ctx.fillText('喜', 16, 16)
+
+        sample.appendChild(label)
+        sample.appendChild(display)
+        sample.appendChild(canvas)
+
+        return sample
+      }
+
+      function createFinalTest() {
+        const container = document.createElement('div')
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+        canvas.style.transform = 'scale(8)'
+        canvas.style.transformOrigin = 'top left'
+        canvas.style.border = '2px solid #00ff00'
+        canvas.style.imageRendering = 'pixelated'
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        ctx.font = 'normal 34px Noto Sans CJK SC'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.1px'
+        }
+
+        ctx.fillText('恭喜發財', 64, 16)
+
+        const info = document.createElement('div')
+        info.style.marginTop = '280px'
+        info.style.color = '#00ff00'
+        info.style.fontSize = '14px'
+        info.innerHTML = '✅ Maximum Optimization:<br>' + 'Font: Noto Sans CJK SC<br>' + 'Size: 34px (maximized for available space)<br>' + 'Letter spacing: 0.1px (minimal)<br>' + 'Weight: normal<br>' + 'Transform: scaleY(1.1) for height stretch<br>' + 'Result: Maximum 口 internal space visibility'
+
+        container.appendChild(canvas)
+        container.appendChild(info)
+
+        return container
+      }
+
+      // Generate tests
+      window.onload = function () {
+        // Size progression
+        const sizeContainer = document.getElementById('sizeProgression')
+        FONT_SIZES.forEach((size) => {
+          sizeContainer.appendChild(createSizeSample(size))
+        })
+
+        // Font comparison
+        const fontContainer = document.getElementById('fontComparison')
+        SPACE_OPTIMIZED_FONTS.forEach((font) => {
+          fontContainer.appendChild(createFontSample(font))
+        })
+
+        // Transform test
+        const transformContainer = document.getElementById('transformTest')
+        TRANSFORMS.forEach((transform) => {
+          transformContainer.appendChild(createTransformSample(transform))
+        })
+
+        // Final test
+        const finalContainer = document.getElementById('finalTest')
+        finalContainer.appendChild(createFinalTest())
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Precise Positioning Test - 恭喜發財</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .test-section {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .positioning-test {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .position-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .position-label {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 5px;
+        border-radius: 2px;
+        display: inline-block;
+        position: relative;
+      }
+      canvas {
+        border: 1px solid #333;
+        image-rendering: pixelated;
+        transform: scale(8);
+        transform-origin: top left;
+      }
+      .grid-overlay {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 128px;
+        height: 32px;
+        transform: scale(8);
+        transform-origin: top left;
+        pointer-events: none;
+        opacity: 0.3;
+      }
+      .grid-line {
+        position: absolute;
+        background: #ff0;
+      }
+      .grid-line.horizontal {
+        width: 100%;
+        height: 1px;
+      }
+      .grid-line.vertical {
+        width: 1px;
+        height: 100%;
+      }
+      .analysis {
+        font-size: 10px;
+        color: #aaa;
+        margin-top: 8px;
+        line-height: 1.3;
+      }
+      .optimal {
+        border-color: #00ff00 !important;
+        background: #001100 !important;
+      }
+      .optimal .position-label {
+        color: #00ff00 !important;
+      }
+      .spacing-comparison {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .spacing-sample {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        text-align: center;
+      }
+      .spacing-label {
+        color: #888;
+        font-size: 11px;
+        margin-bottom: 8px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📐 Precise Positioning Test</h1>
+    <p>Testing vertical positioning (lower by 4 drones) and character spacing (1 drone width)</p>
+
+    <div class="test-container">
+      <div class="test-section">
+        <h3>📏 Vertical Position Adjustment</h3>
+        <p>Testing different vertical offsets to lower text by 4 drone positions:</p>
+        <div class="positioning-test" id="positioningTest">
+          <!-- Position samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔤 Character Spacing Optimization</h3>
+        <p>Testing ultra-minimal spacing between characters (1 drone width):</p>
+        <div class="spacing-comparison" id="spacingComparison">
+          <!-- Spacing samples will be generated here -->
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📐 Final Optimized Display</h3>
+        <div id="finalDisplay"></div>
+      </div>
+    </div>
+
+    <script>
+      // Test different vertical positions
+      const VERTICAL_POSITIONS = [
+        { offset: 0.5, label: 'Original Position' },
+        { offset: 2.5, label: 'Lower by 2 drones' },
+        { offset: 4.5, label: 'Lower by 4 drones (Target)', optimal: true },
+        { offset: 6.5, label: 'Lower by 6 drones' },
+        { offset: 8.5, label: 'Lower by 8 drones' },
+      ]
+
+      // Test different character spacing
+      const CHARACTER_SPACING = [
+        { letterSpacing: 0.3, wordSpacing: 0.3, label: 'Previous Spacing (4 drones)' },
+        { letterSpacing: 0.1, wordSpacing: 0.1, label: 'Reduced Spacing (2 drones)' },
+        { letterSpacing: 0.03, wordSpacing: 0.05, label: 'Ultra-minimal (1 drone)', optimal: true },
+        { letterSpacing: 0.01, wordSpacing: 0.02, label: 'Extremely tight' },
+      ]
+
+      function createGridOverlay() {
+        const overlay = document.createElement('div')
+        overlay.className = 'grid-overlay'
+
+        // Add horizontal grid lines every 4 pixels (drone rows)
+        for (let y = 0; y < 32; y += 4) {
+          const line = document.createElement('div')
+          line.className = 'grid-line horizontal'
+          line.style.top = y + 'px'
+          overlay.appendChild(line)
+        }
+
+        // Add vertical grid lines every 4 pixels (drone columns)
+        for (let x = 0; x < 128; x += 8) {
+          const line = document.createElement('div')
+          line.className = 'grid-line vertical'
+          line.style.left = x + 'px'
+          overlay.appendChild(line)
+        }
+
+        return overlay
+      }
+
+      function createPositionSample(positionInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'position-sample'
+        if (positionInfo.optimal) {
+          sample.classList.add('optimal')
+        }
+
+        const label = document.createElement('div')
+        label.className = 'position-label'
+        label.textContent = positionInfo.label
+
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Apply scaling and positioning
+        ctx.save()
+        ctx.scale(1.0, 1.1) // Height scaling
+
+        ctx.font = 'normal 34px Noto Sans CJK SC, Microsoft YaHei'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.03px'
+        }
+
+        const centerX = 64
+        const centerY = (16 + positionInfo.offset) / 1.1 // Adjust for scaling
+
+        ctx.fillText('恭喜發財', centerX, centerY)
+        ctx.restore()
+
+        canvasWrapper.appendChild(canvas)
+        canvasWrapper.appendChild(createGridOverlay())
+
+        const analysis = document.createElement('div')
+        analysis.className = 'analysis'
+
+        let positionQuality = ''
+        if (positionInfo.offset <= 2.5) {
+          positionQuality = '⬆️ Too high - wasting bottom space<br>📱 Not utilizing full drone area'
+        } else if (positionInfo.offset <= 4.5) {
+          positionQuality = '✅ Perfect position<br>📱 Optimal use of drone space<br>🎯 4 drones lower than original'
+        } else {
+          positionQuality = '⬇️ Too low - may cut off bottom<br>📱 Risk of text truncation'
+        }
+
+        analysis.innerHTML = positionQuality
+
+        sample.appendChild(label)
+        sample.appendChild(canvasWrapper)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      function createSpacingSample(spacingInfo) {
+        const sample = document.createElement('div')
+        sample.className = 'spacing-sample'
+        if (spacingInfo.optimal) {
+          sample.classList.add('optimal')
+        }
+
+        const label = document.createElement('div')
+        label.className = 'spacing-label'
+        label.textContent = spacingInfo.label
+
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        ctx.save()
+        ctx.scale(1.0, 1.1)
+
+        ctx.font = 'normal 34px Noto Sans CJK SC'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = spacingInfo.letterSpacing + 'px'
+        }
+
+        // Custom word spacing rendering
+        const text = '恭喜發財'
+        const centerX = 64
+        const centerY = (16 + 4.5) / 1.1
+
+        // For Chinese, treat each character as a "word" for spacing
+        const chars = text.split('')
+        let totalWidth = 0
+
+        // Calculate total width with custom spacing
+        for (let i = 0; i < chars.length; i++) {
+          totalWidth += ctx.measureText(chars[i]).width
+          if (i < chars.length - 1) {
+            totalWidth += 34 * spacingInfo.wordSpacing // fontSize * spacing
+          }
+        }
+
+        // Render characters with custom spacing
+        let currentX = centerX - totalWidth / 2
+        for (let i = 0; i < chars.length; i++) {
+          const char = chars[i]
+          const charWidth = ctx.measureText(char).width
+
+          ctx.fillText(char, currentX + charWidth / 2, centerY)
+
+          currentX += charWidth
+          if (i < chars.length - 1) {
+            currentX += 34 * spacingInfo.wordSpacing
+          }
+        }
+
+        ctx.restore()
+
+        canvasWrapper.appendChild(canvas)
+
+        const analysis = document.createElement('div')
+        analysis.className = 'analysis'
+
+        let spacingQuality = ''
+        if (spacingInfo.letterSpacing >= 0.2) {
+          spacingQuality = '↔️ Too wide - wasting space<br>📱 Characters too separated<br>⚠️ May not fit'
+        } else if (spacingInfo.letterSpacing >= 0.05) {
+          spacingQuality = '✅ Perfect spacing<br>📱 1 drone width between chars<br>🎯 Optimal readability'
+        } else {
+          spacingQuality = '↔️ Too tight - may merge<br>📱 Characters too close<br>⚠️ Readability issues'
+        }
+
+        analysis.innerHTML = spacingQuality
+
+        sample.appendChild(label)
+        sample.appendChild(canvasWrapper)
+        sample.appendChild(analysis)
+
+        return sample
+      }
+
+      function createFinalDisplay() {
+        const container = document.createElement('div')
+
+        const canvasWrapper = document.createElement('div')
+        canvasWrapper.className = 'canvas-wrapper'
+        canvasWrapper.style.textAlign = 'center'
+
+        const canvas = document.createElement('canvas')
+        canvas.width = 128
+        canvas.height = 32
+        canvas.style.transform = 'scale(10)'
+        canvas.style.transformOrigin = 'center'
+        canvas.style.border = '2px solid #00ff00'
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        ctx.save()
+        ctx.scale(1.0, 1.1) // Height scaling
+
+        ctx.font = 'normal 34px Noto Sans CJK SC'
+        ctx.fillStyle = '#ff4500'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = '0.03px'
+        }
+
+        // Custom character spacing
+        const text = '恭喜發財'
+        const chars = text.split('')
+        const centerX = 64
+        const centerY = (16 + 4.5) / 1.1 // Lower by 4 drones, adjust for scaling
+
+        let totalWidth = 0
+        for (let i = 0; i < chars.length; i++) {
+          totalWidth += ctx.measureText(chars[i]).width
+          if (i < chars.length - 1) {
+            totalWidth += 34 * 0.05 // Ultra-minimal spacing
+          }
+        }
+
+        let currentX = centerX - totalWidth / 2
+        for (let i = 0; i < chars.length; i++) {
+          const char = chars[i]
+          const charWidth = ctx.measureText(char).width
+
+          ctx.fillText(char, currentX + charWidth / 2, centerY)
+
+          currentX += charWidth
+          if (i < chars.length - 1) {
+            currentX += 34 * 0.05
+          }
+        }
+
+        ctx.restore()
+
+        canvasWrapper.appendChild(canvas)
+        canvasWrapper.appendChild(createGridOverlay())
+
+        const info = document.createElement('div')
+        info.style.marginTop = '350px'
+        info.style.color = '#00ff00'
+        info.style.fontSize = '14px'
+        info.style.textAlign = 'center'
+        info.innerHTML = '✅ Final Optimized Configuration:<br>' + 'Vertical offset: 4.5px (4 drones lower)<br>' + 'Letter spacing: 0.03px (1 drone width)<br>' + 'Word spacing: 0.05x (ultra-minimal)<br>' + 'Font: Noto Sans CJK SC, 34px<br>' + 'Height scaling: 1.1x<br>' + 'Result: Perfect positioning with minimal spacing'
+
+        container.appendChild(canvasWrapper)
+        container.appendChild(info)
+
+        return container
+      }
+
+      // Generate tests
+      window.onload = function () {
+        // Position test
+        const positionContainer = document.getElementById('positioningTest')
+        VERTICAL_POSITIONS.forEach((position) => {
+          positionContainer.appendChild(createPositionSample(position))
+        })
+
+        // Spacing test
+        const spacingContainer = document.getElementById('spacingComparison')
+        CHARACTER_SPACING.forEach((spacing) => {
+          spacingContainer.appendChild(createSpacingSample(spacing))
+        })
+
+        // Final display
+        const finalContainer = document.getElementById('finalDisplay')
+        finalContainer.appendChild(createFinalDisplay())
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spacing Fix Test - THANK YOU</title>
+    <style>
+      body {
+        font-family: 'Trebuchet MS', sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 20px;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .comparison {
+        display: flex;
+        gap: 20px;
+      }
+      .test-box {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #1a1a1a;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+      canvas {
+        border: 1px solid #555;
+        image-rendering: pixelated;
+        transform: scale(6);
+        transform-origin: top left;
+      }
+      .dimension-box {
+        width: 128px;
+        height: 32px;
+        border: 2px solid #ff0;
+        background: rgba(255, 255, 0, 0.1);
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📏 Spacing Fix Test - "THANK YOU"</h1>
+
+    <div class="test-container">
+      <div class="test-box">
+        <h3>Reference: 128×32 Dimension</h3>
+        <div class="dimension-box"></div>
+      </div>
+
+      <div class="comparison">
+        <div class="test-box">
+          <h3>BEFORE: High Spacing</h3>
+          <p>Word spacing: 1.8, Letter spacing: 2</p>
+          <div class="canvas-wrapper">
+            <canvas id="beforeCanvas" width="128" height="32"></canvas>
+          </div>
+          <div id="beforeResults"></div>
+        </div>
+
+        <div class="test-box">
+          <h3>AFTER: Fixed Spacing</h3>
+          <p>Word spacing: 0.8, Letter spacing: 0.8</p>
+          <div class="canvas-wrapper">
+            <canvas id="afterCanvas" width="128" height="32"></canvas>
+          </div>
+          <div id="afterResults"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function renderTextWithSpacing(canvasId, text, wordSpacing, letterSpacing) {
+        const canvas = document.getElementById(canvasId)
+        const ctx = canvas.getContext('2d')
+
+        // Clear canvas
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Configure font
+        ctx.font = 'bold 24px Trebuchet MS'
+        ctx.fillStyle = 'white'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        // Apply letter spacing if supported
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = letterSpacing + 'px'
+        }
+
+        const centerX = 64
+        const centerY = 16.5
+
+        if (text.includes(' ')) {
+          // Custom word spacing
+          const words = text.split(' ')
+          let totalWidth = 0
+
+          // Calculate total width with custom spacing
+          for (let i = 0; i < words.length; i++) {
+            totalWidth += ctx.measureText(words[i]).width
+            if (i < words.length - 1) {
+              totalWidth += 24 * wordSpacing // fontSize * wordSpacing
+            }
+          }
+
+          // Render words with custom spacing
+          let currentX = centerX - totalWidth / 2
+          for (let i = 0; i < words.length; i++) {
+            const word = words[i]
+            const wordWidth = ctx.measureText(word).width
+
+            ctx.fillText(word, currentX + wordWidth / 2, centerY)
+
+            currentX += wordWidth
+            if (i < words.length - 1) {
+              currentX += 24 * wordSpacing
+            }
+          }
+
+          return {
+            totalWidth: totalWidth,
+            fits: totalWidth <= 128 * 0.92,
+          }
+        } else {
+          // Single word
+          ctx.fillText(text, centerX, centerY)
+          const width = ctx.measureText(text).width
+          return {
+            totalWidth: width,
+            fits: width <= 128 * 0.92,
+          }
+        }
+      }
+
+      // Test both versions
+      window.onload = function () {
+        const text = 'THANK YOU'
+
+        // Before: High spacing
+        const beforeResult = renderTextWithSpacing('beforeCanvas', text, 1.8, 2)
+        document.getElementById('beforeResults').innerHTML = `Width: ${beforeResult.totalWidth.toFixed(1)}px<br>` + `Fits: ${beforeResult.fits ? '✅ YES' : '❌ NO'}`
+
+        // After: Fixed spacing
+        const afterResult = renderTextWithSpacing('afterCanvas', text, 0.8, 0.8)
+        document.getElementById('afterResults').innerHTML = `Width: ${afterResult.totalWidth.toFixed(1)}px<br>` + `Fits: ${afterResult.fits ? '✅ YES' : '❌ NO'}`
+      }
+    </script>
+  </body>
+</html>

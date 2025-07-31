@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Dev Timeline - Original Clean Design</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #000;
+        color: #fff;
+        overflow-x: hidden;
+      }
+
+      /* === PAGE CONTAINER === */
+      .pageContainer {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #000;
+        color: white;
+      }
+
+      /* === 3D BACKGROUND === */
+      .canvasContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.1) 0%, #000 70%);
+      }
+
+      /* Add some simple animated stars */
+      .canvasContainer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(2px 2px at 20px 30px, #fff, transparent), radial-gradient(2px 2px at 40px 70px, rgba(138, 43, 226, 0.8), transparent), radial-gradient(1px 1px at 90px 40px, #fff, transparent), radial-gradient(1px 1px at 130px 80px, rgba(255, 107, 107, 0.8), transparent), radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+        background-repeat: repeat;
+        background-size: 200px 100px;
+        animation: starMove 20s linear infinite;
+      }
+
+      @keyframes starMove {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-200px);
+        }
+      }
+
+      /* === MAIN CONTENT === */
+      .scrollWrapper {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .content {
+        width: 100%;
+        padding: 3rem 2rem 2rem 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* === INTRO SECTION === */
+      .intro {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInUp 1s ease-out;
+        flex-shrink: 0;
+      }
+
+      .intro h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #8a2be2, #ff6b6b, #4ecdc4);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 3s ease-in-out infinite;
+      }
+
+      .intro p {
+        font-size: 1.3rem;
+        color: #bbb;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+      }
+
+      .introStats {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        margin-top: 2rem;
+      }
+
+      .stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .statNumber {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #8a2be2;
+        text-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+      }
+
+      .statLabel {
+        font-size: 0.9rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* === TIMELINE CONTAINER === */
+      .timelineContainer {
+        position: relative;
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .scrollHint {
+        text-align: center;
+        margin-bottom: 2rem;
+        opacity: 0.7;
+        animation: fadeInUp 1.5s ease-out;
+      }
+
+      .scrollHint span {
+        font-size: 0.9rem;
+        color: #888;
+        background: rgba(138, 43, 226, 0.1);
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(138, 43, 226, 0.2);
+      }
+
+      /* === SIMPLE HORIZONTAL SCROLL === */
+      .simpleScrollContainer {
+        overflow-x: auto;
+        overflow-y: hidden;
+        position: relative;
+        padding: 2rem 0;
+        width: 100%;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .simpleScrollContainer::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Fade overlays */
+      .simpleScrollContainer::before,
+      .simpleScrollContainer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 150px;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .simpleScrollContainer::before {
+        left: 0;
+        background: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.95) 20%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0.2) 85%, transparent 100%);
+      }
+
+      .simpleScrollContainer::after {
+        right: 0;
+        background: linear-gradient(to left, #000 0%, rgba(0, 0, 0, 0.95) 20%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0.2) 85%, transparent 100%);
+      }
+
+      .simpleScroll {
+        display: flex;
+        gap: 3rem;
+        padding: 0 2rem;
+        width: max-content;
+      }
+
+      .simpleSlide {
+        flex: 0 0 auto;
+      }
+
+      /* === TIMELINE ITEMS === */
+      .timelineItem {
+        position: relative;
+        flex-shrink: 0;
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .timelineItem.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .timelineItem:nth-child(1) {
+        animation: itemReveal 0.8s ease-out 0.2s forwards;
+      }
+      .timelineItem:nth-child(2) {
+        animation: itemReveal 0.8s ease-out 0.4s forwards;
+      }
+      .timelineItem:nth-child(3) {
+        animation: itemReveal 0.8s ease-out 0.6s forwards;
+      }
+      .timelineItem:nth-child(4) {
+        animation: itemReveal 0.8s ease-out 0.8s forwards;
+      }
+      .timelineItem:nth-child(5) {
+        animation: itemReveal 0.8s ease-out 1s forwards;
+      }
+
+      @keyframes itemReveal {
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* === TIMELINE DOT === */
+      .timelineDot {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #8a2be2, #ff6b6b);
+        border: 4px solid #000;
+        border-radius: 50%;
+        z-index: 3;
+        box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .timelineDot:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
+      }
+
+      .dotPulse {
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border: 2px solid rgba(138, 43, 226, 0.3);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.5);
+          opacity: 0;
+        }
+      }
+
+      /* === TIMELINE CONTENT === */
+      .timelineContent {
+        width: 100%;
+        padding: 20px 25px;
+        background: linear-gradient(135deg, rgba(20, 20, 20, 0.9), rgba(40, 40, 40, 0.8));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(138, 43, 226, 0.2);
+        border-radius: 12px;
+        position: relative;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        overflow: hidden;
+        height: 280px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .timelineContent::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #8a2be2, #ff6b6b, #4ecdc4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .timelineContent:hover {
+        transform: translateY(-8px);
+        border-color: rgba(138, 43, 226, 0.4);
+        box-shadow: 0 15px 40px rgba(138, 43, 226, 0.25);
+      }
+
+      .timelineContent:hover::before {
+        opacity: 1;
+      }
+
+      .contentHeader {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+
+      .year {
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #8a2be2;
+        background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(138, 43, 226, 0.1));
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(138, 43, 226, 0.3);
+        white-space: nowrap;
+        text-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+      }
+
+      .timelineContent h3 {
+        margin: 0 0 15px 0;
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 600;
+        line-height: 1.3;
+        text-align: center;
+      }
+
+      .timelineContent p {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #ccc;
+        text-align: center;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .contentFooter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 15px;
+      }
+
+      .techIndicator {
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, #8a2be2, #ff6b6b);
+        border-radius: 1px;
+        opacity: 0.6;
+      }
+
+      /* === RESPONSIVE === */
+      @media (max-width: 768px) {
+        .content {
+          padding: 2rem 1rem;
+        }
+
+        .intro h1 {
+          font-size: 2.2rem;
+        }
+
+        .intro p {
+          font-size: 1.1rem;
+        }
+
+        .introStats {
+          gap: 2rem;
+        }
+
+        .statNumber {
+          font-size: 1.5rem;
+        }
+
+        .simpleScroll {
+          gap: 2rem;
+          padding: 0 1rem;
+        }
+
+        .timelineItem {
+          width: 280px;
+        }
+
+        .timelineContent {
+          height: 260px;
+          padding: 18px 20px;
+        }
+
+        .timelineContent h3 {
+          font-size: 1.2rem;
+        }
+
+        .timelineContent p {
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+
+        .year {
+          font-size: 0.75rem;
+          padding: 5px 10px;
+        }
+
+        .timelineDot {
+          width: 20px;
+          height: 20px;
+          margin-bottom: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .content {
+          padding: 1.5rem 0.5rem;
+        }
+
+        .intro h1 {
+          font-size: 1.8rem;
+        }
+
+        .introStats {
+          gap: 1.5rem;
+        }
+
+        .simpleScroll {
+          gap: 1.5rem;
+          padding: 0 0.5rem;
+        }
+
+        .simpleScrollContainer::before,
+        .simpleScrollContainer::after {
+          width: 80px;
+        }
+
+        .timelineItem {
+          width: 250px;
+        }
+
+        .timelineContent {
+          height: 240px;
+          padding: 15px 18px;
+        }
+
+        .timelineContent h3 {
+          font-size: 1.1rem;
+        }
+
+        .timelineContent p {
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pageContainer">
+      <!-- Simple 3D background -->
+      <div class="canvasContainer"></div>
+
+      <!-- 2D timeline content -->
+      <main class="scrollWrapper">
+        <div class="content">
+          <div class="intro">
+            <h1>My Development Journey</h1>
+            <p>A timeline of key projects and milestones that shaped my path as a developer.</p>
+            <div class="introStats">
+              <div class="stat">
+                <span class="statNumber">12</span>
+                <span class="statLabel">Milestones</span>
+              </div>
+              <div class="stat">
+                <span class="statNumber">7+</span>
+                <span class="statLabel">Years</span>
+              </div>
+              <div class="stat">
+                <span class="statNumber">∞</span>
+                <span class="statLabel">Learning</span>
+              </div>
+            </div>
+          </div>
+          <div class="timelineContainer">
+            <div class="scrollHint">
+              <span>Scroll horizontally to explore →</span>
+            </div>
+            <div class="simpleScrollContainer">
+              <div class="simpleScroll">
+                <!-- Timeline Items -->
+                <div class="simpleSlide">
+                  <div class="timelineItem">
+                    <div class="timelineDot">
+                      <div class="dotPulse"></div>
+                    </div>
+                    <div class="timelineContent">
+                      <div class="contentHeader">
+                        <span class="year">2018</span>
+                      </div>
+                      <h3>First Steps in Code</h3>
+                      <p>Started my journey into web development with HTML, CSS, and JavaScript. Built my first website and fell in love with creating digital experiences.</p>
+                      <div class="contentFooter">
+                        <div class="techIndicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="simpleSlide">
+                  <div class="timelineItem">
+                    <div class="timelineDot">
+                      <div class="dotPulse"></div>
+                    </div>
+                    <div class="timelineContent">
+                      <div class="contentHeader">
+                        <span class="year">2019</span>
+                      </div>
+                      <h3>React Revolution</h3>
+                      <p>Discovered React and component-based architecture. Built my first single-page application and understood the power of modern JavaScript frameworks.</p>
+                      <div class="contentFooter">
+                        <div class="techIndicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="simpleSlide">
+                  <div class="timelineItem">
+                    <div class="timelineDot">
+                      <div class="dotPulse"></div>
+                    </div>
+                    <div class="timelineContent">
+                      <div class="contentHeader">
+                        <span class="year">2020</span>
+                      </div>
+                      <h3>Full-Stack Journey</h3>
+                      <p>Expanded into backend development with Node.js and databases. Created my first full-stack application with user authentication and data persistence.</p>
+                      <div class="contentFooter">
+                        <div class="techIndicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="simpleSlide">
+                  <div class="timelineItem">
+                    <div class="timelineDot">
+                      <div class="dotPulse"></div>
+                    </div>
+                    <div class="timelineContent">
+                      <div class="contentHeader">
+                        <span class="year">2021</span>
+                      </div>
+                      <h3>Professional Growth</h3>
+                      <p>Joined my first development team and learned about code reviews, version control, and collaborative development. Contributed to large-scale projects.</p>
+                      <div class="contentFooter">
+                        <div class="techIndicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="simpleSlide">
+                  <div class="timelineItem">
+                    <div class="timelineDot">
+                      <div class="dotPulse"></div>
+                    </div>
+                    <div class="timelineContent">
+                      <div class="contentHeader">
+                        <span class="year">2022</span>
+                      </div>
+                      <h3>Cloud & DevOps</h3>
+                      <p>Dove into cloud technologies and DevOps practices. Learned Docker, AWS, and CI/CD pipelines. Automated deployment processes and improved development workflows.</p>
+                      <div class="contentFooter">
+                        <div class="techIndicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="simpleSlide">
+                  <div class="timelineItem">
+                    <div class="timelineDot">
+                      <div class="dotPulse"></div>
+                    </div>
+                    <div class="timelineContent">
+                      <div class="contentHeader">
+                        <span class="year">2024</span>
+                      </div>
+                      <h3>AI Integration</h3>
+                      <p>Embraced AI tools and machine learning integration. Built intelligent applications and explored the intersection of traditional development with AI capabilities.</p>
+                      <div class="contentFooter">
+                        <div class="techIndicator"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Simple scroll-based animations
+      document.addEventListener('DOMContentLoaded', function () {
+        const container = document.querySelector('.simpleScrollContainer')
+        const items = document.querySelectorAll('.timelineItem')
+
+        // Add magnetic effect on scroll
+        container.addEventListener('scroll', function () {
+          const containerRect = container.getBoundingClientRect()
+          const containerCenter = containerRect.left + containerRect.width / 2
+
+          items.forEach((item) => {
+            const itemRect = item.getBoundingClientRect()
+            const itemCenter = itemRect.left + itemRect.width / 2
+            const distance = Math.abs(itemCenter - containerCenter)
+            const maxDistance = containerRect.width / 2
+            const proximity = Math.max(0, 1 - distance / maxDistance)
+
+            // Subtle scale effect
+            const scale = 0.95 + proximity * 0.05
+            const brightness = 0.8 + proximity * 0.2
+
+            item.style.transform = `scale(${scale})`
+            item.style.filter = `brightness(${brightness})`
+          })
+        })
+
+        // Trigger initial effect
+        container.dispatchEvent(new Event('scroll'))
+      })
+    </script>
+  </body>
+</html>

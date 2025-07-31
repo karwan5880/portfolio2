@@ -9,7 +9,8 @@ function Clouds() {
   const [cloudMap] = useLoader(THREE.TextureLoader, ['/textures/8k_earth_clouds.jpg'])
 
   useFrame(({ clock }) => {
-    cloudsRef.current.rotation.y = clock.getElapsedTime() * 0.02
+    // Slower, more realistic cloud movement
+    cloudsRef.current.rotation.y = clock.getElapsedTime() * 0.008
   })
 
   return (
@@ -43,19 +44,16 @@ export const PhotorealisticPlanet = React.forwardRef(function PhotorealisticPlan
         <meshStandardMaterial
           map={colorMap}
           normalMap={normalMap}
-          // The glossMap makes water reflective (white areas) and land rough (black areas)
+          // Reduce specular map influence for less water reflection
           roughnessMap={glossMap}
+          roughnessMapIntensity={0.3}
           // Lower metalness, higher roughness for a more realistic Earth
-          metalness={0.001}
-          // metalness={0.2}
-          // metalness={0.1}
-          roughness={0.9}
-          // roughness={0.8}
-          // roughness={0.3}
+          metalness={0.0}
+          roughness={0.95}
           // Night lights should glow
           emissiveMap={nightMap}
           emissive={'#ffff88'}
-          emissiveIntensity={1.5}
+          emissiveIntensity={2.0}
         />
       </mesh>
       <Clouds />

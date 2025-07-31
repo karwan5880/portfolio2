@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chinese Neon Test - 恭喜發財</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .test-section {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #111;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 15px 0;
+        text-align: center;
+      }
+      canvas {
+        border: 1px solid #ff4500;
+        image-rendering: pixelated;
+        transform: scale(8);
+        transform-origin: center;
+      }
+      .neon-preview {
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+        margin: 20px 0;
+        color: #ff4500;
+        text-shadow:
+          0 0 5px #ff4500,
+          0 0 10px #ff4500,
+          0 0 15px #ff4500,
+          0 0 20px #ff4500;
+      }
+      .color-info {
+        background: #222;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        margin: 10px 0;
+      }
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .message-box {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 4px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🌃 Chinese Neon Test - Chongqing Style</h1>
+
+    <div class="test-container">
+      <div class="test-section">
+        <h3>🎨 Neon Orange-Red Color Preview</h3>
+        <div class="color-info">
+          RGB: [1.0, 0.3, 0.1] = (255, 77, 26)<br />
+          Style: Bright orange-red like Chongqing neon signs
+        </div>
+        <div class="neon-preview">恭喜發財</div>
+        <div class="neon-preview" style="font-size: 36px">THANK YOU</div>
+      </div>
+
+      <div class="test-section">
+        <h3>📐 128×32 Dimension Test</h3>
+        <div class="comparison">
+          <div class="message-box">
+            <h4>THANK YOU</h4>
+            <div class="canvas-wrapper">
+              <canvas id="englishCanvas" width="128" height="32"></canvas>
+            </div>
+            <div id="englishResults"></div>
+          </div>
+
+          <div class="message-box">
+            <h4>恭喜發財</h4>
+            <div class="canvas-wrapper">
+              <canvas id="chineseCanvas" width="128" height="32"></canvas>
+            </div>
+            <div id="chineseResults"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🌃 Background Darkness Test</h3>
+        <p>Background drones: vec3(0.001, 0.001, 0.001) - Almost invisible like Chongqing night</p>
+        <div style="background: rgb(0, 0, 0); padding: 20px; border-radius: 4px; text-align: center">
+          <div style="background: rgb(0.26, 0.26, 0.26); width: 20px; height: 20px; display: inline-block; margin: 5px"></div>
+          <span style="color: #666">← Background drone brightness (extremely dim)</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Neon orange-red color
+      const NEON_COLOR = 'rgb(255, 77, 26)'
+
+      function renderText(canvasId, text, fontSize, letterSpacing) {
+        const canvas = document.getElementById(canvasId)
+        const ctx = canvas.getContext('2d')
+
+        // Clear with black background
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, 128, 32)
+
+        // Configure font with Chinese support
+        ctx.font = `bold ${fontSize}px Arial, "Microsoft YaHei", "PingFang SC"`
+        ctx.fillStyle = NEON_COLOR
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        // Apply letter spacing if supported
+        if ('letterSpacing' in ctx) {
+          ctx.letterSpacing = letterSpacing + 'px'
+        }
+
+        // Render text
+        const centerX = 64
+        const centerY = 16
+        ctx.fillText(text, centerX, centerY)
+
+        // Measure text
+        const metrics = ctx.measureText(text)
+        const textWidth = metrics.width
+        const maxWidth = 128 * 0.92
+
+        return {
+          width: textWidth,
+          maxWidth: maxWidth,
+          fits: textWidth <= maxWidth,
+          usage: ((textWidth / 128) * 100).toFixed(1),
+        }
+      }
+
+      // Test both messages
+      window.onload = function () {
+        // Test English
+        const englishResult = renderText('englishCanvas', 'THANK YOU', 22, 0.2)
+        document.getElementById('englishResults').innerHTML = `Width: ${englishResult.width.toFixed(1)}px (${englishResult.usage}%)<br>` + `Fits: ${englishResult.fits ? '✅ YES' : '❌ NO'}`
+
+        // Test Chinese
+        const chineseResult = renderText('chineseCanvas', '恭喜發財', 20, 0.1)
+        document.getElementById('chineseResults').innerHTML = `Width: ${chineseResult.width.toFixed(1)}px (${chineseResult.usage}%)<br>` + `Fits: ${chineseResult.fits ? '✅ YES' : '❌ NO'}`
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Spacing Test - 128×32 Dimension Check</title>
+    <link href="https://fonts.googleapis.com/css2?family=Trebuchet+MS:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Trebuchet MS', sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        padding: 20px;
+        margin: 0;
+      }
+      .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .canvas-test {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 8px;
+        background: #1a1a1a;
+      }
+      .canvas-wrapper {
+        background: #000;
+        padding: 10px;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 10px 0;
+      }
+      canvas {
+        border: 1px solid #555;
+        image-rendering: pixelated;
+      }
+      .scaled-canvas {
+        transform: scale(8);
+        transform-origin: top left;
+      }
+      .info {
+        font-size: 12px;
+        color: #aaa;
+        margin: 10px 0;
+      }
+      .controls {
+        margin: 20px 0;
+      }
+      button {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        margin: 5px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #444;
+      }
+      input {
+        background: #222;
+        color: white;
+        border: 1px solid #555;
+        padding: 8px;
+        margin: 5px;
+        border-radius: 4px;
+      }
+      .results {
+        background: #000;
+        color: #0f0;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+      .dimension-box {
+        width: 128px;
+        height: 32px;
+        border: 2px solid #ff0;
+        background: rgba(255, 255, 0, 0.1);
+        position: relative;
+        margin: 10px 0;
+      }
+      .dimension-label {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        font-size: 10px;
+        color: #ff0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📐 Text Spacing Test - 128×32 Dimension Check</h1>
+
+    <div class="test-container">
+      <div class="canvas-test">
+        <h3>Dimension Reference</h3>
+        <div class="dimension-box">
+          <div class="dimension-label">128×32 pixels (actual size)</div>
+        </div>
+        <p class="info">Yellow box shows the exact 128×32 pixel constraint for drone display</p>
+      </div>
+
+      <div class="canvas-test">
+        <h3>Text Fit Test</h3>
+        <div class="controls">
+          <input type="text" id="testText" value="THANK YOU" placeholder="Enter text to test" />
+          <button onclick="testTextFit()">Test Fit</button>
+          <button onclick="testAllMessages()">Test All Messages</button>
+        </div>
+
+        <div id="canvasContainer">
+          <!-- Canvases will be generated here -->
+        </div>
+
+        <div id="results" class="results" style="display: none"></div>
+      </div>
+    </div>
+
+    <script>
+      // Simulate the TextRenderer configuration
+      const TEXT_CONFIG = {
+        CANVAS_WIDTH: 128,
+        CANVAS_HEIGHT: 32,
+        MAX_WIDTH_RATIO: 0.92,
+        MIN_FONT_SIZE: 12,
+        MAX_FONT_SIZE: 28,
+        OPTIMAL_FONT_SIZE: 24,
+        OPTIMAL_FONTS: ['Trebuchet MS', 'Verdana', 'Tahoma', 'Arial', 'Helvetica', 'sans-serif'],
+      }
+
+      class TextSpacingTester {
+        constructor() {
+          this.canvas = document.createElement('canvas')
+          this.canvas.width = TEXT_CONFIG.CANVAS_WIDTH
+          this.canvas.height = TEXT_CONFIG.CANVAS_HEIGHT
+          this.ctx = this.canvas.getContext('2d')
+
+          this.ctx.imageSmoothingEnabled = true
+          this.ctx.imageSmoothingQuality = 'high'
+          this.ctx.textAlign = 'center'
+          this.ctx.textBaseline = 'middle'
+        }
+
+        calculateOptimalFontSize(text, fontFamily = 'Trebuchet MS') {
+          const maxWidth = TEXT_CONFIG.CANVAS_WIDTH * TEXT_CONFIG.MAX_WIDTH_RATIO
+          let minSize = TEXT_CONFIG.MIN_FONT_SIZE
+          let maxSize = TEXT_CONFIG.MAX_FONT_SIZE
+
+          while (maxSize - minSize > 1) {
+            const fontSize = Math.floor((minSize + maxSize) / 2)
+            this.ctx.font = `bold ${fontSize}px ${fontFamily}`
+            const width = this.ctx.measureText(text).width
+
+            if (width <= maxWidth) {
+              minSize = fontSize
+            } else {
+              maxSize = fontSize
+            }
+          }
+
+          return minSize
+        }
+
+        testText(text, fontFamily = 'Trebuchet MS') {
+          // Clear canvas
+          this.ctx.fillStyle = 'black'
+          this.ctx.fillRect(0, 0, TEXT_CONFIG.CANVAS_WIDTH, TEXT_CONFIG.CANVAS_HEIGHT)
+
+          // Calculate optimal font size
+          const fontSize = this.calculateOptimalFontSize(text, fontFamily)
+
+          // Set font
+          this.ctx.font = `bold ${fontSize}px ${fontFamily}`
+          this.ctx.fillStyle = 'white'
+
+          // Measure text
+          const metrics = this.ctx.measureText(text)
+          const textWidth = metrics.width
+          const textHeight = fontSize // Approximate height
+
+          // Render text
+          const centerX = TEXT_CONFIG.CANVAS_WIDTH / 2
+          const centerY = TEXT_CONFIG.CANVAS_HEIGHT / 2 + 0.5 // Slight offset
+          this.ctx.fillText(text, centerX, centerY)
+
+          // Check if text fits
+          const maxAllowedWidth = TEXT_CONFIG.CANVAS_WIDTH * TEXT_CONFIG.MAX_WIDTH_RATIO
+          const fitsWidth = textWidth <= maxAllowedWidth
+          const fitsHeight = textHeight <= TEXT_CONFIG.CANVAS_HEIGHT
+
+          return {
+            text,
+            fontFamily,
+            fontSize,
+            textWidth,
+            textHeight,
+            maxAllowedWidth,
+            fitsWidth,
+            fitsHeight,
+            fits: fitsWidth && fitsHeight,
+            canvas: this.canvas.cloneNode(),
+            widthUsage: ((textWidth / TEXT_CONFIG.CANVAS_WIDTH) * 100).toFixed(1),
+            heightUsage: ((textHeight / TEXT_CONFIG.CANVAS_HEIGHT) * 100).toFixed(1),
+          }
+        }
+      }
+
+      const tester = new TextSpacingTester()
+
+      function testTextFit() {
+        const text = document.getElementById('testText').value || 'THANK YOU'
+        const container = document.getElementById('canvasContainer')
+        const results = document.getElementById('results')
+
+        container.innerHTML = ''
+
+        // Test with primary font
+        const result = tester.testText(text, 'Trebuchet MS')
+
+        // Create display
+        const wrapper = document.createElement('div')
+        wrapper.className = 'canvas-wrapper'
+
+        const canvas = result.canvas
+        canvas.className = 'scaled-canvas'
+        // Copy the rendered content
+        const newCanvas = document.createElement('canvas')
+        newCanvas.width = 128
+        newCanvas.height = 32
+        const newCtx = newCanvas.getContext('2d')
+        newCtx.drawImage(tester.canvas, 0, 0)
+        newCanvas.className = 'scaled-canvas'
+
+        wrapper.appendChild(newCanvas)
+        container.appendChild(wrapper)
+
+        // Show results
+        results.style.display = 'block'
+        results.textContent = `Text Fit Analysis for "${text}":\n\n` + `Font: ${result.fontFamily}\n` + `Font Size: ${result.fontSize}px\n` + `Text Width: ${result.textWidth.toFixed(1)}px (${result.widthUsage}% of 128px)\n` + `Text Height: ${result.textHeight}px (${result.heightUsage}% of 32px)\n` + `Max Allowed Width: ${result.maxAllowedWidth.toFixed(1)}px\n` + `Fits Width: ${result.fitsWidth ? '✅ YES' : '❌ NO'}\n` + `Fits Height: ${result.fitsHeight ? '✅ YES' : '❌ NO'}\n` + `Overall Fit: ${result.fits ? '✅ FITS' : '❌ TOO BIG'}\n`
+      }
+
+      function testAllMessages() {
+        const messages = ['HELLO', 'WELCOME', 'TO MY', 'PORTFOLIO', 'ENJOY', 'THE SHOW', 'THANK YOU']
+
+        const container = document.getElementById('canvasContainer')
+        const results = document.getElementById('results')
+
+        container.innerHTML = ''
+        let resultsText = 'All Messages Fit Analysis:\n\n'
+
+        messages.forEach((text) => {
+          const result = tester.testText(text, 'Trebuchet MS')
+
+          // Create small display
+          const wrapper = document.createElement('div')
+          wrapper.style.display = 'inline-block'
+          wrapper.style.margin = '5px'
+          wrapper.style.textAlign = 'center'
+
+          const newCanvas = document.createElement('canvas')
+          newCanvas.width = 128
+          newCanvas.height = 32
+          const newCtx = newCanvas.getContext('2d')
+          newCtx.drawImage(tester.canvas, 0, 0)
+          newCanvas.style.transform = 'scale(3)'
+          newCanvas.style.transformOrigin = 'top left'
+          newCanvas.style.border = '1px solid #555'
+
+          const label = document.createElement('div')
+          label.textContent = text
+          label.style.fontSize = '10px'
+          label.style.color = '#aaa'
+          label.style.marginTop = '100px'
+
+          wrapper.appendChild(newCanvas)
+          wrapper.appendChild(label)
+          container.appendChild(wrapper)
+
+          resultsText += `"${text}": ${result.fontSize}px, ${result.widthUsage}% width, ${result.fits ? '✅' : '❌'}\n`
+        })
+
+        results.style.display = 'block'
+        results.textContent = resultsText
+      }
+
+      // Initial test
+      window.onload = function () {
+        testTextFit()
+      }
+    </script>
+  </body>
+</html>

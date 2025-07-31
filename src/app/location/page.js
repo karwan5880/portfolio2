@@ -61,8 +61,8 @@ export default function Home() {
       <button className={styles.resetButton} onClick={handleResetView}>
         Reset View
       </button>
-
-      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" />
+      <CornerLink href="/job-hunt" position="bottom-left" label="Job Hunt" aria-label="Return to job-hunt" />
+      {/* <CornerLink href="/applications" position="bottom-left" label="Applications" /> */}
       <CornerLink href="/finale" position="bottom-right" label="Finale" onNavigateStart={grantPermission} />
     </main>
   )

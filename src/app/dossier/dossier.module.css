@@ -1,126 +1,232 @@
 .dossierWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background-color: #0a0a0a; /* A slightly different black */
+  background-color: #0a0a0a;
   padding: 2rem;
   font-family: monospace;
+  overflow-x: auto;
 }
 
-.dossierPaper {
+.dossierContainer {
   width: 100%;
-  max-width: 850px;
+  max-width: 1200px;
+  margin: 0 auto;
   background-color: #121212;
   color: #d0d0d0;
-  padding: 2.5rem 3rem 5rem 3rem;
+  padding: 3rem 2rem 5rem 2rem;
   border: 1px solid #333;
   position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .header {
-  color: #00ff00; /* Green terminal text */
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  color: #00ff00;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
-.timeline {
-  white-space: pre-wrap; /* Allows text to wrap */
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #d0d0d0;
+.scrollHint {
+  text-align: center;
+  margin-bottom: 2rem;
+  opacity: 0.7;
 }
 
-.blinkingCursor {
-  display: inline-block;
-  width: 10px;
-  height: 1.2rem;
-  background-color: #00ff00;
-  animation: blink 1s step-end infinite;
-  margin-left: 5px; /* Position after text */
+.scrollHint span {
+  font-size: 0.9rem;
+  color: #888;
+  background: rgba(0, 255, 0, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
-@keyframes blink {
-  from,
-  to {
-    background-color: transparent;
-  }
-  50% {
-    background-color: #00ff00;
-  }
+.timelineWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 0;
+  overflow-x: auto;
+  /* Removed scroll-behavior: smooth to use custom JS smoothing */
+  /* Enhanced scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 0, 0.6) rgba(255, 255, 255, 0.1);
 }
 
-.dogEar {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
+/* Custom scrollbar for webkit browsers */
+.timelineWrapper::-webkit-scrollbar {
+  height: 6px;
 }
 
-.dogEar::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  background-color: #121212;
-  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
-  border: 25px solid transparent;
-  border-bottom-color: #333;
-  border-right-color: #333;
+.timelineWrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.timelineWrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #333, #00ff00, #333);
+  border-radius: 3px;
   transition: all 0.3s ease;
 }
 
-.dogEar:hover::before {
-  border-width: 35px;
-  border-bottom-color: #8a2be2;
-  border-right-color: #8a2be2;
-  box-shadow: -10px -10px 15px rgba(138, 43, 226, 0.3);
+.timelineWrapper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #555, #00ff44, #555);
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
 }
 
-.documentContainer {
-  /* ... your existing styles like width, background, box-shadow, etc. ... */
-
-  /* ADD THIS LINE to increase the page height */
-  padding-bottom: 6rem; /* Adjust this value as needed */
+.timelineLine {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, #333, #00ff00, #333);
+  z-index: 1;
 }
 
-/* It's also good practice to adjust for mobile */
-@media (max-width: 768px) {
-  .documentContainer {
-    /* You might want a smaller padding on mobile screens */
-    padding-bottom: 3rem;
+.timelineItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.timelineItem:hover {
+  transform: scale(1.1);
+}
+
+.timelineYear {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.timelineIcon {
+  font-size: 2rem;
+  background-color: #121212;
+  border: 2px solid #333;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.timelineLabel {
+  font-size: 0.9rem;
+  text-align: center;
+  color: #d0d0d0;
+}
+
+/* Status-based styling */
+.complete .timelineIcon {
+  border-color: #00ff00;
+  background-color: rgba(0, 255, 0, 0.1);
+}
+
+.pause .timelineIcon {
+  border-color: #ffaa00;
+  background-color: rgba(255, 170, 0, 0.1);
+}
+
+.failed .timelineIcon {
+  border-color: #ff4444;
+  background-color: rgba(255, 68, 68, 0.1);
+}
+
+.running .timelineIcon {
+  border-color: #00aaff;
+  background-color: rgba(0, 170, 255, 0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
   }
 }
 
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  color: #00aaff;
+  font-size: 1rem;
+}
+
+.runningDot {
+  width: 8px;
+  height: 8px;
+  background-color: #00aaff;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
-  /* Reduce the padding around the paper to bring it closer to the screen edges */
   .dossierWrapper {
     padding: 1rem;
-    /* This ensures the paper doesn't get stuck at the top */
-    align-items: flex-start;
-    padding-top: 3rem; /* Add some space from the top */
   }
 
-  /* Reduce the internal padding of the paper itself */
-  .dossierPaper {
-    padding: 1.5rem;
-    /* If you have a max-width, you might want to adjust it */
-    max-width: 100%;
+  .dossierContainer {
+    padding: 2rem 1rem 4rem 1rem;
   }
 
-  /* Make the main header slightly smaller */
   .header {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
   }
 
-  /* The most important fix: Make the preformatted text wrap */
-  .timeline {
-    font-size: 0.85rem; /* Make the timeline text a bit smaller */
-    white-space: pre-wrap; /* This preserves your line breaks but wraps long lines */
-    word-break: break-word; /* A fallback to ensure words themselves can break if needed */
+  .timelineWrapper {
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .timelineItem {
+    min-width: 70px;
+  }
+
+  .timelineIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .timelineYear {
+    font-size: 0.7rem;
+  }
+
+  .timelineLabel {
+    font-size: 0.8rem;
+  }
+
+  .statusIndicator {
+    font-size: 0.9rem;
   }
 }
