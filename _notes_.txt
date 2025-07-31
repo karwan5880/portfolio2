@@ -100,3 +100,28 @@ npm install leva
 npm install troika-three-text
 
 npm install embla-carousel-react embla-carousel-autoplay
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    6.32 kB         112 kB
+├ ○ /_not-found                            981 B         103 kB
+├ ƒ /api/finale-data                       139 B         102 kB
+├ ○ /dev-history                          9.8 kB         382 kB
+├ ○ /dossier                             3.02 kB         109 kB
+├ ○ /experiment2                          4.2 kB         146 kB
+├ ○ /finale                               138 kB         472 kB
+├ ○ /finale/collision-test               2.62 kB         105 kB
+├ ○ /finale/formations-test              5.96 kB         340 kB
+├ ○ /heart-test                          1.64 kB         104 kB
+├ ○ /job-hunt                            3.24 kB         109 kB
+├ ○ /location                            3.18 kB         109 kB
+├ ○ /post-scene                            800 B         103 kB
+├ ○ /secret-room                         1.14 kB         103 kB
+└ ○ /typing-test                         1.99 kB         104 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/1684-f898c09a68329caa.js      45.9 kB
+  ├ chunks/4bd1b696-8f6b7ced0e0027df.js  53.2 kB
+  └ other shared chunks (total)          2.87 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

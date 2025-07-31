@@ -7,11 +7,12 @@ import { useEffect } from 'react'
 const narrativeOrder = {
   '/': 1,
   '/dossier': 2,
-  '/job-hunt': 3,
-  '/applications': 4,
-  '/dev-history': 5,
+  '/dev-history': 3,
+  '/job-hunt': 4,
+  '/location': 5,
   '/finale': 6,
-  '/secret-room': 7,
+  '/applications': 7, // Optional/side path
+  '/secret-room': 8,
 }
 // This hook checks if the user has "unlocked" this part of the story.
 export function useGatekeeper(currentPagePath) {

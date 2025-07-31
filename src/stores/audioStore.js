@@ -11,7 +11,14 @@ const shuffleArray = (array) => {
 
 // Single track for drone show - no playlist needed
 // const DRONE_SHOW_TRACK = { path: '/sound/nezuko.mp3', theme: 'epic' }
-const DRONE_SHOW_TRACK = { path: '/sound/nezuko_short.mp3', theme: 'epic' }
+// Try absolute path for Cloudflare
+const DRONE_SHOW_TRACK = {
+  path: typeof window !== 'undefined' ? `${window.location.origin}/sound/nezuko_short.mp3` : '/sound/nezuko_short.mp3',
+  theme: 'epic',
+}
+
+// Debug logging
+console.log('Audio track path:', DRONE_SHOW_TRACK.path)
 // const DRONE_SHOW_TRACK = { path: '/sound/harvestmoon.mp3', theme: 'epic' }
 
 const sourcePlaylist = [
@@ -33,7 +40,7 @@ export const masterPlaylist = [mainThemeTrack, ...shuffledThematicTracks]
 // We define the audio instance outside the store so it's a single, persistent element.
 const audio = typeof window !== 'undefined' ? new Audio() : null
 if (audio) {
-  audio.volume = 0.3
+  audio.volume = 0.4 // Slightly higher volume for better audibility
   audio.loop = false // Play once, no repeat for drone show
 }
 
@@ -44,12 +51,22 @@ if (sfxAudio) {
 
 let audioContext, analyser, source
 if (typeof window !== 'undefined') {
-  audioContext = new (window.AudioContext || window.webkitAudioContext)()
-  analyser = audioContext.createAnalyser()
-  analyser.fftSize = 256 // Smaller size for better performance
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)()
+    analyser = audioContext.createAnalyser()
+    analyser.fftSize = 256 // Smaller size for better performance
 
-  // Connect the analyser to the speakers
-  analyser.connect(audioContext.destination)
+    // Connect the analyser to the speakers
+    analyser.connect(audioContext.destination)
+
+    console.log('Audio context initialized:', {
+      state: audioContext.state,
+      sampleRate: audioContext.sampleRate,
+      destination: audioContext.destination,
+    })
+  } catch (e) {
+    console.error('Failed to initialize audio context:', e)
+  }
 }
 
 export const useAudioStore = create((set, get) => ({
@@ -61,6 +78,7 @@ export const useAudioStore = create((set, get) => ({
   isInitialized: false,
   hasPermission: false,
   listenersAttached: false,
+  volume: 0.4, // Current volume level
   analyser: analyser, // Expose the analyser instance
 
   // --- Actions ---
@@ -97,16 +115,30 @@ export const useAudioStore = create((set, get) => ({
   },
   /**
    * Initializes the audio experience for drone show.
-   * Plays only the specific drone show track once.
+   * Sets up the playlist but waits for user interaction to play.
    */
   startExperience: () => {
     // Prevent re-initialization
     if (get().isInitialized || !audio) return
 
+    // Resume audio context if suspended
+    if (audioContext && audioContext.state === 'suspended') {
+      console.log('Resuming suspended audio context...')
+      audioContext
+        .resume()
+        .then(() => {
+          console.log('Audio context resumed successfully')
+        })
+        .catch((e) => {
+          console.error('Failed to resume audio context:', e)
+        })
+    }
+
     if (audioContext && !source) {
       try {
         source = audioContext.createMediaElementSource(audio)
         source.connect(analyser)
+        console.log('Audio source connected to analyser')
       } catch (e) {
         console.error('Error connecting audio source:', e)
       }
@@ -120,15 +152,15 @@ export const useAudioStore = create((set, get) => ({
       isInitialized: true,
     })
 
-    // Play the single track
-    get().playNextTrack()
+    // Don't auto-play - wait for user interaction
+    console.log('Audio experience initialized. Waiting for user interaction to play.')
   },
 
   startPlayback: () => {
-    const { isArmed, isPlaying, playTrack } = get()
-    if (isArmed && !isPlaying) {
-      console.log('Playback started by finale page.')
-      playTrack(0) // Start with the first track
+    const { isInitialized, isPlaying } = get()
+    if (isInitialized && !isPlaying) {
+      console.log('Playback started by user interaction.')
+      get().playNextTrack() // Start the drone show track
     }
   },
 
@@ -165,9 +197,33 @@ export const useAudioStore = create((set, get) => ({
 
     const onCanPlay = () => {
       console.log('Track is ready! Calling audio.play()') // <-- ADD THIS LOG
+      console.log('Audio element state:', {
+        volume: audio.volume,
+        muted: audio.muted,
+        paused: audio.paused,
+        currentTime: audio.currentTime,
+        duration: audio.duration,
+        readyState: audio.readyState,
+      })
 
       // 3. Now that it's loaded, we can safely play it.
-      audio.play().catch((e) => console.error('Playback failed after load:', e))
+      // This should work now because it's triggered by user interaction
+      const playPromise = audio.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('Audio playback started successfully!')
+            console.log('Playing state:', {
+              playing: !audio.paused,
+              volume: audio.volume,
+              currentTime: audio.currentTime,
+            })
+          })
+          .catch((e) => {
+            console.error('Playback failed after load:', e)
+            console.log('Audio blocked - user interaction required')
+          })
+      }
       // 4. IMPORTANT: Remove the listener so it doesn't fire again for the same track.
       audio.removeEventListener('canplaythrough', onCanPlay)
     }
@@ -196,13 +252,54 @@ export const useAudioStore = create((set, get) => ({
   togglePlayback: () => {
     if (!audio || !get().isInitialized) return
     const { isPlaying } = get()
+
+    console.log('Toggle playback - Current state:', {
+      isPlaying,
+      audioPaused: audio.paused,
+      audioCurrentTime: audio.currentTime,
+      audioSrc: audio.src,
+    })
+
     if (isPlaying) {
       audio.pause()
       set({ isPlaying: false })
+      console.log('Audio paused')
     } else {
-      audio.play().catch((e) => console.error('Audio playback failed:', e))
-      set({ isPlaying: true })
+      // Resume audio context if suspended
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+          console.log('Audio context resumed for playback')
+        })
+      }
+
+      audio
+        .play()
+        .then(() => {
+          console.log('Audio resumed successfully')
+          set({ isPlaying: true })
+        })
+        .catch((e) => {
+          console.error('Audio playback failed:', e)
+          // Don't set isPlaying to true if play failed
+        })
     }
+  },
+
+  /**
+   * Sets the audio volume (0.0 to 1.0)
+   */
+  setVolume: (volume) => {
+    if (!audio) return
+    const clampedVolume = Math.max(0, Math.min(1, volume))
+    audio.volume = clampedVolume
+    set({ volume: clampedVolume })
+  },
+
+  /**
+   * Gets the current volume
+   */
+  getVolume: () => {
+    return audio ? audio.volume : 0
   },
 
   /**

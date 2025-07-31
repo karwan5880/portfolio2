@@ -8,8 +8,10 @@ import { useAudioStore } from '@/stores/audioStore'
 
 // components/AudioControl.js
 
+// components/AudioControl.js
+
 export function AudioControl() {
-  const { isMuted, unmuteAndPlay, muteAudio, initializeAudio } = useAudioStore()
+  const { isMuted, unmuteAndPlay, muteAudio, initializeAudio, isInitialized, isPlaying, startPlayback, startExperience } = useAudioStore()
 
   // On first mount, just arm the system.
   useEffect(() => {
@@ -19,6 +21,17 @@ export function AudioControl() {
   const handleToggle = () => {
     if (isMuted) {
       unmuteAndPlay() // This function now handles everything
+
+      // If we're on the finale page and audio is initialized but not playing, start it
+      if (typeof window !== 'undefined' && window.location.pathname === '/finale') {
+        if (isInitialized && !isPlaying) {
+          startPlayback()
+        } else if (!isInitialized) {
+          startExperience()
+          // Small delay to ensure initialization completes
+          setTimeout(() => startPlayback(), 100)
+        }
+      }
     } else {
       muteAudio()
     }

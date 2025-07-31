@@ -5,7 +5,7 @@ import { useFrame } from '@react-three/fiber'
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import * as THREE from 'three'
 
-import { AsteroidBelt } from './AsteroidBelt'
+// import { AsteroidBelt } from './AsteroidBelt'
 import { Atmosphere } from './Atmosphere'
 import { PhotorealisticPlanet } from './PhotorealisticPlanet'
 import { Pin } from './Pin'
@@ -117,7 +117,7 @@ const Experience = React.forwardRef(function Experience(
       <ambientLight intensity={0.05} />
       <directionalLight ref={directionalLightRef} intensity={1.0} />
       <Stars ref={starsRef} radius={500} depth={80} count={15000} factor={10} saturation={0} fade speed={1.5} />
-      <AsteroidBelt />
+      {/* <AsteroidBelt /> */}
       <group
         ref={planetGroupRef} //
         // rotation={[0.01, 0, 0]}
