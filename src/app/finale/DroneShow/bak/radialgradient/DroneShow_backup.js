@@ -628,6 +628,30 @@ export function DroneShow() {
                 transition: isExploding ? 'none' : 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
+                if (!isExploding) {
+                  e.target.style.transform = 'scale(1.05)'
+                  e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
+                  // Show the background glow
+                  const glow = e.target.parentElement.querySelector('.hover-glow')
+                  if (glow) {
+                    glow.style.transform = 'translate(-50%, -50%) scale(1)'
+                    glow.style.opacity = '1'
+                  }
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isExploding) {
+                  e.target.style.transform = 'scale(1)'
+                  e.target.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                  // Hide the background glow
+                  const glow = e.target.parentElement.querySelector('.hover-glow')
+                  if (glow) {
+                    glow.style.transform = 'translate(-50%, -50%) scale(0)'
+                    glow.style.opacity = '0'
+                  }
+                }
+              }}
+              onMouseEnter={(e) => {
                 if (!isExploding && !showTextParticles) {
                   e.target.style.transform = 'scale(1.05)'
                   e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
@@ -811,29 +835,20 @@ export function DroneShow() {
   )
 }
 
-// Enhanced music control component with volume
+// Simple music control component
 function MusicControl() {
-  const { isPlaying, togglePlayback, isInitialized, setVolume, getVolume } = useAudioStore()
-  const [showVolumeSlider, setShowVolumeSlider] = React.useState(false)
-  const [currentVolume, setCurrentVolume] = React.useState(0.4)
-
-  React.useEffect(() => {
-    if (isInitialized) {
-      setCurrentVolume(getVolume())
-    }
-  }, [isInitialized, getVolume])
+  const { isPlaying, togglePlayback, isInitialized, startPlayback } = useAudioStore()
 
   if (!isInitialized) return null
 
   const handleMusicToggle = () => {
-    console.log('Music toggle clicked - isPlaying:', isPlaying)
-    togglePlayback() // Always use togglePlayback for consistency
-  }
-
-  const handleVolumeChange = (e) => {
-    const newVolume = parseFloat(e.target.value)
-    setCurrentVolume(newVolume)
-    setVolume(newVolume)
+    if (!isPlaying) {
+      // If not playing, start playback (this handles the user interaction requirement)
+      startPlayback()
+    } else {
+      // If playing, toggle pause/play
+      togglePlayback()
+    }
   }
 
   return (
@@ -843,121 +858,41 @@ function MusicControl() {
         bottom: '30px',
         right: '30px',
         zIndex: 30,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-        gap: '10px',
+        opacity: 0.7,
+        transition: 'opacity 0.3s ease',
       }}
+      onMouseEnter={(e) => (e.target.style.opacity = '1')}
+      onMouseLeave={(e) => (e.target.style.opacity = '0.7')}
     >
-      {/* Volume Slider */}
-      {showVolumeSlider && (
-        <div
-          style={{
-            background: 'rgba(0, 0, 0, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '25px',
-            padding: '15px 20px',
-            backdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            minWidth: '150px',
-          }}
-        >
-          <span style={{ color: 'white', fontSize: '14px' }}>🔊</span>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={currentVolume}
-            onChange={handleVolumeChange}
-            style={{
-              flex: 1,
-              height: '4px',
-              background: 'rgba(255, 255, 255, 0.3)',
-              borderRadius: '2px',
-              outline: 'none',
-              cursor: 'pointer',
-            }}
-          />
-          <span style={{ color: 'white', fontSize: '12px', minWidth: '30px' }}>{Math.round(currentVolume * 100)}%</span>
-        </div>
-      )}
-
-      {/* Control Buttons */}
-      <div
+      <button
+        onClick={handleMusicToggle}
         style={{
+          background: 'rgba(0, 0, 0, 0.6)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '50%',
+          width: '50px',
+          height: '50px',
+          color: 'white',
+          fontSize: '18px',
+          cursor: 'pointer',
           display: 'flex',
-          gap: '10px',
-          opacity: 0.7,
-          transition: 'opacity 0.3s ease',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backdropFilter: 'blur(10px)',
+          transition: 'all 0.3s ease',
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-        onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.7')}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.2)'
+          e.target.style.transform = 'scale(1.1)'
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.6)'
+          e.target.style.transform = 'scale(1)'
+        }}
+        title={isPlaying ? 'Pause Music' : 'Play Music'}
       >
-        {/* Volume Toggle Button */}
-        <button
-          onClick={() => setShowVolumeSlider(!showVolumeSlider)}
-          style={{
-            background: 'rgba(0, 0, 0, 0.6)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '50%',
-            width: '45px',
-            height: '45px',
-            color: 'white',
-            fontSize: '16px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.2)'
-            e.target.style.transform = 'scale(1.1)'
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(0, 0, 0, 0.6)'
-            e.target.style.transform = 'scale(1)'
-          }}
-          title="Volume Control"
-        >
-          🎵
-        </button>
-
-        {/* Play/Pause Button */}
-        <button
-          onClick={handleMusicToggle}
-          style={{
-            background: 'rgba(0, 0, 0, 0.6)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            color: 'white',
-            fontSize: '18px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(10px)',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.2)'
-            e.target.style.transform = 'scale(1.1)'
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(0, 0, 0, 0.6)'
-            e.target.style.transform = 'scale(1)'
-          }}
-          title={isPlaying ? 'Pause Music' : 'Play Music'}
-        >
-          {isPlaying ? '⏸️' : '▶️'}
-        </button>
-      </div>
+        {isPlaying ? '⏸️' : '▶️'}
+      </button>
     </div>
   )
 }

@@ -628,6 +628,30 @@ export function DroneShow() {
                 transition: isExploding ? 'none' : 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
+                if (!isExploding) {
+                  e.target.style.transform = 'scale(1.05)'
+                  e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
+                  // Show the background glow
+                  const glow = e.target.parentElement.querySelector('.hover-glow')
+                  if (glow) {
+                    glow.style.transform = 'translate(-50%, -50%) scale(1)'
+                    glow.style.opacity = '1'
+                  }
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isExploding) {
+                  e.target.style.transform = 'scale(1)'
+                  e.target.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                  // Hide the background glow
+                  const glow = e.target.parentElement.querySelector('.hover-glow')
+                  if (glow) {
+                    glow.style.transform = 'translate(-50%, -50%) scale(0)'
+                    glow.style.opacity = '0'
+                  }
+                }
+              }}
+              onMouseEnter={(e) => {
                 if (!isExploding && !showTextParticles) {
                   e.target.style.transform = 'scale(1.05)'
                   e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
@@ -881,7 +905,9 @@ function MusicControl() {
               cursor: 'pointer',
             }}
           />
-          <span style={{ color: 'white', fontSize: '12px', minWidth: '30px' }}>{Math.round(currentVolume * 100)}%</span>
+          <span style={{ color: 'white', fontSize: '12px', minWidth: '30px' }}>
+            {Math.round(currentVolume * 100)}%
+          </span>
         </div>
       )}
 
@@ -960,7 +986,7 @@ function MusicControl() {
       </div>
     </div>
   )
-}
+}</div></div></span>
 
 // New fast typing content component with clear commands
 function TypingContent({ phase, typedText, showGithubButton, showLinkedinButton, githubCentered, linkedinPositioned, interactiveText, hackingText, showTerminal }) {
