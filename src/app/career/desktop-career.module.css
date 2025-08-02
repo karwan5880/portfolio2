@@ -1,0 +1,330 @@
+/* Desktop Career View - Original Layout */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  color: white;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #a55eea);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+.header p {
+  opacity: 0.8;
+  font-size: 1.1rem;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Five Column Layout */
+.threeColumns {
+  display: grid;
+  grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr;
+  gap: 0.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+  position: relative;
+}
+
+/* Column Styles */
+.leftColumn,
+.rightColumn {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 65vh;
+  padding-top: 15rem;
+}
+
+.leftColumn {
+  position: relative;
+}
+
+.middleColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+/* Card Styles */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Special Card Types */
+.phdTag {
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffd700;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.phdTag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.convergence {
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.current {
+  border-color: rgba(78, 205, 196, 0.4);
+  background: rgba(78, 205, 196, 0.1);
+  max-width: 350px;
+}
+
+.foundation {
+  border-color: rgba(200, 200, 200, 0.3);
+  background: rgba(200, 200, 200, 0.05);
+}
+
+/* Left and Right Column Cards */
+.leftColumn .card {
+  border-color: rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 107, 0.05);
+}
+
+.rightColumn .card {
+  border-color: rgba(165, 94, 234, 0.3);
+  background: rgba(165, 94, 234, 0.05);
+}
+
+.leftColumn .card:hover {
+  border-color: rgba(255, 107, 107, 0.6);
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+}
+
+.rightColumn .card:hover {
+  border-color: rgba(165, 94, 234, 0.6);
+  box-shadow: 0 10px 30px rgba(165, 94, 234, 0.2);
+}
+
+/* Card Content */
+.cardIcon {
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.degree {
+  color: #feca57;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.tags span {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.current .tags span {
+  background: rgba(78, 205, 196, 0.2);
+  border-color: rgba(78, 205, 196, 0.4);
+  color: #4ecdc4;
+}
+
+/* Arrow Styles */
+.arrowUp {
+  font-size: 3rem;
+  color: #4ecdc4;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  text-align: center;
+  margin: 0.1rem 0;
+}
+
+.arrowUp:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Arrow Columns */
+.arrowColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 65vh;
+  padding-top: 15rem;
+  gap: 9rem;
+}
+
+.arrowToCenter,
+.arrowFromCenter {
+  font-size: 2.5rem;
+  color: #ff4757;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+/* Extra spacing between AI + Robotics and Software Developer */
+.reducedSpace {
+  height: 8rem;
+}
+
+/* Time Labels - Positioned relative to entire layout */
+.timeLabelsColumn {
+  position: absolute;
+  left: -80px;
+  top: 0;
+  height: 100%;
+  width: 80px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.timeLabelInColumn {
+  position: absolute;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #a55eea);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  animation: gradientShift 3s ease-in-out infinite;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.futurePosition {
+  top: 3%;
+}
+
+.presentPosition {
+  top: 50%;
+}
+
+.pastPosition {
+  top: 88%;
+}
+
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .threeColumns {
+    grid-template-columns: 1fr 0.1fr 1.2fr 0.1fr 1fr;
+    gap: 0.3rem;
+    max-width: 900px;
+  }
+
+  .timeLabelsColumn {
+    left: -60px;
+    width: 60px;
+  }
+
+  .timeLabelInColumn {
+    font-size: 0.7rem;
+  }
+
+  .card {
+    padding: 1.2rem;
+    max-width: 300px;
+  }
+
+  .card h2 {
+    font-size: 1.1rem;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+  }
+
+  .arrowToCenter,
+  .arrowFromCenter {
+    font-size: 2rem;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    padding-top: 12rem;
+  }
+
+  .arrowColumn {
+    padding-top: 12rem;
+  }
+}

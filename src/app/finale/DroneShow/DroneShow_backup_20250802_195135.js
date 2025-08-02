@@ -158,11 +158,8 @@ export function DroneShow() {
   const [showExplosionParticles, setShowExplosionParticles] = useState(false)
   const [showTextParticles, setShowTextParticles] = useState(false)
 
-  // Music sync timing
-  const [experienceStartTime, setExperienceStartTime] = useState(null)
-
   // Audio system integration
-  const { startExperience, isInitialized, grantPermission, startPlayback, startPlaybackAtTime } = useAudioStore()
+  const { startExperience, isInitialized, grantPermission, startPlayback } = useAudioStore()
 
   // GLOBAL SPEED CONTROL - Easy to adjust entire show timing
   const SHOW_SPEED_MULTIPLIER = 1.0 // 1.0 = normal speed, 2.0 = 2x faster, 0.5 = half speed
@@ -177,9 +174,6 @@ export function DroneShow() {
 
     // Start drone show immediately in background
     setExperienceStarted(true)
-
-    // Record the exact start time for music sync
-    setExperienceStartTime(Date.now())
 
     // Grant permission and initialize audio immediately (critical for iOS)
     await grantPermission()
@@ -569,10 +563,10 @@ export function DroneShow() {
       {experienceStarted && <DroneScene speedMultiplier={SHOW_SPEED_MULTIPLIER} />}
 
       {/* Music control overlay - subtle and unobtrusive */}
-      {experienceStarted && <MusicControl experienceStartTime={experienceStartTime} />}
+      {experienceStarted && <MusicControl />}
 
       {/* Centered iOS Music Prompt for better iPad visibility */}
-      {experienceStarted && <CenteredMusicPrompt experienceStartTime={experienceStartTime} />}
+      {experienceStarted && <CenteredMusicPrompt />}
 
       {/* Cinematic Entry Overlay */}
       {showEntryOverlay && (
@@ -823,8 +817,8 @@ export function DroneShow() {
 }
 
 // Centered music prompt for iPad visibility
-function CenteredMusicPrompt({ experienceStartTime }) {
-  const { isPlaying, isInitialized, hasPermission, startPlayback, startPlaybackAtTime } = useAudioStore()
+function CenteredMusicPrompt() {
+  const { isPlaying, isInitialized, hasPermission, startPlayback } = useAudioStore()
   const [showCenteredPrompt, setShowCenteredPrompt] = React.useState(false)
 
   React.useEffect(() => {
@@ -841,27 +835,7 @@ function CenteredMusicPrompt({ experienceStartTime }) {
   }, [isInitialized, hasPermission, isPlaying])
 
   const handleStartMusic = async () => {
-    if (experienceStartTime) {
-      // Calculate elapsed time since experience started
-      const elapsedSeconds = (Date.now() - experienceStartTime) / 1000
-
-      // Drones start flying at 12 seconds, so music should sync to that point
-      const DRONE_FLIGHT_START_DELAY = 12.0 // seconds
-      const musicOffset = Math.max(0, elapsedSeconds - DRONE_FLIGHT_START_DELAY)
-
-      console.log('🎬 Experience started at:', new Date(experienceStartTime).toLocaleTimeString())
-      console.log('🎬 Current time:', new Date().toLocaleTimeString())
-      console.log(`🎬 Total elapsed: ${elapsedSeconds.toFixed(1)}s`)
-      console.log(`🎬 Drone flight delay: ${DRONE_FLIGHT_START_DELAY}s`)
-      console.log(`🎬 Music offset: ${musicOffset.toFixed(1)}s`)
-
-      // Start music at the correct timestamp to sync with drone flight
-      await startPlaybackAtTime(musicOffset)
-    } else {
-      console.log('🎬 No experience start time, using normal playback')
-      // Fallback to normal playback if no start time
-      await startPlayback()
-    }
+    await startPlayback()
     setShowCenteredPrompt(false)
   }
 
@@ -907,8 +881,8 @@ function CenteredMusicPrompt({ experienceStartTime }) {
 }
 
 // Enhanced music control component with volume
-function MusicControl({ experienceStartTime }) {
-  const { isPlaying, togglePlayback, isInitialized, setVolume, getVolume, startPlayback, startPlaybackAtTime, hasPermission } = useAudioStore()
+function MusicControl() {
+  const { isPlaying, togglePlayback, isInitialized, setVolume, getVolume, startPlayback, hasPermission } = useAudioStore()
   const [showVolumeSlider, setShowVolumeSlider] = React.useState(false)
   const [currentVolume, setCurrentVolume] = React.useState(0.4)
   const [showPlayPrompt, setShowPlayPrompt] = React.useState(false)
@@ -925,33 +899,14 @@ function MusicControl({ experienceStartTime }) {
   if (!isInitialized) return null
 
   const handleMusicToggle = async () => {
-    console.log('🎵 Music toggle clicked - isPlaying:', isPlaying)
+    console.log('Music toggle clicked - isPlaying:', isPlaying)
 
     if (!isPlaying) {
-      if (experienceStartTime) {
-        // Calculate elapsed time and sync music
-        const elapsedSeconds = (Date.now() - experienceStartTime) / 1000
-
-        // Drones start flying at 12 seconds, so music should sync to that point
-        const DRONE_FLIGHT_START_DELAY = 12.0 // seconds
-        const musicOffset = Math.max(0, elapsedSeconds - DRONE_FLIGHT_START_DELAY)
-
-        console.log('🎵 Experience started at:', new Date(experienceStartTime).toLocaleTimeString())
-        console.log('🎵 Current time:', new Date().toLocaleTimeString())
-        console.log(`🎵 Total elapsed: ${elapsedSeconds.toFixed(1)}s`)
-        console.log(`🎵 Drone flight delay: ${DRONE_FLIGHT_START_DELAY}s`)
-        console.log(`🎵 Music offset: ${musicOffset.toFixed(1)}s`)
-
-        await startPlaybackAtTime(musicOffset)
-      } else {
-        console.log('🎵 No experience start time, using normal playback')
-        // Fallback to normal playback
-        await startPlayback()
-      }
+      // Use startPlayback for both first time and resume
+      await startPlayback()
       setShowPlayPrompt(false)
     } else {
       // Pause the music
-      console.log('🎵 Pausing music')
       togglePlayback()
     }
   }

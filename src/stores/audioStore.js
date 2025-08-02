@@ -215,6 +215,109 @@ export const useAudioStore = create((set, get) => ({
     }
   },
 
+  startPlaybackAtTime: async (offsetSeconds) => {
+    const { isInitialized, isPlaying, hasPermission, playlist } = get()
+
+    console.log('🎵 startPlaybackAtTime called with:', {
+      offsetSeconds,
+      isInitialized,
+      isPlaying,
+      hasPermission,
+      playlistLength: playlist.length,
+    })
+
+    if (!hasPermission) {
+      console.warn('Audio playback blocked - no permission granted')
+      return
+    }
+
+    if (isInitialized && !isPlaying && playlist.length > 0) {
+      console.log(`🎵 Starting playback at ${offsetSeconds.toFixed(1)}s offset`)
+
+      // Ensure audio context is ready (critical for iOS)
+      if (audioContext && audioContext.state === 'suspended') {
+        try {
+          await audioContext.resume()
+          console.log('Audio context resumed for playback')
+        } catch (e) {
+          console.error('Failed to resume audio context for playback:', e)
+        }
+      }
+
+      const track = playlist[0] // Always use the first (and only) track
+      console.log('🎵 Track to play:', track.path)
+
+      // Always ensure the track is loaded fresh
+      audio.src = track.path
+      console.log('🎵 Audio src set to:', audio.src)
+
+      // Create a promise that resolves when audio is ready
+      const waitForAudioReady = () => {
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Audio loading timeout'))
+          }, 10000) // 10 second timeout
+
+          const onCanPlay = () => {
+            clearTimeout(timeout)
+            audio.removeEventListener('canplaythrough', onCanPlay)
+            audio.removeEventListener('error', onError)
+            console.log('🎵 Audio is ready, duration:', audio.duration)
+            resolve()
+          }
+
+          const onError = (e) => {
+            clearTimeout(timeout)
+            audio.removeEventListener('canplaythrough', onCanPlay)
+            audio.removeEventListener('error', onError)
+            reject(e)
+          }
+
+          audio.addEventListener('canplaythrough', onCanPlay)
+          audio.addEventListener('error', onError)
+
+          // If already ready, resolve immediately
+          if (audio.readyState >= 2) {
+            clearTimeout(timeout)
+            console.log('🎵 Audio already ready')
+            resolve()
+          } else {
+            console.log('🎵 Loading audio...')
+            audio.load()
+          }
+        })
+      }
+
+      try {
+        await waitForAudioReady()
+
+        // Now set the time AFTER the audio is fully loaded
+        const clampedOffset = Math.max(0, Math.min(offsetSeconds, audio.duration || offsetSeconds))
+        console.log(`🎵 Setting currentTime to ${clampedOffset.toFixed(1)}s (duration: ${audio.duration?.toFixed(1)}s)`)
+
+        audio.currentTime = clampedOffset
+
+        // Verify the time was set correctly
+        console.log(`🎵 Audio currentTime after setting: ${audio.currentTime.toFixed(1)}s`)
+
+        await audio.play()
+
+        set({
+          isPlaying: true,
+          currentTrackIndex: 0,
+          activeTheme: track.theme,
+        })
+
+        console.log('🎵 Synced audio playback started successfully at', audio.currentTime.toFixed(1), 's')
+      } catch (e) {
+        console.error('🎵 Failed to start synced audio playback:', e)
+        // Fallback to regular playback
+        console.log('🎵 Falling back to regular playback')
+        get().startPlayback()
+      }
+    }
+  },
+
   //   // This is the NEW function that the finale page will call
   //   startPlayback: () => {
   //     const { audio, isArmed, currentSongIndex, isPlaying } = get()
