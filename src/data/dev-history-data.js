@@ -21,8 +21,8 @@ export const devHistoryData = [
   {
     id: 'python',
     year: '2020-2021',
-    title: 'Python Deep Dive',
-    description: 'Focused on Python, building various automation tools and projects during the global pause.',
+    title: 'Python/C++',
+    description: 'Focused on Python, C++ libraries, building various automation tools and projects during the global pause.',
     position: [-5, 4, -20],
     connectsTo: ['fyp'],
     type: 'ring',
@@ -39,7 +39,7 @@ export const devHistoryData = [
   {
     id: 'pyqt',
     year: '2024.01 - 2024.08',
-    title: 'PyQt6/PySide6 Apps',
+    title: 'PyQt6 / PySide6 Apps',
     description: 'Designed and built GUI for Windows desktop applications, translating concepts into user-facing programs.',
     position: [6, 8, -40],
     connectsTo: ['lpd'],
@@ -49,7 +49,7 @@ export const devHistoryData = [
     id: 'leet',
     year: '2024.08 - 2025.02',
     title: 'Job Hunt / LeetCode',
-    description: 'Started my journey to look for a job, practicing leetcode questions everyday.',
+    description: 'Started my journey to look for a job, practicing leetcode questions everyday. Focusing on Python, C, C++, Javascript, SQL',
     position: [-6, 10, -50],
     connectsTo: ['pyqt'],
     type: 'circuit',
@@ -66,7 +66,7 @@ export const devHistoryData = [
   {
     id: 'current',
     year: '2025.06 - Present',
-    title: 'Xiaohongshu Clone',
+    title: "'Xiao Hong Shu' Clone",
     description: 'Currently architecting and building a full-stack social media application clone, leveraging React for the front-end and Django for the back-end.',
     position: [7, 14, -70],
     connectsTo: ['exploration'],

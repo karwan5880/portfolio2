@@ -143,7 +143,7 @@ export default function SkillsPage() {
         </section>
       </main>
 
-      <CornerLink href="/dev-history" position="bottom-left" label="Timeline" aria-label="Return to dev-history" />
+      <CornerLink href="/dev-history" position="bottom-left" label="Dev" aria-label="Return to dev-history" />
       <CornerLink href="/career" position="bottom-right" label="Career" aria-label="Go to career" />
     </div>
   )

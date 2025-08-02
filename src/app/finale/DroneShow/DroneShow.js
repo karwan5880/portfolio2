@@ -127,6 +127,11 @@ export function DroneShow() {
           opacity: 0; 
         }
       }
+      @keyframes pulse {
+        0% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.02); }
+        100% { opacity: 0.6; transform: scale(1); }
+      }
     `
     document.head.appendChild(style)
     return () => document.head.removeChild(style)
@@ -162,7 +167,7 @@ export function DroneShow() {
   const introTexts = [] // Removed - Thank You is now in the entry overlay
 
   // Handle experience entry - drone show starts immediately, overlay fades naturally
-  const handleBeginExperience = () => {
+  const handleBeginExperience = async () => {
     // Stage 1: Start drone swarm and drone show immediately
     setIsExploding(true)
     setShowExplosionParticles(true)
@@ -170,8 +175,8 @@ export function DroneShow() {
     // Start drone show immediately in background
     setExperienceStarted(true)
 
-    // Grant permission and initialize audio immediately
-    grantPermission()
+    // Grant permission and initialize audio immediately (critical for iOS)
+    await grantPermission()
     startExperience()
 
     // Stage 2: Start text fade sooner so drone show is visible during fade
@@ -184,11 +189,8 @@ export function DroneShow() {
       setShowEntryOverlay(false)
     }, 6500) // Wait for text fade to fully complete (4s + 2s fade + 0.5s buffer)
 
-    // Start the audio experience after 15 seconds (no additional delay)
-    const musicStartTime = (15 * 1000) / SHOW_SPEED_MULTIPLIER
-    setTimeout(() => {
-      startPlayback()
-    }, musicStartTime)
+    // Note: Audio will be started manually by user interaction (iOS Safari requirement)
+    // The MusicControl component will show a prompt after 15 seconds if needed
   }
 
   // Removed intro text useEffect - Thank You is now handled in entry overlay
@@ -563,6 +565,9 @@ export function DroneShow() {
       {/* Music control overlay - subtle and unobtrusive */}
       {experienceStarted && <MusicControl />}
 
+      {/* Centered iOS Music Prompt for better iPad visibility */}
+      {experienceStarted && <CenteredMusicPrompt />}
+
       {/* Cinematic Entry Overlay */}
       {showEntryOverlay && (
         <div
@@ -811,23 +816,99 @@ export function DroneShow() {
   )
 }
 
+// Centered music prompt for iPad visibility
+function CenteredMusicPrompt() {
+  const { isPlaying, isInitialized, hasPermission, startPlayback } = useAudioStore()
+  const [showCenteredPrompt, setShowCenteredPrompt] = React.useState(false)
+
+  React.useEffect(() => {
+    if (isInitialized && hasPermission) {
+      // Show centered prompt after 15 seconds if music hasn't started
+      const timer = setTimeout(() => {
+        if (!isPlaying) {
+          setShowCenteredPrompt(true)
+        }
+      }, 15000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [isInitialized, hasPermission, isPlaying])
+
+  const handleStartMusic = async () => {
+    await startPlayback()
+    setShowCenteredPrompt(false)
+  }
+
+  if (!showCenteredPrompt || isPlaying) return null
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 50,
+        background: 'rgba(0, 0, 0, 0.8)',
+        border: '2px solid rgba(0, 255, 157, 0.6)',
+        borderRadius: '50%',
+        width: '80px',
+        height: '80px',
+        backdropFilter: 'blur(15px)',
+        animation: 'pulse 2s ease-in-out infinite',
+        boxShadow: '0 0 30px rgba(0, 255, 157, 0.4)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+      }}
+      onClick={handleStartMusic}
+      onMouseEnter={(e) => {
+        e.target.style.background = 'rgba(0, 255, 157, 0.2)'
+        e.target.style.transform = 'translate(-50%, -50%) scale(1.1)'
+        e.target.style.boxShadow = '0 0 40px rgba(0, 255, 157, 0.6)'
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.background = 'rgba(0, 0, 0, 0.8)'
+        e.target.style.transform = 'translate(-50%, -50%) scale(1)'
+        e.target.style.boxShadow = '0 0 30px rgba(0, 255, 157, 0.4)'
+      }}
+    >
+      <div style={{ fontSize: '32px', color: '#00ff9d' }}>🔊</div>
+    </div>
+  )
+}
+
 // Enhanced music control component with volume
 function MusicControl() {
-  const { isPlaying, togglePlayback, isInitialized, setVolume, getVolume } = useAudioStore()
+  const { isPlaying, togglePlayback, isInitialized, setVolume, getVolume, startPlayback, hasPermission } = useAudioStore()
   const [showVolumeSlider, setShowVolumeSlider] = React.useState(false)
   const [currentVolume, setCurrentVolume] = React.useState(0.4)
+  const [showPlayPrompt, setShowPlayPrompt] = React.useState(false)
 
   React.useEffect(() => {
     if (isInitialized) {
       setCurrentVolume(getVolume())
+
+      // Don't show corner prompt - let the centered prompt handle it
+      // This prevents duplicate prompts
     }
   }, [isInitialized, getVolume])
 
   if (!isInitialized) return null
 
-  const handleMusicToggle = () => {
+  const handleMusicToggle = async () => {
     console.log('Music toggle clicked - isPlaying:', isPlaying)
-    togglePlayback() // Always use togglePlayback for consistency
+
+    if (!isPlaying) {
+      // Use startPlayback for both first time and resume
+      await startPlayback()
+      setShowPlayPrompt(false)
+    } else {
+      // Pause the music
+      togglePlayback()
+    }
   }
 
   const handleVolumeChange = (e) => {
@@ -839,14 +920,17 @@ function MusicControl() {
   return (
     <div
       style={{
-        position: 'absolute',
-        bottom: '30px',
-        right: '30px',
+        position: 'fixed',
+        bottom: 'max(20px, env(safe-area-inset-bottom, 20px))',
+        right: 'max(20px, env(safe-area-inset-right, 20px))',
         zIndex: 30,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end',
         gap: '10px',
+        // Ensure visibility on all devices
+        maxWidth: 'calc(100vw - 40px)',
+        maxHeight: 'calc(100vh - 40px)',
       }}
     >
       {/* Volume Slider */}
@@ -884,6 +968,8 @@ function MusicControl() {
           <span style={{ color: 'white', fontSize: '12px', minWidth: '30px' }}>{Math.round(currentVolume * 100)}%</span>
         </div>
       )}
+
+      {/* Corner prompt removed - using centered prompt only to avoid duplicates */}
 
       {/* Control Buttons */}
       <div

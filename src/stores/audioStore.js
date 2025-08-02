@@ -96,9 +96,31 @@ export const useAudioStore = create((set, get) => ({
 
   /**
    * Grants permission for the finale page. Called from the DogEar link.
+   * Also ensures audio context is ready for iOS Safari.
    */
-  grantPermission: () => {
+  grantPermission: async () => {
     set({ hasPermission: true })
+
+    // Resume audio context immediately on user interaction (required for iOS)
+    if (audioContext && audioContext.state === 'suspended') {
+      try {
+        await audioContext.resume()
+        console.log('Audio context resumed on user interaction')
+      } catch (e) {
+        console.error('Failed to resume audio context:', e)
+      }
+    }
+
+    // Pre-load and prepare audio for iOS
+    if (audio && !audio.src) {
+      try {
+        audio.src = DRONE_SHOW_TRACK.path
+        audio.load()
+        console.log('Audio pre-loaded for iOS compatibility')
+      } catch (e) {
+        console.error('Failed to pre-load audio:', e)
+      }
+    }
   },
 
   setupAudioAnalysis: () => {
@@ -156,11 +178,40 @@ export const useAudioStore = create((set, get) => ({
     console.log('Audio experience initialized. Waiting for user interaction to play.')
   },
 
-  startPlayback: () => {
-    const { isInitialized, isPlaying } = get()
+  startPlayback: async () => {
+    const { isInitialized, isPlaying, hasPermission, currentTrackIndex } = get()
+
+    if (!hasPermission) {
+      console.warn('Audio playback blocked - no permission granted')
+      return
+    }
+
     if (isInitialized && !isPlaying) {
       console.log('Playback started by user interaction.')
-      get().playNextTrack() // Start the drone show track
+
+      // Ensure audio context is ready (critical for iOS)
+      if (audioContext && audioContext.state === 'suspended') {
+        try {
+          await audioContext.resume()
+          console.log('Audio context resumed for playback')
+        } catch (e) {
+          console.error('Failed to resume audio context for playback:', e)
+        }
+      }
+
+      // If track has already been loaded (resume case), just play it
+      if (currentTrackIndex >= 0 && audio && audio.src) {
+        console.log('Resuming existing track')
+        try {
+          await audio.play()
+          set({ isPlaying: true })
+        } catch (e) {
+          console.error('Failed to resume audio:', e)
+        }
+      } else {
+        // First time play - load and play the track
+        get().playNextTrack()
+      }
     }
   },
 
