@@ -887,21 +887,35 @@ function CenteredMusicPrompt({ experienceStartTime }) {
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        transition: 'all 0.3s ease',
+        transition: 'background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
+        transformOrigin: 'center center',
       }}
       onClick={handleStartMusic}
       onMouseEnter={(e) => {
-        e.target.style.background = 'rgba(0, 255, 157, 0.2)'
-        e.target.style.transform = 'translate(-50%, -50%) scale(1.1)'
-        e.target.style.boxShadow = '0 0 40px rgba(0, 255, 157, 0.6)'
+        e.currentTarget.style.background = 'rgba(0, 255, 157, 0.2)'
+        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.1)'
+        e.currentTarget.style.boxShadow = '0 0 40px rgba(0, 255, 157, 0.6)'
       }}
       onMouseLeave={(e) => {
-        e.target.style.background = 'rgba(0, 0, 0, 0.8)'
-        e.target.style.transform = 'translate(-50%, -50%) scale(1)'
-        e.target.style.boxShadow = '0 0 30px rgba(0, 255, 157, 0.4)'
+        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'
+        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)'
+        e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 157, 0.4)'
       }}
     >
-      <div style={{ fontSize: '32px', color: '#00ff9d' }}>🔊</div>
+      <div
+        style={{
+          fontSize: '32px',
+          color: '#00ff9d',
+          lineHeight: 1,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        🔊
+      </div>
     </div>
   )
 }
