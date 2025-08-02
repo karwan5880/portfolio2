@@ -91,7 +91,7 @@ export default function Home() {
             <Section title="Languages" isInteractive>
               <p style={commonStyles.p}>English, Mandarin, Malay</p>
             </Section>
-            <DogEar href="/dossier" position="bottom-right" aria-label="View the dossier" onNavigateStart={armAudio} />
+            <DogEar href="/timeline" position="bottom-right" aria-label="View the timeline" onNavigateStart={armAudio} />
           </div>
         </div>
       </div>

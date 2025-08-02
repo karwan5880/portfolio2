@@ -120,40 +120,42 @@
   text-align: center;
 }
 
-/* Navigation arrows */
+/* Navigation arrows - repositioned for better visibility */
 .navArrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border: 2px solid rgba(138, 43, 226, 0.4);
-  background: rgba(20, 20, 20, 0.8);
-  backdrop-filter: blur(10px);
+  border: 3px solid rgba(138, 43, 226, 0.6);
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(15px);
   color: #8a2be2;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   cursor: pointer;
-  z-index: 10;
+  z-index: 15;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .navArrow:hover {
-  border-color: rgba(138, 43, 226, 0.8);
-  background: rgba(138, 43, 226, 0.1);
-  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+  border-color: rgba(138, 43, 226, 1);
+  background: rgba(138, 43, 226, 0.15);
+  box-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .navArrowLeft {
-  left: 2rem;
+  left: 1rem; /* Moved closer to edge for better visibility */
 }
 
 .navArrowRight {
-  right: 2rem;
+  right: 1rem; /* Moved closer to edge for better visibility */
 }
 
 .scrollProgressBar {
@@ -237,7 +239,7 @@
 
 .horizontalScroll {
   display: flex;
-  gap: 32rem; /* Increased gap from 4rem to 8rem for more separation */
+  gap: 20rem; /* Reduced gap from 32rem to 20rem for better flow (5rem = 80px) */
   padding: 0 2rem;
   width: max-content;
   cursor: grab;
@@ -544,6 +546,21 @@
     height: 20px;
     margin-bottom: 1rem;
   }
+
+  /* Adjust arrows for tablet */
+  .navArrow {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .navArrowLeft {
+    left: 0.5rem;
+  }
+
+  .navArrowRight {
+    right: 0.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -579,5 +596,21 @@
 
   .timelineContent p {
     font-size: 0.85rem;
+  }
+
+  /* Adjust arrows for mobile */
+  .navArrow {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+    border-width: 2px;
+  }
+
+  .navArrowLeft {
+    left: 0.25rem;
+  }
+
+  .navArrowRight {
+    right: 0.25rem;
   }
 }

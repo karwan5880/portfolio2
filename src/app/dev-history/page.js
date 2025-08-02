@@ -35,10 +35,11 @@ function useCardSnapScroll() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const lastScrollTime = useRef(0)
 
   // Card dimensions
   const cardWidth = 380 // Updated card width
-  const cardGap = 512 // 8rem = 128px (increased from 4rem for more separation)
+  const cardGap = 320 // Reduced from 512px for better flow (5rem = 80px)
   const cardStep = cardWidth + cardGap
 
   useEffect(() => {
@@ -91,6 +92,22 @@ function useCardSnapScroll() {
       if (isDragging) return
 
       e.preventDefault()
+
+      // Detect platform and input device for better cross-platform support
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+      const isTrackpad = Math.abs(e.deltaY) < 50 // Trackpads send smaller values
+
+      // For Mac trackpads, require a minimum threshold to prevent oversensitive scrolling
+      const scrollThreshold = isMac && isTrackpad ? 10 : 5
+      if (Math.abs(e.deltaY) < scrollThreshold) return
+
+      // Debounce rapid scroll events (especially important for Mac trackpads)
+      const now = Date.now()
+      const timeSinceLastScroll = now - lastScrollTime.current
+      const debounceTime = isMac && isTrackpad ? 150 : 100 // Longer debounce for Mac trackpads
+
+      if (timeSinceLastScroll < debounceTime) return
+      lastScrollTime.current = now
 
       // Determine scroll direction
       const scrollingDown = e.deltaY > 0
@@ -296,7 +313,7 @@ export default function DevHistoryPage() {
 
   // Calculate drag constraints for card snapping
   const cardWidth = 380
-  const cardGap = 256 // Updated to match the new gap
+  const cardGap = 320 // Updated to match the new gap
   const cardStep = cardWidth + cardGap
   const totalCards = devHistoryData.length
 
@@ -365,8 +382,8 @@ export default function DevHistoryPage() {
       </motion.main>
 
       {/* Corner navigation links */}
-      <CornerLink href="/dossier" position="bottom-left" label="Timeline" aria-label="Return to dossier" />
-      <CornerLink href="/job-hunt" position="bottom-right" label="Skills" aria-label="Go to job hunt" onNavigateStart={grantPermission} />
+      <CornerLink href="/timeline" position="bottom-left" label="Timeline" aria-label="Return to timeline" />
+      <CornerLink href="/skills" position="bottom-right" label="Skills" aria-label="Go to skills" onNavigateStart={grantPermission} />
     </div>
   )
 }

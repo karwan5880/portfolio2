@@ -6,13 +6,14 @@ import { useEffect } from 'react'
 // A map defining the narrative order. This is our "source of truth".
 const narrativeOrder = {
   '/': 1,
-  '/dossier': 2,
+  '/timeline': 2,
   '/dev-history': 3,
-  '/job-hunt': 4,
-  '/location': 5,
-  '/finale': 6,
-  '/applications': 7, // Optional/side path
-  '/secret-room': 8,
+  '/skills': 4,
+  '/career': 5,
+  '/location': 6,
+  '/finale': 7,
+  '/applications': 8, // Optional/side path
+  '/secret-room': 9,
 }
 // This hook checks if the user has "unlocked" this part of the story.
 export function useGatekeeper(currentPagePath) {

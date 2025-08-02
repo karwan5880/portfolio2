@@ -113,8 +113,8 @@ function SkillCard({ skill }) {
   )
 }
 
-export default function JobHuntPage() {
-  useGatekeeper('/job-hunt')
+export default function SkillsPage() {
+  useGatekeeper('/skills')
 
   return (
     <div className={styles.wrapper}>
@@ -144,7 +144,7 @@ export default function JobHuntPage() {
       </main>
 
       <CornerLink href="/dev-history" position="bottom-left" label="Timeline" aria-label="Return to dev-history" />
-      <CornerLink href="/location" position="bottom-right" label="Location" aria-label="Go to location" />
+      <CornerLink href="/career" position="bottom-right" label="Career" aria-label="Go to career" />
     </div>
   )
 }

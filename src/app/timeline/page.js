@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 
 import { DogEar } from '@/components/DogEar'
 
-import styles from './dossier.module.css'
+import styles from './timeline.module.css'
 import { useGatekeeper } from '@/hooks/useGatekeeper'
 
 const timelineData = [
@@ -31,6 +31,7 @@ function useHorizontalScroll() {
   const scrollRef = useRef(null)
   const targetScrollRef = useRef(0)
   const animationRef = useRef(null)
+  const lastScrollTime = useRef(0)
 
   useEffect(() => {
     const element = scrollRef.current
@@ -73,8 +74,27 @@ function useHorizontalScroll() {
       if (e.deltaY !== 0) {
         e.preventDefault()
 
-        // Direct scroll amount without momentum accumulation
-        const scrollDelta = e.deltaY * 1.5
+        // Detect platform and adjust scroll sensitivity
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+        const isTrackpad = Math.abs(e.deltaY) < 50 // Trackpads typically send smaller values
+
+        // Throttle rapid scroll events for smoother experience on Mac trackpads
+        const now = Date.now()
+        const timeSinceLastScroll = now - lastScrollTime.current
+        const throttleTime = isMac && isTrackpad ? 16 : 8 // ~60fps for trackpads, ~120fps for mice
+
+        if (timeSinceLastScroll < throttleTime) return
+        lastScrollTime.current = now
+
+        // Adjust scroll multiplier based on platform and input device
+        let scrollMultiplier = 1.5
+        if (isMac && isTrackpad) {
+          scrollMultiplier = 3 // Increase sensitivity for Mac trackpads
+        } else if (isMac) {
+          scrollMultiplier = 2 // Moderate increase for Mac mice
+        }
+
+        const scrollDelta = e.deltaY * scrollMultiplier
         const maxScroll = element.scrollWidth - element.clientWidth
         const newTarget = Math.max(0, Math.min(maxScroll, targetScrollRef.current + scrollDelta))
 
@@ -134,20 +154,20 @@ function useHorizontalScroll() {
   return scrollRef
 }
 
-export default function Dossier() {
-  useGatekeeper('/dossier')
+export default function Timeline() {
+  useGatekeeper('/timeline')
   const timelineScrollRef = useHorizontalScroll()
 
   return (
-    <div className={styles.dossierWrapper}>
-      <div className={styles.dossierContainer}>
+    <div className={styles.timelineWrapper}>
+      <div className={styles.timelineContainer}>
         <h1 className={styles.header}>Timeline</h1>
 
         <div className={styles.scrollHint}>
           <span>← Scroll, mouse wheel, or arrow keys to navigate →</span>
         </div>
 
-        <div className={styles.timelineWrapper} ref={timelineScrollRef}>
+        <div className={styles.timelineScrollContainer} ref={timelineScrollRef}>
           <div className={styles.timelineLine}></div>
 
           {timelineData.map((item, index) => (

@@ -1,0 +1,443 @@
+/* Career Page - Simple 3-Column Layout */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  color: white;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #a55eea);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+.header p {
+  opacity: 0.8;
+  font-size: 1.1rem;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Five Column Layout */
+.threeColumns {
+  display: grid;
+  grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr;
+  gap: 0.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+  position: relative;
+}
+
+/* Column Styles */
+.leftColumn,
+.rightColumn {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 65vh;
+  padding-top: 11rem;
+}
+
+.leftColumn {
+  position: relative;
+}
+
+.middleColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+/* Card Styles */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Special Card Types */
+.phdTag {
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffd700;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.phdTag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.convergence {
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.current {
+  border-color: rgba(78, 205, 196, 0.4);
+  background: rgba(78, 205, 196, 0.1);
+  max-width: 350px;
+}
+
+.foundation {
+  border-color: rgba(200, 200, 200, 0.3);
+  background: rgba(200, 200, 200, 0.05);
+}
+
+/* Left and Right Column Cards */
+.leftColumn .card {
+  border-color: rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 107, 0.05);
+}
+
+.rightColumn .card {
+  border-color: rgba(165, 94, 234, 0.3);
+  background: rgba(165, 94, 234, 0.05);
+}
+
+.leftColumn .card:hover {
+  border-color: rgba(255, 107, 107, 0.6);
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+}
+
+.rightColumn .card:hover {
+  border-color: rgba(165, 94, 234, 0.6);
+  box-shadow: 0 10px 30px rgba(165, 94, 234, 0.2);
+}
+
+/* Card Content */
+.inlineIcon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.cardIcon {
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.degree {
+  color: #feca57;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.tags span {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.current .tags span {
+  background: rgba(78, 205, 196, 0.2);
+  border-color: rgba(78, 205, 196, 0.4);
+  color: #4ecdc4;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .threeColumns {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    min-height: auto;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+}
+/* Arrow Styles */
+.arrowUp,
+.arrowRight,
+.arrowLeft {
+  font-size: 3rem;
+  color: #4ecdc4;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.arrowUp {
+  text-align: center;
+  margin: 0.1rem 0;
+}
+
+.arrowRight {
+  position: absolute;
+  right: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.arrowLeft {
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.arrowUp:hover,
+.arrowRight:hover,
+.arrowLeft:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.arrowRight:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+.arrowLeft:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Adjust column positioning for arrows */
+.leftColumn,
+.rightColumn {
+  position: relative;
+}
+/* Diagonal Arrows from Current Position */
+.diagonalArrows {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.arrowDiagonalLeft,
+.arrowDiagonalRight {
+  position: absolute;
+  font-size: 2.5rem;
+  color: #4ecdc4;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.arrowDiagonalLeft {
+  left: -2rem;
+  top: -1rem;
+}
+
+.arrowDiagonalRight {
+  right: -2rem;
+  top: -1rem;
+}
+
+.arrowDiagonalLeft:hover,
+.arrowDiagonalRight:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Make current card position relative for absolute positioning */
+.current {
+  position: relative;
+}
+
+/* Arrow Columns */
+.arrowColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 65vh;
+  padding-top: 11rem;
+  gap: 9rem;
+}
+
+.arrowToCenter,
+.arrowFromCenter {
+  font-size: 2.5rem;
+  color: #ff4757;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+/* Diagonal arrows from center */
+.diagonalArrowsFromCenter {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  transform: translateY(1rem);
+  pointer-events: none;
+}
+
+.arrowToLeft,
+.arrowToRight {
+  position: absolute;
+  font-size: 2rem;
+  color: #ff4757;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.arrowToLeft {
+  left: -6rem;
+  top: 1rem;
+}
+
+.arrowToRight {
+  right: -6rem;
+  top: 1rem;
+}
+/* Extra spacing between AI + Robotics and Software Developer */
+.extraSpace {
+  height: 2rem;
+}
+
+/* Reduced spacing to move AI + Robotics up */
+.reducedSpace {
+  height: 8rem;
+}
+/* Card container for absolute positioning */
+.cardContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Absolute positioned time labels */
+.timeLabelAbsolute {
+  position: absolute;
+  left: -5rem;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #a55eea);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  animation: gradientShift 3s ease-in-out infinite;
+  white-space: nowrap;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* Time Labels - Positioned relative to entire layout */
+.timeLabelsColumn {
+  position: absolute;
+  left: -80px;
+  top: 0;
+  height: 100%;
+  width: 80px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.timeLabelInColumn {
+  position: absolute;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #a55eea);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  animation: gradientShift 3s ease-in-out infinite;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.futurePosition {
+  top: 3%;
+}
+
+.presentPosition {
+  top: 50%;
+}
+
+.pastPosition {
+  top: 88%;
+}
