@@ -33,7 +33,7 @@ export default function CareerPage() {
     <>
       {isMobile ? <MobileCareerView /> : <DesktopCareerView />}
       <CornerLink href="/skills" position="bottom-left" label="Skills" aria-label="Return to skills" />
-      <CornerLink href="/location" position="bottom-right" label="Location" aria-label="Go to location" />
+      <CornerLink href="/project" position="bottom-right" label="Project" aria-label="Go to project" />
     </>
   )
 }

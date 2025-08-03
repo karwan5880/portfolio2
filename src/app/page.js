@@ -49,9 +49,20 @@ export default function Home() {
             <Header />
             <Section title="Summary" isInteractive>
               <ul style={commonStyles.ul}>
-                <li>Developing software solutions since 2018, starting with web technologies (2018-2019) and advancing to Python/C++ development (2020-2024).</li>
+                <li>Software engineer focused on AI, system programming, and full-stack development with 6+ years of hands-on experience.</li>
+                <li>Built diverse software solutions: windows drivers, C++ libraries, AI applications, system applications, and modern web applications.</li>
+
+                {/* 
+                <li>Full-stack developer with expertise in AI/ML, system programming, and web technologies - Python, C++, JavaScript specialist.</li>
+                <li>Shipped production software including Windows drivers, deep learning models, mobile apps, and scalable web platforms.</li> */}
+
+                {/* 
+                <li>Software engineer building AI-powered applications, system drivers, and full-stack web solutions since 2018.</li>
+                <li>Created Windows drivers, machine learning models, games, and modern web applications using Python, C++, and JavaScript.</li> */}
+
+                {/* <li>Developing software solutions since 2018, starting with web technologies (2018-2019) and advancing to Python/C++ development (2020-2024).</li>
                 <li>Developed diverse projects including a new Windows driver, Python library, Godot game, Flutter app, and Next.js landing page.</li>
-                <li>Continuously expanding expertise through self-study in AI, LLM, and reinforcement learning.</li>
+                <li>Continuously expanding expertise through self-study in AI, LLM, and reinforcement learning.</li> */}
               </ul>
             </Section>
             <Section title="Education" isInteractive>

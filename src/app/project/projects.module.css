@@ -1,0 +1,143 @@
+.projectWrapper {
+  min-height: 100vh;
+  background-color: #0a0a0a;
+  padding: 2rem;
+  font-family: monospace;
+}
+
+.projectContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #121212;
+  color: #d0d0d0;
+  padding: 3rem 2rem 5rem 2rem;
+  border: 1px solid #333;
+  position: relative;
+  min-height: 80vh;
+}
+
+.header {
+  color: #00ff00;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.columnsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.columnTitle {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #333;
+  width: 100%;
+}
+
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.projectLink {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+.projectItem {
+  color: #00ff00;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  text-align: center;
+  transition: color 0.2s ease;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.projectItem:hover {
+  color: #00ff44;
+  text-decoration: none;
+}
+
+.projectListItem {
+  color: #888;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .projectWrapper {
+    padding: 1rem;
+  }
+
+  .projectContainer {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+
+  .header {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .columnsContainer {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .columnTitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .projectItem {
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  .projectListItem {
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projectContainer {
+    padding: 1.5rem 1rem 3rem 1rem;
+  }
+
+  .header {
+    font-size: 1.8rem;
+  }
+
+  .projectItem {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .projectListItem {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+}

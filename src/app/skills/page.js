@@ -12,7 +12,7 @@ const coreSkills = [
     level: 9,
     description: 'Automation, Scripting, App Development',
     category: 'primary',
-    icon: '🐍',
+    icon: '/icons/python.png', // Path to icon in public folder
     tags: ['Flask', 'FastAPI', 'Automation'],
   },
   {
@@ -20,7 +20,7 @@ const coreSkills = [
     level: 8,
     description: 'Performance-Critical Applications, Game Development, Dynamic Libraries, Drivers',
     category: 'primary',
-    icon: '⚡',
+    icon: '/icons/cpp.png', // Path to icon in public folder
     tags: ['Performance', 'Memory Management', 'Algorithms'],
   },
   {
@@ -28,7 +28,7 @@ const coreSkills = [
     level: 8,
     description: 'Frontend Development, Modern Web Apps, Portfolio, Landing Page, Business',
     category: 'primary',
-    icon: '⚛️',
+    icon: '/icons/react.png', // Path to icon in public folder
     tags: ['Hooks', 'State Management', 'UI/UX'],
   },
   {
@@ -36,7 +36,7 @@ const coreSkills = [
     level: 7,
     description: 'OpenCV, Image Processing, YOLO, Object Detection, Linux, Ubuntu, Script',
     category: 'primary',
-    icon: '👁️',
+    icon: '/icons/opencv.png', // Path to icon in public folder
     tags: ['OpenCV', 'YOLO', 'Image Processing'],
   },
 ]
@@ -48,7 +48,7 @@ const emergingSkills = [
     level: 3,
     description: 'Cross-platform Mobile Development',
     category: 'emerging',
-    icon: '📱',
+    icon: '/icons/flutter.png', // Path to icon in public folder
     tags: ['Mobile', 'Cross-platform', 'Dart'],
   },
   {
@@ -56,7 +56,7 @@ const emergingSkills = [
     level: 2,
     description: 'Game Engine, 2D/3D Game Development',
     category: 'emerging',
-    icon: '🎮',
+    icon: '/icons/godot.png', // Path to icon in public folder
     tags: ['Game Engine', 'GDScript', 'Indie Games'],
   },
   {
@@ -64,7 +64,7 @@ const emergingSkills = [
     level: 0,
     description: 'Systems Programming, Memory Safety',
     category: 'emerging',
-    icon: '🦀',
+    icon: '/icons/rust.png', // Path to icon in public folder
     tags: ['Systems', 'Memory Safety', 'Performance'],
   },
   {
@@ -72,7 +72,7 @@ const emergingSkills = [
     level: 0,
     description: 'Backend Services, Microservices',
     category: 'emerging',
-    icon: '🐹',
+    icon: '/icons/go.png', // Path to icon in public folder
     tags: ['Backend', 'Concurrency', 'Microservices'],
   },
 ]
@@ -92,7 +92,9 @@ function SkillCard({ skill }) {
 
   return (
     <div className={getCardClass(skill.category)}>
-      <div className={styles.skillIcon}>{skill.icon}</div>
+      <div className={styles.skillIcon}>
+        <img src={skill.icon} alt={`${skill.name} icon`} width="40" height="40" />
+      </div>
       {skill.category === 'emerging' && <div className={styles.emergingBadge}>Learning</div>}
       <div className={styles.skillHeader}>
         <h3 className={styles.skillName}>{skill.name}</h3>

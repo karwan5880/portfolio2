@@ -6,7 +6,7 @@ export function GitHubIcon() {
   return (
     <a
       href="https://github.com/karwan5880/portfolio2" // Your GitHub URL
-      className={styles.actionLink} // Use the same class name
+      className={styles.githubLink} // Use the GitHub-specific class
       aria-label="View GitHub profile in new tab"
       target="_blank"
       rel="noopener noreferrer"

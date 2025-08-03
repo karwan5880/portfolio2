@@ -81,10 +81,11 @@
   position: absolute;
   top: 50%;
   left: 0;
-  right: 0;
   height: 2px;
   background: linear-gradient(to right, #333, #00ff00, #333);
-  z-index: 1;
+  z-index: 0; /* Put line behind the timeline items */
+  /* Calculate width based on timeline items: 14 items * (80px width + 2rem gap) */
+  width: calc(14 * 80px + 13 * 2rem); /* 14 items + 13 gaps between them */
 }
 
 .timelineItem {
@@ -93,7 +94,7 @@
   align-items: center;
   min-width: 80px;
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Keep items above the line */
   transition: transform 0.3s ease;
 }
 
@@ -109,7 +110,7 @@
 
 .timelineIcon {
   font-size: 2rem;
-  background-color: #121212;
+  background-color: #121212; /* Solid background to cover the line */
   border: 2px solid #333;
   border-radius: 50%;
   width: 60px;
@@ -119,6 +120,8 @@
   justify-content: center;
   margin-bottom: 0.5rem;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 3; /* Ensure icon is above everything */
 }
 
 .timelineLabel {
@@ -130,22 +133,22 @@
 /* Status-based styling */
 .complete .timelineIcon {
   border-color: #00ff00;
-  background-color: rgba(0, 255, 0, 0.1);
+  background-color: #121212; /* Solid background to properly mask the line */
 }
 
 .pause .timelineIcon {
   border-color: #ffaa00;
-  background-color: rgba(255, 170, 0, 0.1);
+  background-color: #121212; /* Solid background to properly mask the line */
 }
 
 .failed .timelineIcon {
   border-color: #ff4444;
-  background-color: rgba(255, 68, 68, 0.1);
+  background-color: #121212; /* Solid background to properly mask the line */
 }
 
 .running .timelineIcon {
   border-color: #00aaff;
-  background-color: rgba(0, 170, 255, 0.1);
+  background-color: #121212; /* Solid background to properly mask the line */
   animation: pulse 2s infinite;
 }
 

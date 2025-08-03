@@ -28,3 +28,24 @@
 .actionLink:hover {
   color: #ffffff;
 }
+
+.githubLink {
+  position: absolute;
+  top: 2rem;
+  left: 2rem; /* Position on the left side, opposite of resume */
+  z-index: 10;
+  color: #a0a0a0;
+  transition: color 0.3s ease;
+}
+
+.githubLink:hover {
+  color: #ffffff;
+}
+
+/* Add mobile styles for GitHub icon */
+@media (max-width: 768px) {
+  .githubLink {
+    top: 1rem;
+    left: 1rem;
+  }
+}
