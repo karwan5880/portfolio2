@@ -636,6 +636,7 @@ export function DroneShow() {
                 position: 'relative',
                 zIndex: 10,
                 animation: showTextParticles ? 'textDissolve 2s ease-out forwards' : 'fadeInUp 4s ease-out 1s both',
+                opacity: showTextParticles ? 1 : 0, // Fix FOUC - start invisible until animation begins
                 transition: isExploding ? 'none' : 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {

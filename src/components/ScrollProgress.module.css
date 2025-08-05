@@ -1,0 +1,263 @@
+/* Scroll Progress Container */
+.scrollProgress {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.scrollProgress.position-top {
+  top: 0;
+}
+
+.scrollProgress.position-bottom {
+  bottom: 0;
+}
+
+.scrollProgress.visible {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Progress Bar */
+.progressBar {
+  height: 100%;
+  position: relative;
+  transition: width 0.1s ease-out;
+  border-radius: 0 2px 2px 0;
+  overflow: hidden;
+}
+
+/* Color Variants */
+.color-primary .progressBar {
+  background: linear-gradient(90deg, var(--primary-color, #00ff9d), var(--secondary-color, #4a9eff));
+}
+
+.color-secondary .progressBar {
+  background: linear-gradient(90deg, var(--secondary-color, #4a9eff), var(--accent-color, #ff6b9d));
+}
+
+.color-accent .progressBar {
+  background: linear-gradient(90deg, var(--accent-color, #ff6b9d), var(--primary-color, #00ff9d));
+}
+
+.color-mono .progressBar {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+}
+
+/* Progress Glow Effect */
+.progressGlow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6));
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Progress Pulse */
+.progressPulse {
+  position: absolute;
+  top: -2px;
+  width: 6px;
+  height: 7px;
+  background: radial-gradient(circle, var(--primary-color, #00ff9d), transparent);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: pulse 1.5s infinite;
+  transform: translateX(-50%);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.5);
+    opacity: 0.4;
+  }
+}
+
+/* Percentage Display */
+.percentageDisplay {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .scrollProgress {
+    height: 2px;
+  }
+
+  .progressPulse {
+    width: 4px;
+    height: 5px;
+    top: -1.5px;
+  }
+
+  .percentageDisplay {
+    font-size: 9px;
+    right: 6px;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .progressBar {
+    transition: none;
+  }
+
+  .progressGlow {
+    animation: none;
+    opacity: 0;
+  }
+
+  .progressPulse {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .scrollProgress {
+    transition: opacity 0.1s ease;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .scrollProgress {
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid white;
+  }
+
+  .color-primary .progressBar,
+  .color-secondary .progressBar,
+  .color-accent .progressBar {
+    background: white;
+  }
+
+  .progressPulse {
+    background: radial-gradient(circle, white, transparent);
+  }
+
+  .percentageDisplay {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Dark Theme Adjustments */
+@media (prefers-color-scheme: dark) {
+  .scrollProgress {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .percentageDisplay {
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Light Theme Adjustments */
+@media (prefers-color-scheme: light) {
+  .scrollProgress {
+    background: rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .percentageDisplay {
+    color: rgba(0, 0, 0, 0.8);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Vertical Progress Bar (for side positioning) */
+.scrollProgress.vertical {
+  width: 3px;
+  height: 100%;
+  top: 0;
+  left: auto;
+}
+
+.scrollProgress.vertical.position-left {
+  left: 0;
+}
+
+.scrollProgress.vertical.position-right {
+  right: 0;
+}
+
+.scrollProgress.vertical .progressBar {
+  width: 100%;
+  height: 0%;
+  transition: height 0.1s ease-out;
+  border-radius: 0 0 2px 2px;
+}
+
+.scrollProgress.vertical .progressGlow {
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.6));
+  bottom: 0;
+  right: auto;
+}
+
+.scrollProgress.vertical .progressPulse {
+  left: -2px;
+  width: 7px;
+  height: 6px;
+  bottom: 0;
+  top: auto;
+  transform: translateY(50%);
+}
+
+@keyframes shimmerVertical {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.scrollProgress.vertical .progressGlow {
+  animation: shimmerVertical 2s infinite;
+}

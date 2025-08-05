@@ -39,7 +39,7 @@ export const devHistoryData = [
   {
     id: 'pyqt',
     year: '2024.01 - 2024.08',
-    title: 'PyQt6 / PySide6 Apps',
+    title: 'Windows GUI Apps',
     description: 'Designed and built GUI for Windows desktop applications, translating concepts into user-facing programs.',
     position: [6, 8, -40],
     connectsTo: ['lpd'],

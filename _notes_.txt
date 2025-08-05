@@ -125,3 +125,21 @@ Route (app)                                 Size  First Load JS
 
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
+
+
+
+fluid motion
+clean
+smooth
+simple yet powerful
+phenomenal
+kick-ass webflow websites
+transformations
+animations
+visual stunning
+liquid glass
+
+npm install @react-spring/web react-spring @react-three/fiber @react-three/drei three react-lottie-player react-particles react-reveal react-use-gesture @react-spring/parallax
+
+npm install @react-spring/web @react-three/fiber @react-three/drei three react-use-gesture --legacy-peer-deps
+npm install @use-gesture/react lottie-react --legacy-peer-deps

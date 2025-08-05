@@ -1,0 +1,274 @@
+.performanceMonitor {
+  position: fixed;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #ffffff;
+  min-width: 250px;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.performanceMonitor.compact {
+  min-width: 200px;
+}
+
+.performanceMonitor.expanded {
+  min-width: 300px;
+}
+
+/* Position variants */
+.topLeft {
+  top: 20px;
+  left: 20px;
+}
+
+.topRight {
+  top: 20px;
+  right: 20px;
+}
+
+.bottomLeft {
+  bottom: 20px;
+  left: 20px;
+}
+
+.bottomRight {
+  bottom: 20px;
+  right: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.statusIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.statusIndicator.good {
+  background: #00ff9d;
+}
+
+.statusIndicator.poor {
+  background: #ff6b35;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.controls {
+  display: flex;
+  gap: 4px;
+}
+
+.controlButton,
+.expandButton {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.controlButton:hover,
+.expandButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.content {
+  padding: 12px;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  border-left: 3px solid transparent;
+}
+
+.metricLabel {
+  font-size: 10px;
+  color: #cccccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.metricStatus {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 0 0 0 4px;
+}
+
+.charts {
+  margin-bottom: 12px;
+}
+
+.chartContainer {
+  margin-bottom: 8px;
+}
+
+.chartLabel {
+  font-size: 10px;
+  color: #cccccc;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chart {
+  width: 100%;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gridLines line {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.summary {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.summaryItem span:first-child {
+  color: #cccccc;
+}
+
+.good {
+  color: #00ff9d !important;
+}
+
+.poor {
+  color: #ff6b35 !important;
+}
+
+.active {
+  color: #4a9eff !important;
+}
+
+.inactive {
+  color: #888888 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .performanceMonitor {
+    min-width: 200px;
+    max-width: 280px;
+    font-size: 11px;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart {
+    height: 40px;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .performanceMonitor {
+    background: #000000;
+    border: 2px solid #ffffff;
+  }
+
+  .statusIndicator.good {
+    background: #00ff00;
+  }
+
+  .statusIndicator.poor {
+    background: #ff0000;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .performanceMonitor {
+    transition: none;
+  }
+
+  .statusIndicator {
+    animation: none;
+  }
+
+  .controlButton:hover,
+  .expandButton:hover {
+    transition: none;
+  }
+}

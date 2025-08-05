@@ -1,0 +1,288 @@
+/* Mobile-specific global styles and optimizations */
+
+/* Touch device optimizations */
+.touch-device {
+  /* Improve touch scrolling */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+
+  /* Optimize touch targets */
+  --min-touch-target: 44px;
+  --touch-padding: 8px;
+}
+
+.touch-device * {
+  /* Ensure minimum touch target sizes */
+  min-height: var(--min-touch-target);
+  min-width: var(--min-touch-target);
+}
+
+.touch-device button,
+.touch-device [role='button'],
+.touch-device a {
+  /* Touch-friendly interactive elements */
+  min-height: var(--min-touch-target);
+  min-width: var(--min-touch-target);
+  padding: var(--touch-padding);
+  touch-action: manipulation;
+}
+
+/* Performance mode optimizations */
+.performance-optimized {
+  /* Reduce animation complexity */
+  --animation-duration: 0.3s;
+  --particle-count: 20;
+  --blur-radius: 5px;
+  --shadow-intensity: 0.3;
+}
+
+.performance-optimized * {
+  /* Disable complex animations */
+  animation-duration: var(--animation-duration) !important;
+  transition-duration: var(--animation-duration) !important;
+}
+
+.performance-optimized .parallax-element {
+  /* Disable parallax on low-performance devices */
+  transform: none !important;
+}
+
+.performance-full {
+  /* Full performance settings */
+  --animation-duration: 0.6s;
+  --particle-count: 100;
+  --blur-radius: 20px;
+  --shadow-intensity: 0.6;
+}
+
+/* Mobile viewport optimizations */
+@media (max-width: 768px) {
+  :root {
+    /* Mobile-specific CSS custom properties */
+    --mobile-padding: 1rem;
+    --mobile-gap: 0.75rem;
+    --mobile-border-radius: 8px;
+    --mobile-font-size-small: 0.8rem;
+    --mobile-font-size-base: 0.9rem;
+    --mobile-font-size-large: 1.1rem;
+    --mobile-line-height: 1.4;
+  }
+
+  /* Optimize text rendering on mobile */
+  body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+  }
+
+  /* Reduce motion on mobile by default */
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+
+  /* Optimize scrolling */
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Mobile-specific spacing */
+  .mobile-container {
+    padding: var(--mobile-padding);
+    gap: var(--mobile-gap);
+  }
+
+  .mobile-text {
+    font-size: var(--mobile-font-size-base);
+    line-height: var(--mobile-line-height);
+  }
+
+  .mobile-text-small {
+    font-size: var(--mobile-font-size-small);
+  }
+
+  .mobile-text-large {
+    font-size: var(--mobile-font-size-large);
+  }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --tablet-padding: 1.5rem;
+    --tablet-gap: 1rem;
+    --tablet-font-size-base: 1rem;
+  }
+
+  .tablet-container {
+    padding: var(--tablet-padding);
+    gap: var(--tablet-gap);
+  }
+
+  .tablet-text {
+    font-size: var(--tablet-font-size-base);
+  }
+}
+
+/* Landscape mobile optimizations */
+@media (max-width: 768px) and (orientation: landscape) {
+  :root {
+    --mobile-padding: 0.75rem;
+    --mobile-gap: 0.5rem;
+  }
+
+  /* Reduce vertical spacing in landscape */
+  .mobile-container {
+    padding-top: var(--mobile-padding);
+    padding-bottom: var(--mobile-padding);
+  }
+
+  /* Optimize for landscape viewing */
+  .landscape-optimize {
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Optimize for retina displays */
+  .high-dpi-optimize {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* Reduce blur effects on high DPI to maintain performance */
+  .performance-optimized {
+    --blur-radius: 3px;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .touch-device *,
+  .performance-optimized *,
+  .performance-full * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Keep essential transitions for UX */
+  .touch-device button,
+  .touch-device [role='button'] {
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .touch-device {
+    /* Increase contrast for better visibility */
+    --border-width: 2px;
+    --outline-width: 3px;
+  }
+
+  .touch-device button,
+  .touch-device [role='button'] {
+    border-width: var(--border-width);
+    outline-width: var(--outline-width);
+  }
+}
+
+/* Dark mode mobile optimizations */
+@media (prefers-color-scheme: dark) {
+  .touch-device {
+    /* Optimize for dark mode on mobile */
+    --mobile-bg-alpha: rgba(0, 0, 0, 0.95);
+    --mobile-text-contrast: 1.2;
+  }
+}
+
+/* Battery optimization */
+@media (prefers-reduced-data: reduce) {
+  .performance-optimized {
+    /* Further reduce effects when data saving is preferred */
+    --particle-count: 10;
+    --blur-radius: 2px;
+    --shadow-intensity: 0.1;
+  }
+
+  /* Disable non-essential visual effects */
+  .performance-optimized .particle-system,
+  .performance-optimized .parallax-element {
+    display: none !important;
+  }
+}
+
+/* Utility classes for mobile development */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+}
+
+.tablet-only {
+  display: none;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tablet-only {
+    display: block;
+  }
+}
+
+/* Touch-specific utilities */
+.touch-only {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .touch-only {
+    display: block;
+  }
+
+  .hover-only {
+    display: none;
+  }
+}
+
+/* Performance utilities */
+.performance-hide-on-mobile {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .performance-hide-on-mobile {
+    display: none;
+  }
+}
+
+.performance-simplify-on-mobile {
+  /* Default complex styles */
+}
+
+@media (max-width: 768px) {
+  .performance-simplify-on-mobile {
+    /* Simplified mobile styles */
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: var(--mobile-border-radius) !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}

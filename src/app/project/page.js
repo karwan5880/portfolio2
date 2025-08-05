@@ -26,12 +26,12 @@ export default function ProjectPage() {
           <div className={styles.column}>
             <h2 className={styles.columnTitle}>Software/Web</h2>
             <div className={styles.projectList}>
-              <Link href="/location" className={styles.projectLink}>
+              <a href="/location" className={styles.projectLink} target="_blank" rel="noopener noreferrer">
                 <div className={styles.projectItem}>Earth Model</div>
-              </Link>
-              <Link href="/finale" className={styles.projectLink}>
+              </a>
+              <a href="/finale" className={styles.projectLink} target="_blank" rel="noopener noreferrer">
                 <div className={styles.projectItem}>Drone Show</div>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -44,7 +44,7 @@ export default function ProjectPage() {
         </div>
 
         <DogEar href="/career" position="bottom-left" aria-label="Return to career" />
-        <DogEar href="/" position="bottom-right" aria-label="Return to main page" />
+        {/* <DogEar href="/" position="bottom-right" aria-label="Return to main page" /> */}
       </div>
     </div>
   )

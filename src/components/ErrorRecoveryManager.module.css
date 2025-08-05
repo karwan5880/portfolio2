@@ -1,0 +1,361 @@
+/* Error Recovery Manager Styles */
+
+.errorStats {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--surface-color, #111111);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 8px;
+  padding: 1rem;
+  max-width: 300px;
+  font-size: 0.875rem;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.errorStats h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color, #e0e0e0);
+  font-size: 1rem;
+}
+
+.statsGrid {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statLabel {
+  color: var(--text-muted-color, #888888);
+}
+
+.statValue {
+  color: var(--primary-color, #00ff9d);
+  font-weight: 600;
+}
+
+.errorTypes {
+  margin-bottom: 1rem;
+}
+
+.errorTypes h5 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color, #e0e0e0);
+  font-size: 0.875rem;
+}
+
+.typeItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted-color, #888888);
+  margin-bottom: 0.25rem;
+}
+
+.clearButton {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--accent-color, #ff6b35);
+  color: var(--background-color, #ffffff);
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.clearButton:hover {
+  opacity: 0.9;
+}
+
+/* Recovery Panel */
+.recoveryPanel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--surface-color, #111111);
+  border: 2px solid var(--accent-color, #ff6b35);
+  border-radius: 12px;
+  padding: 0;
+  max-width: 500px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 10000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.panelContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  background: var(--card-color, #1a1a1a);
+  border-radius: 12px 12px 0 0;
+}
+
+.panelHeader h3 {
+  margin: 0;
+  color: var(--text-color, #e0e0e0);
+  font-size: 1.25rem;
+}
+
+.dismissButton {
+  background: none;
+  border: none;
+  color: var(--text-muted-color, #888888);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.dismissButton:hover {
+  background: var(--border-color, rgba(255, 255, 255, 0.1));
+  color: var(--text-color, #e0e0e0);
+}
+
+.panelBody {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.panelBody p {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-color, #e0e0e0);
+  line-height: 1.5;
+}
+
+.recoveryActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.recoveryButton {
+  padding: 0.75rem 1rem;
+  background: var(--primary-color, #00ff9d);
+  color: var(--background-color, #0a0a0a);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recoveryButton:hover {
+  background: var(--primary-color, #00ff9d);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.recoveryButton:nth-child(2) {
+  background: var(--secondary-color, #4a9eff);
+  color: var(--background-color, #ffffff);
+}
+
+.recoveryButton:nth-child(3) {
+  background: var(--accent-color, #ff6b35);
+  color: var(--background-color, #ffffff);
+}
+
+/* Error Details */
+.errorDetails {
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.errorDetails summary {
+  padding: 0.75rem;
+  background: var(--card-color, #1a1a1a);
+  color: var(--text-color, #e0e0e0);
+  cursor: pointer;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+}
+
+.errorDetails summary:hover {
+  background: var(--surface-color, #111111);
+}
+
+.errorList {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.errorItem {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.errorItem:last-child {
+  border-bottom: none;
+}
+
+.errorType {
+  background: var(--accent-color, #ff6b35);
+  color: var(--background-color, #ffffff);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.errorMessage {
+  color: var(--text-color, #e0e0e0);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.errorTime {
+  color: var(--text-muted-color, #888888);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .errorStats {
+    top: 5px;
+    right: 5px;
+    left: 5px;
+    max-width: none;
+  }
+
+  .recoveryPanel {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .panelHeader {
+    padding: 1rem;
+  }
+
+  .panelBody {
+    padding: 1rem;
+  }
+
+  .recoveryActions {
+    grid-template-columns: 1fr;
+  }
+
+  .errorItem {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .errorType {
+    justify-self: start;
+  }
+
+  .errorTime {
+    justify-self: end;
+  }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .errorStats {
+    background: #1a1a1a;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .recoveryPanel {
+    background: #1a1a1a;
+    border-color: #ff6b35;
+  }
+
+  .panelHeader {
+    background: #111111;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .errorDetails {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .errorDetails summary {
+    background: #111111;
+  }
+
+  .errorDetails summary:hover {
+    background: #0a0a0a;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  .recoveryPanel {
+    border-width: 3px;
+  }
+
+  .recoveryButton {
+    border: 2px solid currentColor;
+  }
+
+  .errorType {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .recoveryPanel {
+    animation: none;
+  }
+
+  .recoveryButton {
+    transition: none;
+  }
+
+  .recoveryButton:hover {
+    transform: none;
+  }
+
+  .dismissButton {
+    transition: none;
+  }
+}

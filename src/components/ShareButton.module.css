@@ -1,0 +1,331 @@
+/* === SHARE BUTTON COMPONENT === */
+
+.shareButton {
+  position: fixed;
+  z-index: 9998;
+  font-family: var(--font-mono, 'ui-monospace', 'Menlo', 'Monaco', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', sans-serif);
+}
+
+/* Positioning variants */
+.shareButton.bottom-left {
+  bottom: 6rem;
+  left: 2rem;
+}
+
+.shareButton.bottom-right {
+  bottom: 6rem;
+  right: 2rem;
+}
+
+.shareButton.top-left {
+  top: 6rem;
+  left: 2rem;
+}
+
+.shareButton.top-right {
+  top: 6rem;
+  right: 2rem;
+}
+
+/* === SHARE TOGGLE BUTTON === */
+
+.shareToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface-color-alpha, rgba(30, 30, 30, 0.95));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.2));
+  border-radius: 50px;
+  padding: 0.75rem 1rem;
+  color: var(--text-color, white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 8px 32px var(--shadow-dark, rgba(0, 0, 0, 0.3)),
+    inset 0 1px 0 var(--surface-highlight, rgba(255, 255, 255, 0.1));
+  user-select: none;
+}
+
+.shareToggle:hover {
+  background: var(--surface-color-alpha-hover, rgba(40, 40, 40, 0.95));
+  border-color: var(--secondary-color-alpha-border, rgba(255, 107, 53, 0.4));
+  box-shadow:
+    0 12px 40px var(--shadow-dark-hover, rgba(0, 0, 0, 0.4)),
+    0 0 20px var(--secondary-color-glow, rgba(255, 107, 53, 0.2)),
+    inset 0 1px 0 var(--surface-highlight, rgba(255, 255, 255, 0.1));
+  transform: translateY(-2px);
+}
+
+.shareToggle:active {
+  transform: translateY(0);
+}
+
+.shareIcon {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 8px var(--secondary-color-glow, rgba(255, 107, 53, 0.3)));
+  transition: all 0.3s ease;
+}
+
+.shareLabel {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* === BACKDROP === */
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+}
+
+/* === SHARE MENU === */
+
+.shareMenu {
+  position: absolute;
+  bottom: calc(100% + 1rem);
+  left: 0;
+  width: 280px;
+  background: var(--surface-color-alpha, rgba(20, 20, 20, 0.98));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.2));
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 20px 60px var(--shadow-dark, rgba(0, 0, 0, 0.5)),
+    inset 0 1px 0 var(--surface-highlight, rgba(255, 255, 255, 0.1));
+  overflow: hidden;
+}
+
+/* Menu positioning for different button positions */
+.shareButton.bottom-right .shareMenu {
+  left: auto;
+  right: 0;
+}
+
+.shareButton.top-left .shareMenu,
+.shareButton.top-right .shareMenu {
+  bottom: auto;
+  top: calc(100% + 1rem);
+}
+
+.shareButton.top-right .shareMenu {
+  left: auto;
+  right: 0;
+}
+
+/* === MENU HEADER === */
+
+.menuHeader {
+  padding: 1rem 1.25rem 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color, white);
+  background: linear-gradient(135deg, var(--secondary-color, #ff6b35), var(--accent-color, #4a9eff));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text 3s ease-in-out infinite;
+}
+
+@keyframes gradient-text {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* === MENU ITEMS === */
+
+.menuItems {
+  padding: 0.75rem 0;
+}
+
+.shareOption {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  color: var(--text-color, white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.shareOption:hover {
+  background: var(--surface-color-alpha-hover, rgba(255, 255, 255, 0.05));
+  color: var(--secondary-color, #ff6b35);
+}
+
+.optionIcon {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.optionName {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* === URL PREVIEW === */
+
+.urlPreview {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  background: var(--surface-color-alpha, rgba(255, 255, 255, 0.02));
+  font-size: 0.75rem;
+}
+
+.urlLabel {
+  color: var(--text-muted, rgba(255, 255, 255, 0.7));
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.urlText {
+  color: var(--text-secondary, rgba(255, 255, 255, 0.9));
+  font-family: monospace;
+  word-break: break-all;
+  background: var(--surface-color-alpha, rgba(255, 255, 255, 0.05));
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+}
+
+/* === MOBILE RESPONSIVENESS === */
+
+@media (max-width: 768px) {
+  .shareButton {
+    bottom: 1rem;
+    left: 1rem;
+    right: auto;
+  }
+
+  .shareButton.bottom-right {
+    left: auto;
+    right: 1rem;
+  }
+
+  .shareToggle {
+    padding: 0.75rem;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+  }
+
+  .shareLabel {
+    display: none;
+  }
+
+  .shareMenu {
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    width: 90vw;
+    max-width: 300px;
+    right: auto;
+    top: auto;
+  }
+
+  .shareButton.bottom-right .shareMenu,
+  .shareButton.top-left .shareMenu,
+  .shareButton.top-right .shareMenu {
+    position: fixed;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    right: auto;
+    top: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .shareMenu {
+    width: 85vw;
+    max-width: 280px;
+  }
+
+  .menuItems {
+    padding: 0.5rem 0;
+  }
+
+  .shareOption {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .optionIcon {
+    font-size: 1rem;
+  }
+
+  .urlPreview {
+    padding: 0.6rem 1rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* === ACCESSIBILITY === */
+
+.shareToggle:focus {
+  outline: 2px solid var(--secondary-color, #ff6b35);
+  outline-offset: 2px;
+}
+
+.shareOption:focus {
+  outline: 2px solid var(--secondary-color, #ff6b35);
+  outline-offset: -2px;
+}
+
+/* === REDUCED MOTION === */
+
+@media (prefers-reduced-motion: reduce) {
+  .shareToggle,
+  .shareOption {
+    transition: none;
+  }
+
+  .menuHeader {
+    animation: none;
+  }
+
+  .shareToggle:hover {
+    transform: none;
+  }
+}
+
+/* === HIGH CONTRAST === */
+
+@media (prefers-contrast: high) {
+  .shareMenu {
+    border-width: 2px;
+  }
+
+  .shareToggle {
+    border-width: 2px;
+  }
+
+  .urlText {
+    border-width: 2px;
+  }
+}

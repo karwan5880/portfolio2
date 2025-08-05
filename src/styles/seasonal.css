@@ -1,0 +1,318 @@
+/* Seasonal Theme Styles */
+
+/* Christmas Theme */
+.theme-christmas {
+  /* Christmas lights effect */
+  --christmas-light-1: #dc2626;
+  --christmas-light-2: #16a34a;
+  --christmas-light-3: #fbbf24;
+  --christmas-light-4: #3b82f6;
+}
+
+.theme-christmas .christmas-lights {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-christmas .christmas-lights::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--christmas-light-1) 0%, var(--christmas-light-2) 25%, var(--christmas-light-3) 50%, var(--christmas-light-4) 75%, var(--christmas-light-1) 100%);
+  background-size: 40px 4px;
+  animation: christmas-lights-move 3s linear infinite;
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+}
+
+@keyframes christmas-lights-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 0;
+  }
+}
+
+/* Holly border effect */
+.theme-christmas .holly-border {
+  border-image: repeating-linear-gradient(45deg, var(--primary-color), var(--primary-color) 10px, var(--secondary-color) 10px, var(--secondary-color) 20px) 1;
+}
+
+/* Candle glow effect */
+.theme-christmas .candle-glow {
+  box-shadow:
+    0 0 20px var(--accent-color-glow),
+    0 0 40px var(--accent-color-glow),
+    inset 0 0 20px rgba(251, 191, 36, 0.1);
+  animation: candle-flicker 2s ease-in-out infinite alternate;
+}
+
+@keyframes candle-flicker {
+  0% {
+    box-shadow:
+      0 0 20px var(--accent-color-glow),
+      0 0 40px var(--accent-color-glow),
+      inset 0 0 20px rgba(251, 191, 36, 0.1);
+  }
+  100% {
+    box-shadow:
+      0 0 30px var(--accent-color-glow),
+      0 0 60px var(--accent-color-glow),
+      inset 0 0 30px rgba(251, 191, 36, 0.2);
+  }
+}
+
+/* New Year Theme */
+.theme-new-year {
+  /* Golden shimmer effect */
+  --golden-shimmer: linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.5) 50%, transparent 70%);
+}
+
+.theme-new-year .golden-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-new-year .golden-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--golden-shimmer);
+  animation: shimmer-sweep 3s ease-in-out infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Champagne glass effect */
+.theme-new-year .champagne-glass {
+  background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.2) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 100%);
+  animation: champagne-bubble 4s ease-in-out infinite;
+}
+
+@keyframes champagne-bubble {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.05);
+  }
+}
+
+/* Countdown timer styling */
+.theme-new-year .countdown-timer {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-shadow:
+    0 0 10px var(--primary-color-glow),
+    0 0 20px var(--primary-color-glow),
+    0 0 30px var(--primary-color-glow);
+  animation: countdown-pulse 1s ease-in-out infinite;
+}
+
+@keyframes countdown-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Snow Theme */
+.theme-snow {
+  /* Frost overlay effect */
+  --frost-pattern: radial-gradient(circle at 20% 20%, rgba(224, 242, 254, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(224, 242, 254, 0.08) 0%, transparent 50%);
+}
+
+.theme-snow .frost-overlay {
+  position: relative;
+}
+
+.theme-snow .frost-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--frost-pattern);
+  pointer-events: none;
+  animation: frost-shift 10s ease-in-out infinite;
+}
+
+@keyframes frost-shift {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.02);
+  }
+}
+
+/* Icicle effect */
+.theme-snow .icicles {
+  position: relative;
+}
+
+.theme-snow .icicles::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(224, 242, 254, 0.3) 50%, rgba(224, 242, 254, 0.6) 100%);
+  clip-path: polygon(0% 0%, 5% 100%, 10% 0%, 15% 100%, 20% 0%, 25% 100%, 30% 0%, 35% 100%, 40% 0%, 45% 100%, 50% 0%, 55% 100%, 60% 0%, 65% 100%, 70% 0%, 75% 100%, 80% 0%, 85% 100%, 90% 0%, 95% 100%, 100% 0%);
+}
+
+/* Breath effect */
+.theme-snow .breath-effect {
+  animation: breath-mist 3s ease-in-out infinite;
+}
+
+@keyframes breath-mist {
+  0%,
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+  50% {
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+}
+
+/* Snow accumulation effect */
+.theme-snow .snow-accumulation {
+  position: relative;
+}
+
+.theme-snow .snow-accumulation::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+  border-radius: 4px 4px 0 0;
+  animation: snow-accumulate 20s ease-in-out infinite;
+}
+
+@keyframes snow-accumulate {
+  0% {
+    height: 2px;
+  }
+  50% {
+    height: 8px;
+  }
+  100% {
+    height: 2px;
+  }
+}
+
+/* General seasonal enhancements */
+.seasonal-theme-active {
+  transition: all 0.5s ease-in-out;
+}
+
+/* Seasonal button styles */
+.seasonal-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.theme-christmas .seasonal-button:hover {
+  box-shadow: 0 0 20px var(--primary-color-glow);
+}
+
+.theme-new-year .seasonal-button:hover {
+  box-shadow: 0 0 20px var(--primary-color-glow);
+  transform: translateY(-2px);
+}
+
+.theme-snow .seasonal-button:hover {
+  box-shadow: 0 0 15px var(--primary-color-glow);
+  filter: brightness(1.1);
+}
+
+/* Seasonal text effects */
+.seasonal-text {
+  transition: all 0.3s ease;
+}
+
+.theme-christmas .seasonal-text {
+  text-shadow: 0 0 10px var(--primary-color-glow);
+}
+
+.theme-new-year .seasonal-text {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text 3s ease-in-out infinite;
+}
+
+@keyframes gradient-text {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.theme-snow .seasonal-text {
+  color: var(--primary-color);
+  text-shadow: 0 0 8px var(--primary-color-glow);
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .theme-christmas .christmas-lights::before,
+  .theme-christmas .candle-glow,
+  .theme-new-year .golden-shimmer::before,
+  .theme-new-year .champagne-glass,
+  .theme-new-year .countdown-timer,
+  .theme-new-year .seasonal-text,
+  .theme-snow .frost-overlay::before,
+  .theme-snow .breath-effect,
+  .theme-snow .snow-accumulation::after {
+    animation: none;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .theme-christmas,
+  .theme-new-year,
+  .theme-snow {
+    --primary-color-alpha: rgba(255, 255, 255, 0.3);
+    --secondary-color-alpha: rgba(255, 255, 255, 0.2);
+    --accent-color-alpha: rgba(255, 255, 255, 0.25);
+  }
+}

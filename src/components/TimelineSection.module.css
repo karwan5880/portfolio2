@@ -1,0 +1,303 @@
+.timelineWrapper {
+  min-height: 100vh;
+  background-color: var(--background-color, #0a0a0a);
+  padding: 2rem;
+  font-family: var(--font-mono, monospace);
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timelineContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--surface-color, #121212);
+  color: var(--text-color, #d0d0d0);
+  padding: 3rem 2rem 5rem 2rem;
+  border: 1px solid var(--border-color, #333);
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.header {
+  color: var(--primary-color, #00ff00);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.scrollHint {
+  text-align: center;
+  margin-bottom: 2rem;
+  opacity: 0.7;
+}
+
+.scrollHint span {
+  font-size: 0.9rem;
+  color: var(--text-muted, #888);
+  background: var(--primary-color-alpha, rgba(0, 255, 0, 0.1));
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--primary-color-alpha-border, rgba(0, 255, 0, 0.2));
+  transition: all 0.3s ease;
+}
+
+.scrollHint span:hover {
+  background: var(--primary-color-alpha-hover, rgba(0, 255, 0, 0.15));
+  border-color: var(--primary-color-alpha-border-hover, rgba(0, 255, 0, 0.3));
+}
+
+.timelineScrollContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 0;
+  overflow-x: auto;
+  /* Enhanced scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color-alpha, rgba(0, 255, 0, 0.6)) var(--scrollbar-track, rgba(255, 255, 255, 0.1));
+}
+
+/* Custom scrollbar for webkit browsers */
+.timelineScrollContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.timelineScrollContainer::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.1));
+  border-radius: 3px;
+}
+
+.timelineScrollContainer::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--border-color, #333), var(--primary-color, #00ff00), var(--border-color, #333));
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.timelineScrollContainer::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, var(--border-color-hover, #555), var(--primary-color-bright, #00ff44), var(--border-color-hover, #555));
+  box-shadow: 0 0 8px var(--primary-color-glow, rgba(0, 255, 0, 0.5));
+}
+
+.timelineLine {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--border-color, #333), var(--primary-color, #00ff00), var(--border-color, #333));
+  z-index: 0;
+  /* Calculate width based on timeline items: 14 items * (80px width + 2rem gap) */
+  width: calc(14 * 80px + 13 * 2rem);
+  transform-origin: left center;
+}
+
+.timelineItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.timelineItem:hover {
+  transform: scale(1.05);
+}
+
+.timelineYear {
+  font-size: 0.8rem;
+  color: var(--text-muted, #888);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.timelineIcon {
+  font-size: 2rem;
+  background-color: var(--surface-color, #121212);
+  border: 2px solid var(--border-color, #333);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 3;
+}
+
+.timelineLabel {
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--text-color, #d0d0d0);
+  font-weight: 500;
+}
+
+/* Status-based styling */
+.complete .timelineIcon {
+  border-color: var(--success-color, #00ff00);
+  background-color: var(--surface-color, #121212);
+}
+
+.complete .timelineIcon:hover {
+  box-shadow: 0 0 15px var(--success-color-glow, rgba(0, 255, 0, 0.4));
+}
+
+.pause .timelineIcon {
+  border-color: var(--warning-color, #ffaa00);
+  background-color: var(--surface-color, #121212);
+}
+
+.pause .timelineIcon:hover {
+  box-shadow: 0 0 15px var(--warning-color-glow, rgba(255, 170, 0, 0.4));
+}
+
+.failed .timelineIcon {
+  border-color: var(--error-color, #ff4444);
+  background-color: var(--surface-color, #121212);
+}
+
+.failed .timelineIcon:hover {
+  box-shadow: 0 0 15px var(--error-color-glow, rgba(255, 68, 68, 0.4));
+}
+
+.running .timelineIcon {
+  border-color: var(--info-color, #00aaff);
+  background-color: var(--surface-color, #121212);
+  animation: pulse 2s infinite;
+}
+
+.running .timelineIcon:hover {
+  box-shadow: 0 0 15px var(--info-color-glow, rgba(0, 170, 255, 0.4));
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  color: var(--info-color, #00aaff);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.runningDot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--info-color, #00aaff);
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .timelineWrapper {
+    padding: 1rem;
+  }
+
+  .timelineContainer {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+
+  .header {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .timelineScrollContainer {
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .timelineItem {
+    min-width: 70px;
+  }
+
+  .timelineIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .timelineYear {
+    font-size: 0.7rem;
+  }
+
+  .timelineLabel {
+    font-size: 0.8rem;
+  }
+
+  .statusIndicator {
+    font-size: 0.9rem;
+  }
+
+  .scrollHint span {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Theme-aware animations */
+@media (prefers-reduced-motion: reduce) {
+  .timelineItem,
+  .timelineIcon,
+  .scrollHint span {
+    transition: none;
+  }
+
+  .running .timelineIcon {
+    animation: none;
+  }
+
+  .runningDot {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .timelineContainer {
+    border-width: 2px;
+  }
+
+  .timelineIcon {
+    border-width: 3px;
+  }
+
+  .scrollHint span {
+    border-width: 2px;
+  }
+}

@@ -12,7 +12,7 @@
   font-family: 'Fira Code', 'Victor Mono', monospace; /* The same font as your comments */
   white-space: nowrap;
 }
-:global([class*='comment-']) {
+.commentGlobal :global([class*='comment-']) {
   font-size: 1.2rem;
   font-style: italic;
   font-family: 'Fira Code', 'Victor Mono', monospace; /* A nice coding font */

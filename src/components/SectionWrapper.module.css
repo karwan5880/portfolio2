@@ -1,0 +1,209 @@
+/* Section Wrapper with Parallax Support */
+.sectionWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh; /* Ensure exact viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden; /* Prevent content overflow */
+  /* Remove CSS transitions as Framer Motion handles animations */
+}
+
+/* Parallax container for background elements */
+.parallaxContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.parallaxElement {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sectionWrapper.visible {
+  /* Framer Motion handles visibility animations */
+}
+
+.sectionWrapper.animated {
+  /* Additional styles for sections that have been animated */
+}
+
+/* Section Content */
+.sectionContent {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* Allow content scrolling if needed */
+  overflow-x: hidden;
+  z-index: 1; /* Ensure content is above parallax elements */
+}
+
+/* Ensure child components fill the section properly */
+.sectionContent > * {
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh; /* Exact height for proper layout */
+}
+
+/* Scrolling state styles */
+.sectionWrapper.scrolling {
+  /* Optional: Add styles during scroll for performance */
+}
+
+/* Animation state improvements */
+.sectionWrapper.animated {
+  /* Ensure animated sections maintain proper layout */
+}
+
+/* Smooth scrolling behavior - handled globally in globals.css */
+
+/* Scroll snap for better section navigation */
+.sectionsContainer {
+  scroll-snap-type: y mandatory;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .sectionWrapper {
+    min-height: 100vh;
+    height: 100vh;
+    padding: 0;
+  }
+
+  .sectionContent {
+    padding: 0;
+    /* Allow more flexible height on mobile */
+    min-height: 100vh;
+  }
+
+  .sectionContent > * {
+    min-height: 100vh;
+    height: auto; /* More flexible on mobile */
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .sectionWrapper {
+    /* Framer Motion animations are handled by useAnimations hook */
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+}
+
+/* Focus management for keyboard navigation */
+.sectionWrapper:focus-within {
+  outline: 2px solid var(--primary-color, #00ff9d);
+  outline-offset: -2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sectionWrapper {
+    border: 1px solid transparent;
+  }
+
+  .sectionWrapper.visible {
+    border-color: white;
+  }
+}
+/* Accessibility Enhancements */
+.sectionWrapper.reducedMotion {
+  scroll-behavior: auto;
+}
+
+.sectionWrapper.reducedMotion * {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0.01ms !important;
+}
+
+.sectionWrapper[data-screen-reader='true'] {
+  /* Enhanced styles for screen reader users */
+}
+
+.sectionWrapper[data-screen-reader='true']:focus {
+  outline: 3px solid var(--focus-color, #66b3ff);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Focus management */
+.sectionWrapper:focus-visible {
+  outline: 2px solid var(--focus-color, #66b3ff);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sectionWrapper:focus {
+    outline: 3px solid white;
+    outline-offset: 2px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Ensure proper heading hierarchy */
+.sectionWrapper h1,
+.sectionWrapper h2,
+.sectionWrapper h3,
+.sectionWrapper h4,
+.sectionWrapper h5,
+.sectionWrapper h6 {
+  scroll-margin-top: 2rem;
+}
+
+/* Skip link target styling */
+.sectionWrapper:target {
+  scroll-margin-top: 2rem;
+}
+
+/* Screen reader announcements */
+.sectionWrapper[aria-current='page'] {
+  /* Additional styling for current section */
+  position: relative;
+}
+
+.sectionWrapper[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--focus-color, #66b3ff);
+  opacity: 0.7;
+  z-index: 1;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .sectionWrapper {
+    scroll-behavior: auto;
+  }
+
+  .sectionWrapper * {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0.01ms !important;
+  }
+}

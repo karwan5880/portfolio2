@@ -10,17 +10,22 @@ export function DogEar({ href, 'aria-label': ariaLabel, position = 'bottom-right
   // Get the sound-playing action from our store
   const playUISound = useAudioStore((state) => state.playUISound)
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     // 1. Trigger the global sound effect
     playUISound('dogEar')
 
     // 2. Call the optional callback if it exists
     if (onNavigateStart) {
       onNavigateStart()
+      // onNavigateStart(e)
     }
 
-    // 3. That's it! We DO NOT call e.preventDefault().
-    // The Next.js <Link> will now handle the navigation instantly.
+    // // 3. If the callback prevented default, don't navigate
+    // if (e && e.defaultPrevented) {
+    //   return
+    // }
+
+    // 4. Otherwise, let Next.js <Link> handle the navigation
   }
 
   const positionClass = position === 'bottom-left' ? styles.bottomLeft : styles.bottomRight

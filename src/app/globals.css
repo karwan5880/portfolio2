@@ -1,20 +1,33 @@
 @import 'tailwindcss';
 
 :root {
+  /* Theme colors - will be dynamically set by ThemeProvider */
   --primary-color: #00ff9d;
+  --secondary-color: #4a9eff;
+  --background-color: #0a0a0a;
+  --surface-color: #111111;
+  --card-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --text-muted-color: #888888;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-color: #ff6b35;
+  --tag-bg-color: rgba(0, 255, 157, 0.1);
+  --tag-border-color: rgba(0, 255, 157, 0.3);
+
+  /* Skill level colors - preserved from original */
   --expert-color: #ff6b35;
   --advanced-color: #00ff9d;
   --intermediate-color: #4a9eff;
   --beginner-color: #9d4edd;
   --emerging-color: #ffd60a;
-  --bg-color: #0a0a0a;
-  --container-bg: #111;
-  --card-bg: #1a1a1a;
-  --text-color: #e0e0e0;
-  --text-muted: #888;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --tag-bg: rgba(0, 255, 157, 0.1);
-  --tag-border: rgba(0, 255, 157, 0.3);
+
+  /* Legacy aliases for backward compatibility */
+  --bg-color: var(--background-color);
+  --container-bg: var(--surface-color);
+  --card-bg: var(--card-color);
+  --text-muted: var(--text-muted-color);
+  --tag-bg: var(--tag-bg-color);
+  --tag-border: var(--tag-border-color);
 }
 
 html {
@@ -31,8 +44,20 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  color-scheme: dark;
-
-  background-color: transparent;
+  background-color: var(--background-color);
+  color: var(--text-color);
   overscroll-behavior-y: contain;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+/* Global scroll behavior for multiverse portfolio */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
