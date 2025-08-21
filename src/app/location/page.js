@@ -3,12 +3,12 @@
 import dynamic from 'next/dynamic'
 import { Suspense, useRef, useState } from 'react'
 
-import { CornerLink } from '@/components/CornerLink'
+import { CornerLink } from '@/components/shared/CornerLink'
 
 import styles from './page.module.css'
 import { useAudioStore } from '@/stores/audioStore'
 
-const Scene = dynamic(() => import('@/components/Scene'), {
+const Scene = dynamic(() => import('@/components/location/Scene'), {
   ssr: false,
   loading: () => (
     <div>

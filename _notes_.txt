@@ -138,8 +138,28 @@ transformations
 animations
 visual stunning
 liquid glass
+truly premium
+
+mouse interactions
 
 npm install @react-spring/web react-spring @react-three/fiber @react-three/drei three react-lottie-player react-particles react-reveal react-use-gesture @react-spring/parallax
 
 npm install @react-spring/web @react-three/fiber @react-three/drei three react-use-gesture --legacy-peer-deps
 npm install @use-gesture/react lottie-react --legacy-peer-deps
+
+npm install uuid xlsx papaparse file-saver moment @dnd-kit/sortable @dnd-kit/utilities @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction
+npm install @dnd-kit/modifiers
+npm install @dnd-kit/core
+npm install react-day-picker
+npm audit
+
+npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
+npm install opentype.js
+npm install gsap
+npm i animejs
+npm install lottie-react
+npm install vivus
+npm install vara
+
+
+npm run deploy

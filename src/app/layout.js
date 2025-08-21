@@ -37,8 +37,19 @@ export default function RootLayout({ children }) {
     '@type': 'Person',
     name: 'Leong Kar Wan',
     jobTitle: 'Software Engineer',
-    description: 'M.Eng.Sc. | B.Comp.Sc. (Hons.) | Software Engineer specializing in Python, C++, React, Computer Vision, AI, Embedded Systems, and Robotics',
-    knowsAbout: ['Python Programming', 'C++ Programming', 'React Development', 'Computer Vision', 'Artificial Intelligence', 'Embedded Systems', 'Robotics', 'Machine Learning', 'Full Stack Development'],
+    description:
+      'M.Eng.Sc. | B.Comp.Sc. (Hons.) | Software Engineer specializing in Python, C++, React, Computer Vision, AI, Embedded Systems, and Robotics',
+    knowsAbout: [
+      'Python Programming',
+      'C++ Programming',
+      'React Development',
+      'Computer Vision',
+      'Artificial Intelligence',
+      'Embedded Systems',
+      'Robotics',
+      'Machine Learning',
+      'Full Stack Development',
+    ],
     alumniOf: [
       {
         '@type': 'EducationalOrganization',
@@ -60,6 +71,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>

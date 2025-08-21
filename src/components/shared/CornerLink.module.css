@@ -1,0 +1,90 @@
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 255, 157, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(0, 255, 157, 0.2);
+  }
+}
+
+.cornerLink {
+  position: fixed;
+  z-index: 1000;
+  padding: 0.75rem 1.5rem;
+  color: #a0a0a0;
+  text-decoration: none;
+  font-family: 'ui-monospace', 'Menlo', 'Monaco', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+  animation: pulse-glow 4s infinite ease-in-out;
+}
+
+.cornerLink:hover {
+  color: #00ff9d;
+  text-shadow: 0 0 8px rgba(0, 255, 157, 0.7);
+}
+
+/* The corner brackets created with pseudo-elements */
+.cornerLink::before,
+.cornerLink::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #555;
+  transition: border-color 0.3s ease;
+}
+
+.cornerLink:hover::before,
+.cornerLink:hover::after {
+  border-color: #00ff9d;
+}
+
+/* Positioning for the top-left and bottom-right corners of the bracket */
+.cornerLink::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.cornerLink::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* Positioning for the entire component */
+.bottomLeft {
+  left: 2rem;
+  bottom: 3rem;
+}
+
+.bottomRight {
+  right: 2rem;
+  bottom: 3rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .bottomLeft {
+    left: 1rem;
+    bottom: 2rem;
+  }
+  .bottomRight {
+    right: 1rem;
+    bottom: 2rem;
+  }
+  .cornerLink {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}

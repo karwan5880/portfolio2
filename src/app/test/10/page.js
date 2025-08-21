@@ -1,0 +1,54 @@
+'use client'
+
+import { useEffect } from 'react'
+
+export default function Page() {
+  useEffect(() => {
+    // Load Vara.js dynamically (it relies on window/document)
+    const loadVara = async () => {
+      if (!window.Vara) {
+        const script = document.createElement('script')
+        script.src = 'https://cdn.jsdelivr.net/npm/vara@1.4.0/lib/vara.min.js'
+        script.async = true
+        script.onload = initVara
+        document.body.appendChild(script)
+      } else {
+        initVara()
+      }
+    }
+
+    const initVara = () => {
+      // Clean up old SVG if re-rendered
+      const container = document.getElementById('vara-container')
+      container.innerHTML = ''
+
+      new window.Vara(
+        '#vara-container',
+        'https://raw.githubusercontent.com/akzhy/Vara/master/fonts/Satisfy/SatisfySL.json',
+        // 'https://raw.githubusercontent.com/akzhy/Vara/master/fonts/Pacifico/PacificoSLO.json',
+        // 'https://raw.githubusercontent.com/akzhy/Vara/master/fonts/Parisienne/Parisienne.json',
+        // 'https://raw.githubusercontent.com/akzhy/Vara/master/fonts/Shadows-Into-Light/shadows-into-light.json',
+        [
+          {
+            text: 'Leong Kar Wan',
+            fontSize: 48,
+            strokeWidth: 2,
+            color: '#000',
+            y: 40, // vertical offset so it appears inside container
+          },
+        ],
+        {
+          duration: 2000, // animation speed
+        }
+      )
+    }
+
+    loadVara()
+  }, [])
+
+  return (
+    <main className="flex items-center justify-center h-screen bg-gray-100">
+      <div id="vara-container" className="w-[600px] h-[200px] border border-gray-300"></div>
+    </main>
+  )
+}

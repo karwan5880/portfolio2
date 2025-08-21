@@ -1,0 +1,639 @@
+.neuralNetworkBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  background-color: #121212;
+}
+
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+/* 
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #333;
+  perspective: 1000px;
+} */
+
+.documentContainer {
+  max-width: 850px;
+  width: 100%;
+  background-color: #121212;
+  color: #d0d0d0;
+  padding: 2.5rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  position: relative;
+}
+
+.pageActions {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10;
+  display: flex; /* This is key for side-by-side layout */
+  gap: 1rem; /* This controls the space between the icons */
+}
+
+@media (max-width: 768px) {
+  .pageActions {
+    top: 1rem;
+    right: 1rem;
+    gap: 0.75rem;
+  }
+}
+
+.jobTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.companyName::after {
+  content: ' -';
+  white-space: pre;
+}
+
+@media (max-width: 768px) {
+  .jobTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+  }
+
+  .companyName::after {
+    content: '';
+  }
+
+  .roleName {
+    font-size: 0.9em;
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 1rem;
+  }
+
+  .documentContainer {
+    padding: 2rem 1.5rem;
+    font-size: 15px;
+  }
+}
+
+.dogEar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.dogEar::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  background-color: #121212;
+  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
+  border: 25px solid transparent;
+  border-bottom-color: #333;
+  border-right-color: #333;
+  transition: all 0.3s ease;
+}
+
+.dogEar:hover::before {
+  border-width: 35px;
+  border-bottom-color: #8a2be2;
+  border-right-color: #8a2be2;
+  box-shadow: -10px -10px 15px rgba(138, 43, 226, 0.3);
+}
+
+.timeline {
+  position: relative;
+  max-width: 48rem; /* max-w-3xl */
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+/* ================================== */
+/* STUNNING LANDING HERO SECTION  */
+/* ================================== */
+
+/* Main hero container with advanced background effects */
+.heroContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient background */
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, #0f0f23, #1a1a2e, #16213e, #0f0f23);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Floating particles effect */
+.heroParticles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.heroParticle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: float 20s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Main title with multiple stunning effects */
+.heroTitle {
+  position: relative;
+  display: inline-block;
+  font-weight: 100;
+  letter-spacing: 0.05em;
+}
+
+/* Glitch effect wrapper */
+.glitchWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.glitchText {
+  position: relative;
+  color: #ffffff;
+  font-size: inherit;
+  animation: glitch 2s infinite;
+}
+
+.glitchText::before,
+.glitchText::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitchText::before {
+  animation: glitch-1 0.5s infinite;
+  color: #ff0040;
+  z-index: -1;
+}
+
+.glitchText::after {
+  animation: glitch-2 0.5s infinite;
+  color: #00ffff;
+  z-index: -2;
+}
+
+@keyframes glitch {
+  0%,
+  74%,
+  76%,
+  100% {
+    transform: translate(0);
+  }
+  75% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+@keyframes glitch-1 {
+  0%,
+  74%,
+  76%,
+  100% {
+    transform: translate(0);
+  }
+  75% {
+    transform: translate(2px, -2px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%,
+  74%,
+  76%,
+  100% {
+    transform: translate(0);
+  }
+  75% {
+    transform: translate(-2px, -2px);
+  }
+}
+
+/* Holographic text effect */
+.holographicText {
+  background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b, #ff006e);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holographic 3s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes holographic {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Neon glow effect */
+.neonText {
+  color: #ffffff;
+  text-shadow:
+    0 0 5px #ffffff,
+    0 0 10px #ffffff,
+    0 0 15px #ffffff,
+    0 0 20px #00ffff,
+    0 0 35px #00ffff,
+    0 0 40px #00ffff;
+  animation: neonFlicker 2s infinite alternate;
+}
+
+@keyframes neonFlicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    text-shadow:
+      0 0 5px #ffffff,
+      0 0 10px #ffffff,
+      0 0 15px #ffffff,
+      0 0 20px #00ffff,
+      0 0 35px #00ffff,
+      0 0 40px #00ffff;
+  }
+  20%,
+  24%,
+  55% {
+    text-shadow: none;
+  }
+}
+
+/* Typewriter effect */
+.typewriterText {
+  overflow: hidden;
+  border-right: 3px solid #ffffff;
+  white-space: nowrap;
+  animation:
+    typewriter 4s steps(40, end),
+    blink 0.75s step-end infinite;
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #ffffff;
+  }
+}
+
+/* 3D text effect */
+.text3D {
+  color: #ffffff;
+  text-shadow:
+    1px 1px 0 #ccc,
+    2px 2px 0 #c9c9c9,
+    3px 3px 0 #bbb,
+    4px 4px 0 #b9b9b9,
+    5px 5px 0 #aaa,
+    6px 6px 1px rgba(0, 0, 0, 0.1),
+    0 0 5px rgba(0, 0, 0, 0.1),
+    1px 1px 3px rgba(0, 0, 0, 0.3),
+    3px 3px 5px rgba(0, 0, 0, 0.2),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Liquid text effect */
+.liquidText {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.liquidText::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  clip-path: polygon(0 50%, 100% 60%, 100% 100%, 0% 100%);
+  animation: liquidWave 3s ease-in-out infinite;
+}
+
+@keyframes liquidWave {
+  0%,
+  100% {
+    clip-path: polygon(0 45%, 100% 55%, 100% 100%, 0% 100%);
+  }
+  50% {
+    clip-path: polygon(0 60%, 100% 40%, 100% 100%, 0% 100%);
+  }
+}
+
+/* Matrix rain effect */
+.matrixText {
+  position: relative;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+}
+
+.matrixText::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent, #00ff00, transparent);
+  animation: matrixRain 2s linear infinite;
+}
+
+@keyframes matrixRain {
+  0% {
+    top: -100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Shimmering text effect */
+.shimmerText {
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 40%, #ffff00 50%, #ffffff 60%, #ffffff 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Subtitle effects */
+.heroSubtitle {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out 2s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CTA button with advanced hover effects */
+.heroCTA {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.heroCTA::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.heroCTA:hover::before {
+  left: 100%;
+}
+
+.heroCTA:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+}
+
+/* Scroll indicator with pulse effect */
+.scrollIndicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+
+.scrollIndicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  animation: scrollPulse 2s infinite;
+}
+
+@keyframes scrollPulse {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(40px);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.5rem !important;
+  }
+
+  .glitchText::before,
+  .glitchText::after {
+    display: none; /* Disable glitch on mobile for performance */
+  }
+
+  .heroParticles {
+    display: none; /* Disable particles on mobile */
+  }
+}
+
+/* ================================== */
+/* 3. NEW JOURNEY (TIMELINE) SECTION  */
+/* ================================== */
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: relative;
+}
+.timelineLine {
+  position: absolute;
+  left: 0.75rem; /* Adjust this to center your icon */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #3b82f6; /* A nice blue color */
+}
+
+.timelineItem {
+  padding-left: 3rem; /* Creates space for the icon and line */
+  position: relative;
+}
+
+/* Add some space between timeline items */
+.timelineItem:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
+.timelineIcon {
+  position: absolute;
+  left: 0.75rem; /* Must match the .timelineLine left position */
+  top: 0.25rem;
+  transform: translateX(-50%);
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem; /* h-6 */
+  background-color: #3b82f6; /* bg-blue-500 */
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* This creates the ring effect against the section background */
+  border: 4px solid #1f2937;
+  color: #ffffff;
+}
+
+.timelineContent {
+  background-color: #111827; /* Darker than the section for contrast */
+  padding: 1.5rem;
+  border-radius: 0.5rem; /* rounded-lg */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timelinePeriod {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600;
+  color: #60a5fa; /* text-blue-400 */
+}
+.timelineRole {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: #ffffff;
+}
+.timelineCompany {
+  font-size: 1.125rem; /* text-lg */
+  color: #9ca3af; /* text-gray-400 */
+  margin-bottom: 0.75rem;
+}
+.timelineDescription {
+  color: #d1d5db; /* text-gray-300 */
+}

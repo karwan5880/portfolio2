@@ -1,0 +1,263 @@
+.neuralNetworkBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  background-color: #121212;
+}
+
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+/* 
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #333;
+  perspective: 1000px;
+} */
+
+.documentContainer {
+  max-width: 850px;
+  width: 100%;
+  background-color: #121212;
+  color: #d0d0d0;
+  padding: 2.5rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  position: relative;
+}
+
+.pageActions {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10;
+  display: flex; /* This is key for side-by-side layout */
+  gap: 1rem; /* This controls the space between the icons */
+}
+
+@media (max-width: 768px) {
+  .pageActions {
+    top: 1rem;
+    right: 1rem;
+    gap: 0.75rem;
+  }
+}
+
+.jobTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.companyName::after {
+  content: ' -';
+  white-space: pre;
+}
+
+@media (max-width: 768px) {
+  .jobTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+  }
+
+  .companyName::after {
+    content: '';
+  }
+
+  .roleName {
+    font-size: 0.9em;
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 1rem;
+  }
+
+  .documentContainer {
+    padding: 2rem 1.5rem;
+    font-size: 15px;
+  }
+}
+
+.dogEar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.dogEar::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  background-color: #121212;
+  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
+  border: 25px solid transparent;
+  border-bottom-color: #333;
+  border-right-color: #333;
+  transition: all 0.3s ease;
+}
+
+.dogEar:hover::before {
+  border-width: 35px;
+  border-bottom-color: #8a2be2;
+  border-right-color: #8a2be2;
+  box-shadow: -10px -10px 15px rgba(138, 43, 226, 0.3);
+}
+
+.timeline {
+  position: relative;
+  max-width: 48rem; /* max-w-3xl */
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+/* ================================== */
+/* LANDING HERO SECTION  */
+/* ================================== */
+
+.heroDrawnTextWrapper {
+  position: relative;
+  display: inline-block; /* This is important for layout */
+}
+
+/* This is the BOTTOM layer: the OUTLINE text. It's always visible. */
+.heroDrawnTextOutline {
+  color: transparent;
+  /* The prefixed version for maximum compatibility */
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
+  /* The standard version */
+  text-stroke: 1px rgba(255, 255, 255, 0.6);
+}
+
+/* This is the TOP layer: the FILLED text. It sits directly on top of the outline. */
+.heroDrawnTextFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #ffffff; /* The fill color */
+  /* We explicitly turn off the stroke for the fill layer */
+  -webkit-text-stroke: 0px;
+  text-stroke: 0px;
+}
+
+/* 2. We use a ::before pseudo-element to create the FILLED text layer */
+.heroDrawnText::before {
+  content: attr(data-text); /* This copies the text from the parent */
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  /* 3. This is the solid white fill color */
+  color: #ffffff;
+  -webkit-text-stroke: 0px; /* No stroke on the fill */
+  text-stroke: 0px;
+
+  /* 4. The MAGIC: We use a clip-path to hide the fill initially and then animate it */
+  clip-path: inset(0 100% 0 0); /* Hidden: clipped from the right */
+  transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1); /* Smooth animation */
+}
+
+/* 5. The animation state: we add a class to trigger the reveal */
+.animateFill::before {
+  clip-path: inset(0 0 0 0); /* Revealed: no clipping */
+}
+
+/* ================================== */
+/* 3. NEW JOURNEY (TIMELINE) SECTION  */
+/* ================================== */
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: relative;
+}
+.timelineLine {
+  position: absolute;
+  left: 0.75rem; /* Adjust this to center your icon */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #3b82f6; /* A nice blue color */
+}
+
+.timelineItem {
+  padding-left: 3rem; /* Creates space for the icon and line */
+  position: relative;
+}
+
+/* Add some space between timeline items */
+.timelineItem:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
+.timelineIcon {
+  position: absolute;
+  left: 0.75rem; /* Must match the .timelineLine left position */
+  top: 0.25rem;
+  transform: translateX(-50%);
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem; /* h-6 */
+  background-color: #3b82f6; /* bg-blue-500 */
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* This creates the ring effect against the section background */
+  border: 4px solid #1f2937;
+  color: #ffffff;
+}
+
+.timelineContent {
+  background-color: #111827; /* Darker than the section for contrast */
+  padding: 1.5rem;
+  border-radius: 0.5rem; /* rounded-lg */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timelinePeriod {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600;
+  color: #60a5fa; /* text-blue-400 */
+}
+.timelineRole {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: #ffffff;
+}
+.timelineCompany {
+  font-size: 1.125rem; /* text-lg */
+  color: #9ca3af; /* text-gray-400 */
+  margin-bottom: 0.75rem;
+}
+.timelineDescription {
+  color: #d1d5db; /* text-gray-300 */
+}

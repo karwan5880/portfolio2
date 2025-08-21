@@ -1,0 +1,246 @@
+/* Mobile Date Picker Styles */
+
+.mobile-day-picker {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #3b82f6;
+  --rdp-background-color: #ffffff;
+  --rdp-accent-color-dark: #2563eb;
+  --rdp-background-color-dark: #374151;
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+  width: 100%;
+  max-width: 280px;
+  margin: 10px 26px 10px 34px;
+  padding: 0 10 0 10;
+  box-sizing: border-box;
+}
+
+/* Dark mode support */
+.dark .mobile-day-picker {
+  --rdp-background-color: #374151;
+  --rdp-accent-color: #3b82f6;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .mobile-day-picker {
+    --rdp-cell-size: 44px; /* Larger touch targets on mobile */
+  }
+
+  .mobile-day-picker .rdp-months {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-day-picker .rdp-month {
+    width: 100%;
+  }
+
+  .mobile-day-picker .rdp-table {
+    width: 100%;
+    max-width: none;
+  }
+
+  .mobile-day-picker .rdp-cell {
+    padding: 2px;
+  }
+
+  .mobile-day-picker .rdp-day {
+    height: var(--rdp-cell-size);
+    width: var(--rdp-cell-size);
+    border-radius: 8px;
+    font-size: 16px; /* Prevent zoom on iOS */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation; /* Improve touch response */
+  }
+}
+
+/* Improve touch targets */
+.mobile-day-picker .rdp-day {
+  min-height: 40px;
+  min-width: 40px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom header navigation buttons are styled inline */
+
+/* Hide default caption since we use custom header */
+.mobile-day-picker .rdp-caption {
+  display: none !important;
+}
+
+.mobile-day-picker .rdp-caption_label {
+  display: none !important;
+}
+
+.mobile-day-picker .rdp-nav {
+  display: none !important;
+}
+
+/* NUCLEAR OPTION - Remove ALL possible spacing elements */
+.mobile-day-picker .rdp-month_caption,
+.mobile-day-picker .rdp-month-caption,
+.mobile-day-picker .rdp-caption_start,
+.mobile-day-picker .rdp-caption_end,
+.mobile-day-picker .rdp-caption_between,
+.mobile-day-picker .rdp-vhidden,
+.mobile-day-picker .rdp-button_reset,
+.mobile-day-picker .rdp-months > *:empty,
+.mobile-day-picker .rdp-month > *:empty,
+.mobile-day-picker [class*="caption"],
+.mobile-day-picker [class*="rdp-caption"],
+.mobile-day-picker [class*="rdp-month_caption"] {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Remove extra spacing from hidden elements */
+.mobile-day-picker .rdp-month {
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+/* Remove any spacing from month children */
+.mobile-day-picker .rdp-month > * {
+  margin: 0 !important;
+}
+
+.mobile-day-picker .rdp-table {
+  margin: 0 auto !important;
+  border-spacing: 0 !important;
+  width: 100%;
+  table-layout: fixed !important;
+  transform: translateX(-8px) !important;
+  height: 240px !important;
+}
+
+.mobile-day-picker .rdp-head {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-top: 4px !important;
+}
+
+.mobile-day-picker .rdp-tbody {
+  margin: 0 !important;
+  height: 240px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-evenly !important;
+}
+
+/* Ensure rows are properly spaced */
+.mobile-day-picker .rdp-row {
+  margin: 0;
+  gap: 0;
+}
+
+/* Ensure cells fill the space properly */
+.mobile-day-picker .rdp-cell {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Week day headers */
+.mobile-day-picker .rdp-head_cell {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* Selected day styling */
+.mobile-day-picker .rdp-day_selected {
+  background-color: var(--rdp-accent-color) !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.mobile-day-picker .rdp-day_selected:hover {
+  background-color: var(--rdp-accent-color-dark) !important;
+}
+
+/* Today styling */
+.mobile-day-picker .rdp-day_today:not(.rdp-day_selected) {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--rdp-accent-color);
+  font-weight: 600;
+}
+
+/* Disabled days */
+.mobile-day-picker .rdp-day_disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Outside month days */
+.mobile-day-picker .rdp-day_outside {
+  opacity: 0.4;
+}
+
+/* Desktop-specific improvements */
+@media (min-width: 640px) {
+  .mobile-day-picker {
+    --rdp-cell-size: 42px;
+  }
+}
+
+/* Hover effects for non-touch devices */
+@media (hover: hover) {
+  .mobile-day-picker
+    .rdp-day:not(.rdp-day_selected):not(.rdp-day_disabled):hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+
+  .mobile-day-picker .rdp-nav_button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    opacity: 1;
+  }
+
+  .dark .mobile-day-picker .rdp-nav_button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Focus styles for accessibility */
+.mobile-day-picker .rdp-day:focus {
+  outline: 2px solid var(--rdp-accent-color);
+  outline-offset: 2px;
+}
+
+.mobile-day-picker .rdp-nav_button:focus {
+  outline: 2px solid var(--rdp-accent-color);
+  outline-offset: 2px;
+}
+
+/* Animation for modal */
+.mobile-day-picker-modal {
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
