@@ -163,3 +163,7 @@ npm install vara
 
 
 npm run deploy
+
+npm install signature-animation
+
+npm install @svgr/webpack --save-dev

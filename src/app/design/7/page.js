@@ -119,6 +119,7 @@ const StunningLandingSection = () => {
   const ref = useRef(null)
   const [currentEffect, setCurrentEffect] = useState(0)
   const [showEffects, setShowEffects] = useState(false)
+  const [particles, setParticles] = useState([])
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -133,21 +134,32 @@ const StunningLandingSection = () => {
   const textEffects = ['holographic', 'neon', 'glitch', 'liquid', 'shimmer', 'typewriter', '3d', 'matrix']
 
   useEffect(() => {
+    // Generate floating particles only on the client-side
+    const generatedParticles = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      animationDelay: Math.random() * 20,
+      size: Math.random() * 3 + 1,
+    }))
+    setParticles(generatedParticles)
+
+    // This effect should only run once, so we can keep the rest of your logic here
     setShowEffects(true)
     const interval = setInterval(() => {
       setCurrentEffect((prev) => (prev + 1) % textEffects.length)
     }, 4000) // Change effect every 4 seconds
 
     return () => clearInterval(interval)
-  }, [])
+  }, []) // Empty dependency array ensures this runs only once on the client
+  // --- END: FIX FOR HYDRATION ERROR ---
 
-  // Generate floating particles
-  const particles = Array.from({ length: 50 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    animationDelay: Math.random() * 20,
-    size: Math.random() * 3 + 1,
-  }))
+  // // Generate floating particles
+  // const particles = Array.from({ length: 50 }, (_, i) => ({
+  //   id: i,
+  //   left: Math.random() * 100,
+  //   animationDelay: Math.random() * 20,
+  //   size: Math.random() * 3 + 1,
+  // }))
 
   const getTextEffectClass = (effect) => {
     switch (effect) {
@@ -404,9 +416,9 @@ const SkillsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <SkillCard title="Core Languages" delay={0.2}>
             <ul className="space-y-4">
-              {skills.core.map((skill) => (
-                <li key={skill} className="bg-slate-700/50 border border-white/10 rounded-xl p-4 text-center">
-                  <span className="text-lg md:text-xl font-medium text-white">{skill}</span>
+              {skills.main.map((skill) => (
+                <li key={skill.name} className="bg-slate-700/50 border border-white/10 rounded-xl p-4 text-center">
+                  <span className="text-lg md:text-xl font-medium text-white">{skill.name}</span>
                 </li>
               ))}
             </ul>

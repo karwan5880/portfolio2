@@ -1,0 +1,292 @@
+.landingSection {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+
+  /* background: linear-gradient(250deg, #1a1a2e, #16213e, #0f3460); */
+  /* background: linear-gradient(250deg, #023535, #015958, #008f8c); */
+  /* background: linear-gradient(250deg, #1c1c1c, #2d2d2d, #4a3f35); */
+  /* background: linear-gradient(250deg, #0d0d2b, #1c2c5c, #4a1c4f); */
+  /* background: linear-gradient(250deg, #002d2d, #044a42, #5a4623); */
+  /* background: linear-gradient(250deg, #2b004d, #d1007a, #ff7e5f); */
+  /* background: linear-gradient(250deg, #232526, #414345, #333540); */
+  /* background: linear-gradient(250deg, #0d0d2b, #25204d, #4c1d95); */
+  background: linear-gradient(250deg, #11001c, #18007a, #400157);
+  /* background: linear-gradient(250deg, #11001c, #58007a, #be00ff); */
+  /* background: linear-gradient(250deg, #1d1b26, #3a325a, #5c54a4); */
+  /* background: linear-gradient(250deg, #000011, #0c0c2c, #000011); */
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+
+  /* background-image:
+    radial-gradient(circle 50% at top 15% right 15%, rgba(109, 94, 215, 0.4), transparent 50%), linear-gradient(250deg, #0d0d2b, #1c2c5c, #4a1c4f);
+  background-size:
+    100% 100%,
+    400% 400%;
+  background-repeat: no-repeat, no-repeat;
+  animation: gradientAnimation 5s ease infinite; */
+
+  /* background-image: radial-gradient(circle 500px at var(--x) var(--y), rgba(74, 93, 159, 0.3), transparent 80%);
+  background-color: #050610;
+  transition: background-color 0.3s ease; */
+
+  /* background-image:
+    radial-gradient(circle 500px at var(--x) var(--y), rgba(200, 220, 255, 0.2), transparent 80%),
+    linear-gradient(250deg, #0d0d2b, #1c2c5c, #4a1c4f);
+  background-size:
+    100% 100%,
+    400% 400%;
+  background-repeat: no-repeat, no-repeat;
+  animation: gradientAnimation 15s ease infinite; */
+}
+
+.landingSection::before,
+.landingSection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  /* background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.15) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: lightSweep 8s 2s ease-in-out infinite; */
+
+  /* background: linear-gradient(
+    110deg,
+    transparent 40%,
+    rgba(120, 140, 250, 0.2) 48%,
+    rgba(167, 179, 249, 0.4) 50%,
+    rgba(120, 140, 250, 0.2) 52%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: lightSweep 8s 2s ease-in-out infinite; */
+
+  /* background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+  background-size: 200% 100%; */
+
+  background-image:
+    radial-gradient(circle 1px, rgba(255, 255, 255, 0.6) 1px, transparent 2px),
+    radial-gradient(circle 1px, rgba(255, 255, 255, 0.5) 1px, transparent 2px);
+  background-size:
+    40px 40px,
+    60px 60px;
+  background-position:
+    0 0,
+    30px 30px;
+  animation: sparkle 5s linear infinite;
+}
+
+.landingSection::after {
+  animation: lightSweep 10s 2s ease-in-out infinite;
+}
+
+.landingSection::before {
+  opacity: 0.6;
+  animation: lightSweep 7s 5s ease-in-out infinite;
+}
+
+@keyframes lightSweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* version 2 */
+.landingSection {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+
+  background: linear-gradient(250deg, #11001c, #18007a, #400157);
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+.landingSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+
+  background-image: radial-gradient(circle 1px, rgba(255, 255, 255, 0.7) 1px, transparent 2px);
+  background-size: 40px 40px;
+
+  animation:
+    moveSparkles 11.5s ease-in-out infinite,
+    /* warpJump 1.5s ease-in-out infinite, */ sparkle 7s linear infinite;
+}
+
+.landingSection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+
+  background-image: radial-gradient(circle 1px, rgba(255, 255, 255, 0.6) 1px, transparent 2px);
+  background-size: 60px 60px;
+
+  animation:
+    moveSparkles 10.7s ease-in-out infinite,
+    /* warpJump 0.7s ease-in-out infinite, */ sparkle 5s 2s linear infinite; /* Adding a 2s delay to desynchronize the twinkle */
+}
+
+@keyframes moveSparkles {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -1000px 500px;
+  } /* Move over a large distance */
+}
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes warpJump {
+  0% {
+    background-position: 0 0;
+  }
+  10% {
+    background-position: -50px 25px;
+  }
+  90% {
+    background-position: -950px 475px;
+  }
+  100% {
+    background-position: -1000px 500px;
+  }
+}
+
+/* version 3 */
+
+.landingSection {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+
+  background: linear-gradient(250deg, #11001c, #18007a, #400157);
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+.landingSection::before,
+.landingSection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+
+  background-image:
+    radial-gradient(circle 1px, rgba(255, 255, 255, 0.6) 1px, transparent 2px),
+    radial-gradient(circle 1px, rgba(255, 255, 255, 0.5) 1px, transparent 2px);
+  background-size:
+    20px 20px,
+    /* Smaller grid for denser particles */ 30px 30px;
+  background-position:
+    0 0,
+    15px 15px;
+}
+
+.landingSection::before {
+  opacity: 0.6;
+  animation: particleSweep 3.5s cubic-bezier(0.005, 0, 0.005, 1) infinite;
+}
+
+.landingSection::after {
+  opacity: 0.6;
+  animation: particleSweep 4s cubic-bezier(0.005, 0, 0.005, 1) infinite;
+}
+
+@keyframes particleSweep {
+  0% {
+    background-position:
+      0 0,
+      15px 15px;
+  }
+  100% {
+    background-position:
+      1080px 0,
+      1095px 15px; /* Shift by 12x 30px + initial 15px offset for 30px grid */
+  }
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: #f0f0f0;
+  padding: 2rem; /* Add some padding for smaller screens */
+  box-sizing: border-box;
+}
+
+.animatedLetter {
+  width: 70%; /* Adjust the width as needed */
+  max-width: 700px; /* Set a max width for very large screens */
+  height: auto; /* Let height adjust automatically to maintain aspect ratio */
+}

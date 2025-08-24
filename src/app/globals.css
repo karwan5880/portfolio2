@@ -4,7 +4,7 @@
   /* Theme colors - will be dynamically set by ThemeProvider */
   --primary-color: #00ff9d;
   --secondary-color: #4a9eff;
-  --background-color: #0a0a0a;
+  /* --background-color: #0a0a0a; */
   --surface-color: #111111;
   --card-color: #1a1a1a;
   --text-color: #e0e0e0;
@@ -22,8 +22,8 @@
   --emerging-color: #ffd60a;
 
   /* Legacy aliases for backward compatibility */
-  --bg-color: var(--background-color);
-  --container-bg: var(--surface-color);
+  /* --bg-color: var(--background-color); */
+  /* --container-bg: var(--surface-color); */
   --card-bg: var(--card-color);
   --text-muted: var(--text-muted-color);
   --tag-bg: var(--tag-bg-color);
@@ -35,8 +35,8 @@ html {
   margin: 0;
   padding: 0;
   /* overflow-x: hidden; */
-  background-color: #000;
-  color-scheme: dark;
+  /* background-color: #000; */
+  /* color-scheme: dark; */
 }
 
 body {
@@ -44,14 +44,18 @@ body {
   margin: 0;
   padding: 0;
   /* overflow-x: hidden; */
-  background-color: var(--background-color);
-  color: var(--text-color);
+  /* background-color: var(--background-color); */
+  /* z-index: 0;
+  background: linear-gradient(250deg, #000011, #0c0c2c, #000011);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite; */
+
+  /* color: var(--text-color); */
   overscroll-behavior-y: contain;
-  transition:
+  /* transition:
     background-color 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease; */
 }
-/* Global scroll behavior for multiverse portfolio */
 html {
   scroll-behavior: smooth;
 }
@@ -59,5 +63,17 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

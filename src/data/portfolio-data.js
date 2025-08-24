@@ -1,6 +1,5 @@
-// ============================================================================
-// PORTFOLIO DATA
-// ============================================================================
+import { FaPython, FaReact } from 'react-icons/fa'
+import { SiCplusplus } from 'react-icons/si'
 
 export const personalInfo = {
   name: 'Leong Kar Wan',
@@ -10,29 +9,62 @@ export const personalInfo = {
   linkedin: 'https://linkedin.com/in/karwanleong',
   youtube: 'https://youtube.com/@Lleongg5880',
   twitch: 'https://twitch.tv/lleongg5880',
+  resume: '/resume.pdf',
+  profileImageUrl: '/images/profile.png',
+  aboutMe: `
+  I'm from Kuala Lumpur, Malaysia. 
+  I'm a software engineer/software developer. 
+  I'm not a full-stack developer.
+  I'm not a front-end developer.
+  I'm not a back-end developer.
+  I'm not an AI engineer.
+  I'm not an embedded system engineer.
+  But I do everything kinda. 
+  I'm a junior dev and everything is new to me. 
+  I build windows app, algorithms, solutions, also started building web app/solutions recently. 
+  My main language is Python, a little C/C++, and recently learning React, Django.   
+  `,
 }
 
 export const education = [
   {
     id: 'masters',
     degree: 'Master of Engineering Science',
-    institution: 'Universiti Tunku Abdul Rahman',
+    institution: 'Universiti Tunku Abdul Rahman (UTAR)',
     color: 'text-blue-300',
   },
   {
     id: 'bachelors',
-    degree: 'Bachelor of Computer Science',
-    institution: 'Universiti Tunku Abdul Rahman',
+    degree: 'Bachelor of Computer Science (Honours)',
+    institution: 'Universiti Tunku Abdul Rahman (UTAR)',
     color: 'text-purple-300',
   },
 ]
 
 export const skills = {
   core: ['Python', 'C/C++', 'React'],
+  main: [
+    {
+      name: 'Python',
+      icon: FaPython,
+      description: 'Backend, scripting, and data solutions.',
+    },
+    {
+      name: 'C/C++',
+      icon: SiCplusplus,
+      description: 'Performance-critical applications and systems.',
+    },
+    {
+      name: 'React',
+      icon: FaReact,
+      description: 'Dynamic and responsive user interfaces.',
+    },
+  ],
   other: [
     'JavaScript',
     'TypeScript',
-    'HTML/CSS',
+    'HTML',
+    'CSS',
     'Node.js',
     'Django',
     'Flask',
@@ -40,7 +72,6 @@ export const skills = {
     'WebGL',
     'OpenCV',
     'YOLO',
-    'Machine Learning',
     'Computer Vision',
     'PyQt6',
     'PySide6',
@@ -58,7 +89,6 @@ export const skills = {
     'Next.js',
     'Tailwind CSS',
     'Framer Motion',
-    'GSAP',
     'Godot',
     'Game Development',
     'Reinforcement Learning',
@@ -67,120 +97,128 @@ export const skills = {
 }
 
 export const timeline = [
+  // {
+  //   year: '2018',
+  //   title: 'First Job, Internship',
+  //   description: 'My first real job building websites with Angular and .NET',
+  //   status: 'Beginning',
+  // },
+  // {
+  //   year: '2019',
+  //   title: 'Final Year Project',
+  //   description: 'Big school project that taught me how to code properly',
+  //   status: "Bachelor's Degree",
+  // },
+  // {
+  //   year: '2020',
+  //   title: 'Python and Computer Vision',
+  //   description: 'Learning Python and C++ by building Computer Vision applications',
+  //   status: 'Covid-19',
+  // },
+  // {
+  //   year: '2022',
+  //   title: "Master's Research",
+  //   description: 'Using object detection models to detect license plates in images',
+  //   status: "Master's Degree",
+  // },
+  // {
+  //   year: '2024.01',
+  //   title: 'Desktop Application Design',
+  //   description: 'Making desktop apps for Windows',
+  //   status: 'Freelance',
+  // },
+  // {
+  //   year: '2024.08',
+  //   title: 'Leetcode Practice',
+  //   description: 'Practicing coding problems and learning new programming languages',
+  //   status: 'Job Hunt',
+  // },
+  // {
+  //   year: '2025.02',
+  //   title: 'WinRT, KMDF, Flutter, Godot, Next.js',
+  //   description: 'Building new projects and learning new languages/framework',
+  //   status: 'Recent',
+  // },
+  // {
+  //   year: '2025.06',
+  //   title: 'Full Stack App Practice',
+  //   description: 'Building a social media app with React and Django',
+  //   status: 'Recent',
+  // },
+  // {
+  //   year: '2025.08',
+  //   title: 'Learning More React, Started YouTube/Twitch',
+  //   description: 'Started making videos and explore streaming on platforms',
+  //   status: 'Present',
+  // },
+  //
   {
-    year: '2018',
-    title: 'First Job, Internship',
-    description: 'My first real job building websites with Angular and .NET',
-    status: 'Beginning',
+    year: '2025.08',
+    title: 'Learning More React / Django / YouTube',
+    description: 'Recording my everyday life doing some new projects',
+    status: 'Present',
   },
   {
-    year: '2019',
-    title: 'Final Year Project',
-    description: 'Big school project that taught me how to code properly',
-    status: "Bachelor's Degree",
+    year: '2025.06',
+    title: 'Xiao Hong Shu Clone',
+    description: 'Building a social media app with React and Django',
+    status: 'Recent',
+  },
+  {
+    year: '2025.02',
+    title: 'WinRT, KMDF, Flutter, Godot, Next.js',
+    description: 'Explore low level driver development, C++ library, game engine, simple landing page',
+    status: '-',
+  },
+  {
+    year: '2024.08',
+    title: 'Leetcode, Job Search',
+    description: 'Practice solving leetcode questions, started job hunting',
+    status: 'Python / C/C++ / Javascript / SQL',
+  },
+  {
+    year: '2024.01',
+    title: 'Desktop Windows UI Design',
+    description: 'Making windows desktop apps',
+    status: 'PySide6',
+  },
+  {
+    year: '2022',
+    title: "Master's Research",
+    description: 'Using object detection models to detect license plates in images. Learn how to carry out my works systematically everyday',
+    status: 'License Plate Detection Using Object Detection Models',
   },
   {
     year: '2020',
     title: 'Python and Computer Vision',
     description: 'Learning Python and C++ by building Computer Vision applications',
-    status: 'Covid-19',
+    status: '-',
   },
   {
-    year: '2022',
-    title: "Master's Research",
-    description: 'Using object detection models to detect license plates in images',
-    status: "Master's Degree",
+    year: '2019',
+    title: 'Final Year Project',
+    description: 'Finished my FYP (quiz application using Angular & MySql)',
+    status: '-',
   },
   {
-    year: '2024.01',
-    title: 'Desktop Application Design',
-    description: 'Making desktop apps for Windows',
-    status: 'Freelance',
+    year: '2018',
+    title: 'First Job, Internship',
+    description: 'Assist in building websites with Angular and .NET ',
+    status: '(Inventech, Puchong, Malaysia)',
   },
-  {
-    year: '2024.08',
-    title: 'Leetcode Practice',
-    description: 'Practicing coding problems and learning new programming languages',
-    status: 'Job Hunt',
-  },
-  {
-    year: '2025.02',
-    title: 'WinRT, KMDF, Flutter, Godot, Next.js',
-    description: 'Building new projects and learning new languages/framework',
-    status: 'Recent',
-  },
-  {
-    year: '2025.06',
-    title: 'Full Stack App Practice',
-    description: 'Building a social media app with React and Django',
-    status: 'Recent',
-  },
-  {
-    year: '2025.08',
-    title: 'Learning More React, Started YouTube/Twitch',
-    description: 'Started making videos and explore streaming on platforms',
-    status: 'Present',
-  },
-  // {
-  //   year: '2025.06',
-  //   title: 'Full Stack App Practice',
-  //   description: 'Building a social media app with React and Django',
-  //   status: 'Present',
-  // },
-  //   {
-  //     year: '2025.02',
-  //     title: 'WinRT, KMDF, Flutter, Godot, Next.js',
-  //     description: 'Building new projects and learning new languages/framework',
-  //     status: 'Recent',
-  //   },
-  //   {
-  //     year: '2024.08',
-  //     title: 'Leetcode Practice',
-  //     description: 'Practicing coding problems and learning new programming languages',
-  //     status: 'Growth',
-  //   },
-  //   {
-  //     year: '2024.01',
-  //     title: 'Desktop Application Design',
-  //     description: 'Making desktop apps for Windows',
-  //     status: 'Design',
-  //   },
-  //   {
-  //     year: '2022',
-  //     title: "Master's Research",
-  //     description: 'Using AI to detect license plates in images',
-  //     status: 'Academic',
-  //   },
-  //   {
-  //     year: '2020',
-  //     title: 'Python and Computer Vision',
-  //     description: 'Learning Python and C++ by building Computer Vision applications',
-  //     status: 'Learning',
-  //   },
-  //   {
-  //     year: '2019',
-  //     title: 'Final Year Project',
-  //     description: 'Big school project that taught me how to code properly',
-  //     status: 'Milestone',
-  //   },
-  //   {
-  //     year: '2018',
-  //     title: 'First Job, Internship',
-  //     description: 'My first real job building websites with Angular and .NET',
-  //     status: 'Beginning',
-  //   },
 ]
 
 export const projects = [
   {
     title: 'Todo App (Simplified)',
     description: 'Lightweight, high-performance todo app with beautiful UI and smooth animations',
-    technologies: ['React', 'Next.js', 'Drag & Drop', 'Calendar', 'Due Date', 'Category', 'Performance', 'Local Storage'],
+    technologies: ['React', 'Drag & Drop', 'Calendar', 'Local Storage'],
     status: 'Live Demo',
     category: 'Optimized App',
     color: 'from-emerald-600 to-teal-500',
     link: '/todo-simplified',
     imageUrl: '/images/todosimplified.png',
+    category: 'recent',
   },
   {
     title: 'Todo App (Full)',
@@ -191,6 +229,7 @@ export const projects = [
     color: 'from-emerald-600 to-teal-500',
     link: '/todo',
     imageUrl: '/images/todo.png',
+    category: 'recent',
   },
   {
     title: 'Drone Show Simulator',
@@ -201,6 +240,7 @@ export const projects = [
     color: 'from-emerald-600 to-teal-500',
     link: '/finale',
     imageUrl: '/images/drone.png',
+    category: 'recent',
   },
   {
     title: 'Earth Model',
@@ -211,6 +251,7 @@ export const projects = [
     color: 'from-emerald-600 to-teal-500',
     link: '/location',
     imageUrl: '/images/earth.png',
+    category: 'recent',
   },
   {
     title: 'KMDF Windows Filter Driver',
@@ -221,6 +262,7 @@ export const projects = [
     color: 'from-indigo-600 to-purple-500',
     link: null,
     imageUrl: '/images/kmdf.png',
+    category: 'older',
   },
   {
     title: 'WinRT Screen Capturing Library',
@@ -231,16 +273,18 @@ export const projects = [
     color: 'from-indigo-600 to-purple-500',
     link: null,
     imageUrl: '/images/winrt.png',
+    category: 'older',
   },
   {
     title: 'Qt Windows GUI Application',
     description: 'Modern desktop application with native Windows integration and sleek UI',
-    technologies: ['Qt6', 'C++', 'PySide6', 'Python', 'QML', 'Windows API', 'Desktop Development'],
+    technologies: ['Python', 'Qt6', 'PySide6', 'Windows API', 'Desktop Development'],
     status: 'Complete',
     category: 'Desktop Application',
     color: 'from-indigo-600 to-purple-500',
     link: null,
     imageUrl: '/images/pyside6.png',
+    category: 'older',
   },
   {
     title: 'License Plate Detection',
@@ -251,6 +295,7 @@ export const projects = [
     color: 'from-indigo-600 to-purple-500',
     link: null,
     imageUrl: '/images/licenseplate.png',
+    category: 'older',
   },
   {
     title: 'Raspberry Pi 4 Bluetooth Hub',
@@ -261,44 +306,53 @@ export const projects = [
     color: 'from-indigo-600 to-purple-500',
     link: null,
     imageUrl: '/images/rasppi4.jpg',
+    category: 'older',
   },
 ]
 
 export const careerPaths = [
   {
     id: 'fullstack',
-    title: 'Full Stack Developer',
-    description: 'Building websites and apps that people love to use',
-    technologies: ['React', 'Django', 'Cloud', 'DevOps'],
+    title: 'Software Engineer',
+    description: 'Building windows apps, solutions, algorithms, web & designs',
+    technologies: ['Python', 'C/C++', 'React', 'Django'],
     color: 'from-green-500 to-teal-400',
-    icon: '💻',
+    icon: '',
+    // icon: '💻',
     tag: 'Present',
+    statusTag: 'current',
   },
   {
     id: 'ai-engineer',
     title: 'AI Engineer',
-    description: 'Creating smart AI solutions that solve real problems',
-    technologies: ['Machine Learning', 'Neural Networks', 'MLOps', 'Data Science'],
+    description: 'Create robust, useful AI algorithms to solve real world problems',
+    technologies: ['Machine Learning', 'Neural Networks', 'PyTorch', 'TensorFlow'],
     color: 'from-purple-500 to-pink-400',
-    icon: '🧠',
+    icon: '',
+    // icon: '🧠',
     tag: 'Alternative Choice',
+    statusTag: 'interest',
   },
   {
     id: 'embedded',
-    title: 'Embedded Systems',
-    description: 'Making hardware and software work together perfectly',
+    title: 'Embedded Systems Engineer',
+    description: 'Because I love C/C++',
     technologies: ['C/C++', 'RTOS', 'Microcontrollers', 'IoT'],
     color: 'from-orange-500 to-red-400',
-    icon: '⚙️',
+    icon: '',
+    // icon: '⚙️',
     tag: 'Alternative Choice',
+    statusTag: 'interest',
   },
   {
     id: 'ai-robotics',
     title: 'PhD & AI Robotics',
-    description: 'Building smart robots and AI systems that work in the real world',
+    description: 'Because PhD is a dream and robotics is the future',
     technologies: ['Deep Learning', 'Computer Vision', 'Robotics', 'Research'],
     color: 'from-blue-500 to-cyan-400',
-    icon: '🤖',
+    icon: '',
+    // icon: '🤖',
     tag: 'Future',
+    statusTag: 'future',
   },
 ]
